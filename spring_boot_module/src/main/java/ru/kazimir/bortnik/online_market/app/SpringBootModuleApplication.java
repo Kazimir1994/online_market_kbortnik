@@ -1,4 +1,4 @@
-package ru.kazimir.bortnik.online_market;
+package ru.kazimir.bortnik.online_market.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,5 +9,4 @@ public class SpringBootModuleApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringBootModuleApplication.class, args);
     }
-
 }
