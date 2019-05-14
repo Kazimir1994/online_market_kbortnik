@@ -12,6 +12,7 @@ public class RoleConverterImpl implements Converter<RoleDTO, Role> {
     public RoleDTO toDTO(Role role) {
         RoleDTO roleDTO = new RoleDTO();
         roleDTO.setName(role.getName());
+        roleDTO.setId(role.getId());
         return roleDTO;
     }
 
@@ -19,6 +20,7 @@ public class RoleConverterImpl implements Converter<RoleDTO, Role> {
     public Role fromDTO(RoleDTO roleDTO) {
         Role role = new Role();
         role.setName(roleDTO.getName());
+        role.setId(roleDTO.getId());
         return role;
     }
 }

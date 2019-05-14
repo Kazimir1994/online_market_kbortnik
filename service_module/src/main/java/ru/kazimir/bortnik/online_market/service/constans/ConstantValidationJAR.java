@@ -1,6 +1,7 @@
 package ru.kazimir.bortnik.online_market.service.constans;
 
 public class ConstantValidationJAR {
+
     private ConstantValidationJAR() {
     }
 

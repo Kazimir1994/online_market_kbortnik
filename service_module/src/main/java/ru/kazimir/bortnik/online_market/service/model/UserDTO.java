@@ -1,26 +1,29 @@
 package ru.kazimir.bortnik.online_market.service.model;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
 import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidationJAR.*;
 
-
 public class UserDTO {
-
+    @NotNull
     @Pattern(regexp = REGEX_NAME, message = "{user.error.user.name}")
     @Size(min = 2, max = 20, message = "{user.error.name.size}")
     private String name;
 
+    @NotNull
     @Size(min = 2, max = 40, message = "{user.error.surname.size}")
     @Pattern(regexp = REGEX_SURNAME, message = "{user.error.user.surname}")
     private String surname;
 
+    @NotNull
     @Size(max = 40, message = "{user.error.patronymic.size}")
     @Pattern(regexp = REGEX_PATRONYMIC, message = "{user.error.user.patronymic}")
     private String patronymic;
 
+    @NotNull
     @Size(max = 40, message = "{user.error.email.size}")
     @Pattern(regexp = REGEX_EMAIL,
             message = "{user.error.user.email}")

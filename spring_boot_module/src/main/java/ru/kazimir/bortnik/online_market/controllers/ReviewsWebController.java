@@ -21,7 +21,13 @@ import java.util.List;
 
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_DELETE_REVIEWS;
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_UPDATE_STATUS_SHOWING_REVIEWS;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.*;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_REVIEWS_DELETE_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_REVIEWS_PAGE;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_REVIEWS_SHOWING_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_REVIEWS_UPDATE_SHOWING_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_REVIEWS_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.REDIRECT_PRIVATE_REVIEWS_SHOWING;
+
 
 @Controller
 @RequestMapping(PRIVATE_REVIEWS_URL)

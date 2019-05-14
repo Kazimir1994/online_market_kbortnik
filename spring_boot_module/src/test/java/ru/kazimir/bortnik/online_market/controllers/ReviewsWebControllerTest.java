@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReviewsWebControllerTest {
+
     @Mock
     private ReviewService reviewService;
     @Mock
@@ -55,7 +56,6 @@ public class ReviewsWebControllerTest {
 
     }
 
-
     @Test
     public void shouldReturnThePageFullOfTestimonials() throws Exception {
         when(reviewService.getReviews(10L, 0L)).thenReturn(reviewDTOList);
@@ -79,7 +79,6 @@ public class ReviewsWebControllerTest {
                 .andExpect(forwardedUrl("private_reviews"));
     }
 
-
     @Test
     public void ifAnEmptyListOfTheUpdateDisplayStatusHasComeThenTheAddMethodShouldNotBeDone() {
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -87,7 +86,6 @@ public class ReviewsWebControllerTest {
         reviewsWebController.updateStatusShowing(shellAboveReviewSheet, bindingResult, redirectAttributes);
         verify(reviewService, never()).updateShowing(shellAboveReviewSheet.getReviewList());
     }
-
 
     @Test
     public void ifTheEmptyDisplayListUpdateListIsNotEmptyThenTheAddMethodMustBeDone() {
@@ -98,7 +96,6 @@ public class ReviewsWebControllerTest {
         verify(reviewService, Mockito.times(1)).updateShowing(shellAboveReviewSheet.getReviewList());
     }
 
-
     @Test
     public void ifNullObjectReviewsCameThenTheRemovalMethodShouldNotBeCalled() {
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -106,7 +103,6 @@ public class ReviewsWebControllerTest {
         reviewsWebController.deleteReviews(reviewDTO, bindingResult, redirectAttributes);
         verify(reviewService, never()).deleteReviewsById(reviewDTO.getId());
     }
-
 
     @Test
     public void ifNonNullObjectReviewsCameInThenTheRemovalMethodShouldBeCalled() {

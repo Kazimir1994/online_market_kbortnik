@@ -23,12 +23,12 @@ public class RoleRepositoryImpl extends GenericRepositoryImpl implements RoleRep
 
     @Override
     public List<Role> getRoles(Connection connection) {
-        String sqlQuery = "SELECT Role.name FROM  Role";
+        String sqlQuery = "SELECT Role.name, Role.id FROM Role";
         List<Role> userList = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    userList.add(new Role(resultSet.getString("name")));
+                    userList.add(buildingRole(resultSet));
                 }
             }
         } catch (SQLException e) {
@@ -38,4 +38,11 @@ public class RoleRepositoryImpl extends GenericRepositoryImpl implements RoleRep
         return userList;
     }
 
+
+    private Role buildingRole(ResultSet resultSet) throws SQLException {
+        Role role = new Role();
+        role.setName(resultSet.getString("name"));
+        role.setId(resultSet.getLong("id"));
+        return role;
+    }
 }

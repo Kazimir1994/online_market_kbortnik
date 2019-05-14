@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kazimir.bortnik.online_market.model.Pageable;
 import ru.kazimir.bortnik.online_market.service.RoleService;
 import ru.kazimir.bortnik.online_market.service.UserService;
+import ru.kazimir.bortnik.online_market.service.exception.UserServiceException;
 import ru.kazimir.bortnik.online_market.service.model.RoleDTO;
 import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 
@@ -25,8 +26,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.*;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.*;
+import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_ADD_USER;
+import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_UPDATE_PASSWORD_USER_BY_EMAIL;
+import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_UPDATE_ROLE;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_ADD_FORM_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_ADD_USERS_PAGE;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_ADD_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_CHANGE_PASSWORD_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_DELETE_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_UPDATE_ROLE_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_USERS_PAGE;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_USERS_SHOWING_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.REDIRECT_ERROR_422;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.REDIRECT_PRIVATE_FORM_ADD_USERS;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.REDIRECT_PRIVATE_USERS_SHOWING;
+
 
 @Controller
 @RequestMapping(PRIVATE_USERS_URL)
@@ -76,13 +91,17 @@ public class UsersWebController {
     @PostMapping(PRIVATE_DELETE_USERS_URL)
     public String deleteUsers(
             @RequestParam(value = "id_delete_users", required = false) Long[] idDeleteUsers,
-                              RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         if (idDeleteUsers != null) {
             List<Long> longList = Arrays.stream(idDeleteUsers).filter(aLong -> aLong != null && aLong > 0).collect(Collectors.toList());
             logger.info("Request to delete users by ID {}", longList);
             if (!longList.isEmpty()) {
-                userService.deleteUsersById(longList);
-                redirectAttributes.addFlashAttribute("message", "Selected users were successfully deleted");
+                try {
+                    userService.deleteUsersById(longList);
+                    redirectAttributes.addFlashAttribute("message", "Selected users were successfully deleted");
+                } catch (UserServiceException e) {
+                    return REDIRECT_ERROR_422;
+                }
             }
         }
         return REDIRECT_PRIVATE_USERS_SHOWING;
@@ -93,9 +112,8 @@ public class UsersWebController {
         logger.info("Request to update role ( User = {} )", userDTO);
         roleValidator.validate(userDTO.getRoleDTO(), bindingResult);
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("message", "Cannot change role with sent data.");
             logger.info("Request denied. Error code := {}", ERROR_UPDATE_ROLE);
-            return REDIRECT_PRIVATE_USERS_SHOWING;
+            return REDIRECT_ERROR_422;
         }
 
         userService.updateRole(userDTO);
@@ -108,9 +126,8 @@ public class UsersWebController {
         logger.info("Password change request for user ( Email = {} )", userDTO.getEmail());
         updatePasswordValidator.validate(userDTO, bindingResult);
         if (bindingResult.hasFieldErrors("email")) {
-            redirectAttributes.addFlashAttribute("message", "Cannot change password with sent data.");
             logger.info("Request denied. Error code := {}", ERROR_UPDATE_PASSWORD_USER_BY_EMAIL);
-            return REDIRECT_PRIVATE_USERS_SHOWING;
+            return REDIRECT_ERROR_422;
         }
         userService.updatePasswordByEmail(userDTO.getEmail());
         redirectAttributes.addFlashAttribute("message", "Password has been successfully changed");
@@ -142,7 +159,6 @@ public class UsersWebController {
             return REDIRECT_PRIVATE_FORM_ADD_USERS;
         }
 
-        logger.info("Add user{}", userDTO);
         userService.add(userDTO);
         redirectAttributes.addFlashAttribute("message", "User was added successfully");
         return REDIRECT_PRIVATE_FORM_ADD_USERS;

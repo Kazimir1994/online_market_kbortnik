@@ -9,7 +9,8 @@
 <div class="container">
     <div class="bs-docs-section">
         <div class="bs-component" style="padding-top: 40px">
-            <p class="text-success" th:text="${message}"></p>
+            <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
+            <p th:if="${#strings.trim(message)}" class="text-success" th:text="${error}"></p>
             <div class="jumbotron">
                 <form action="#" id="update_status_showing" th:action="@{/private/users/add_users}"
                       th:object="${userDTO}" method="post">
@@ -46,8 +47,8 @@
                         <hr class="my-4">
                         <div class="form-group">
                             <label>User role</label>
-                            <select name="role" class="custom-select" th:field="*{roleDTO.name}">
-                                <option th:each="role : ${roles}" th:value="${role.name}"
+                            <select name="role" class="custom-select" th:field="*{roleDTO.id}">
+                                <option th:each="role : ${roles}" th:value="${role.id}"
                                         th:text="${role.name}"></option>
                             </select>
                         </div>

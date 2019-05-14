@@ -9,8 +9,12 @@
 <div class="container">
     <div th:if="${!#lists.isEmpty(reviews.reviewList)}">
         <div class="bs-docs-section">
+            <div class="page-header" style="padding-top: 20px; padding-bottom: 5px; color: #ebebeb">
+                <h1 id="tables">Reviews</h1>
+            </div>
             <div class="bs-component">
-                <p class="text-success" th:text="${message}" style="padding-top: 10px"></p>
+                <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
+                <p th:if="${#strings.trim(message)}" class="text-success" th:text="${error}"></p>
                 <form action="#" id="update_status_showing" th:action="@{/private/reviews/update_showing}"
                       th:object="${reviews}"
                       method="post">

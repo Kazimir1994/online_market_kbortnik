@@ -1,6 +1,7 @@
 package ru.kazimir.bortnik.online_market.service.exception.messageexception;
 
 public class ErrorMessagesService {
+
     private ErrorMessagesService() {
     }
 

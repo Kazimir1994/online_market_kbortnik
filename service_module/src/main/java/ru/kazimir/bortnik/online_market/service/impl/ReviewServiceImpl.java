@@ -18,7 +18,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.*;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.CONNECTION_ERROR_MESSAGE;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.NUMBER_OF_PAGES;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.REVIEW_ERROR_DELETE;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.REVIEW_ERROR_MESSAGE;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.REVIEW_ERROR_UPDATE_SHOWING;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -37,7 +41,8 @@ public class ReviewServiceImpl implements ReviewService {
         try (Connection connection = reviewRepository.getConnection()) {
             try {
                 connection.setAutoCommit(false);
-                List<Review> userList = reviewRepository.getReviews(connection, limitPositions, limitPositions * (positions - 1));
+                List<Review> userList = reviewRepository.getReviews(connection, limitPositions,
+                        getPosition(limitPositions, positions));
                 List<ReviewDTO> reviewDTOList = userList.stream().map(reviewConverter::toDTO).collect(Collectors.toList());
                 connection.commit();
                 return reviewDTOList;
@@ -57,17 +62,9 @@ public class ReviewServiceImpl implements ReviewService {
         try (Connection connection = reviewRepository.getConnection()) {
             try {
                 connection.setAutoCommit(false);
-                Long sizeData = reviewRepository.getSizeData(connection);
-                if (sizeData % maxPositions > 0) {
-                    sizeData = sizeData / maxPositions;
-                    sizeData++;
-                } else {
-                    sizeData = sizeData / maxPositions;
-                    if (sizeData == 0) {
-                        sizeData++;
-                    }
-                }
-                return sizeData;
+                Long countOfReview = reviewRepository.getCountOfReview(connection);
+                connection.commit();
+                return calculationCountOfPages(countOfReview, maxPositions);
             } catch (SQLException | ReviewRepositoryException e) {
                 connection.rollback();
                 logger.error(e.getMessage(), e);
@@ -114,5 +111,23 @@ public class ReviewServiceImpl implements ReviewService {
             logger.error(e.getMessage(), e);
             throw new ConnectionDataBaseExceptions(CONNECTION_ERROR_MESSAGE, e);
         }
+    }
+
+    private Long getPosition(Long limitPositions, Long positions) {
+        if (positions == 0) {
+            positions++;
+        }
+        return limitPositions * (positions - 1);
+    }
+
+
+    private Long calculationCountOfPages(Long countOfUsers, Long maxPositions) {
+        Long countOfPages;
+        if (countOfUsers % maxPositions > 0) {
+            countOfPages = (countOfUsers / maxPositions) + 1;
+        } else {
+            countOfPages = countOfUsers / maxPositions;
+        }
+        return countOfPages;
     }
 }

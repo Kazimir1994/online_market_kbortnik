@@ -15,7 +15,14 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import ru.kazimir.bortnik.online_market.configs.security.handler.AppUrlAuthenticationSuccessHandler;
 
 import static ru.kazimir.bortnik.online_market.constant.RoleConstants.ADMIN_ROLE_NAME;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.*;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.CSS_CONTENT_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.DEFAULT_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.ERROR_403_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.ERROR_500_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.HOME_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.LOGIN_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_URL;
+
 
 @Configuration
 public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {

@@ -12,6 +12,9 @@ public class URLConstants {
     public static final String ERROR_500_PAGE = "error/500";
     public static final String ERROR_404_PAGE_URL = "/404";
     public static final String ERROR_404_PAGE = "error/404";
+    public static final String ERROR_422_PAGE_URL = "/422";
+    public static final String ERROR_422_PAGE = "error/422";
+    public static final String REDIRECT_ERROR_422 = "redirect:/error/422";
 
     public static final String HOME_PAGE_URL = "/home";
     public static final String HOME_PAGE = "home";

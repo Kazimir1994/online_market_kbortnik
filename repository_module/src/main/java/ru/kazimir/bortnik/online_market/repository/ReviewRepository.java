@@ -6,9 +6,10 @@ import java.sql.Connection;
 import java.util.List;
 
 public interface ReviewRepository extends GenericRepository {
+
     List<Review> getReviews(Connection connection, Long limitPositions, Long positions);
 
-    Long getSizeData(Connection connection);
+    Long getCountOfReview(Connection connection);
 
     void deleteReviewsById(Connection connection, Long id);
 

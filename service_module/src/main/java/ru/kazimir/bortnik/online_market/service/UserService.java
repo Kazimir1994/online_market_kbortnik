@@ -5,6 +5,7 @@ import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 import java.util.List;
 
 public interface UserService {
+
     List<UserDTO> getUsers(Long limitPositions, Long positions);
 
     Long getNumberOfPages(Long maxPositions);

@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 @Configuration
 public class LiquibaseConfig {
+
     @Bean
     public SpringLiquibase liquibase(@Qualifier("dataSource") DataSource dataSource) {
         SpringLiquibase liquibase = new SpringLiquibase();

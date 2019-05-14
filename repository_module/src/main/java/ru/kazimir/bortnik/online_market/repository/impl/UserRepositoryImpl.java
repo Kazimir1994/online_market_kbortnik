@@ -16,7 +16,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.kazimir.bortnik.online_market.repository.exception.messageexception.ErrorMessagesRepository.*;
+import static ru.kazimir.bortnik.online_market.repository.exception.messageexception.ErrorMessagesRepository.ADD_USER_FILED;
+import static ru.kazimir.bortnik.online_market.repository.exception.messageexception.ErrorMessagesRepository.DELETE_USER_FAILED;
+import static ru.kazimir.bortnik.online_market.repository.exception.messageexception.ErrorMessagesRepository.ERROR_QUERY_FAILED;
+import static ru.kazimir.bortnik.online_market.repository.exception.messageexception.ErrorMessagesRepository.UPDATE_PASSWORD_FAILED;
+import static ru.kazimir.bortnik.online_market.repository.exception.messageexception.ErrorMessagesRepository.UPDATE_ROLE_FAILED;
+
 
 @Repository
 public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRepository {
@@ -44,7 +49,7 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
     }
 
     @Override
-    public Long getSizeData(Connection connection) {
+    public Long getCountOfUsers(Connection connection) {
         String sqlQuery = "SELECT COUNT(*) AS number_of_users FROM User WHERE User.deleted = FALSE";
         try (Statement statement = connection.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(sqlQuery)) {
@@ -77,16 +82,16 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
     }
 
     @Override
-    public void updateRole(Connection connection, String role, Long id) {
-        String sqlQuery = "UPDATE user SET role_id=(SELECT r.id FROM Role r WHERE r.name = ?) WHERE id = ?";
+    public void updateRole(Connection connection, Long idRole, Long idUser) {
+        String sqlQuery = "UPDATE user SET role_id= ? WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
-            preparedStatement.setString(1, role);
-            preparedStatement.setLong(2, id);
+            preparedStatement.setLong(1, idRole);
+            preparedStatement.setLong(2, idUser);
             int sizeUpdate = preparedStatement.executeUpdate();
             if (sizeUpdate > 0) {
-                logger.info("The user with id = {} has been assigned the role = {}", id, role);
+                logger.info("The user with id = {} has been assigned the idRole = {}", idRole, idUser);
             } else {
-                throw new UserRepositoryException(String.format(UPDATE_ROLE_FAILED, role, id));
+                throw new UserRepositoryException(String.format(UPDATE_ROLE_FAILED, idRole, idUser));
             }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
@@ -114,14 +119,14 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
 
     @Override
     public void add(Connection connection, User user) {
-        String sqlQuery = "INSERT INTO User (name,surname,patronymic,email, password, role_id) VALUES (?,?,?,?,?,(SELECT r.id FROM Role r WHERE r.name = ? ))";
+        String sqlQuery = "INSERT INTO User (name,surname,patronymic,email, password, role_id) VALUES (?,?,?,?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getSurname());
             preparedStatement.setString(3, user.getPatronymic());
             preparedStatement.setString(4, user.getEmail());
             preparedStatement.setString(5, user.getPassword());
-            preparedStatement.setString(6, user.getRole().getName());
+            preparedStatement.setLong(6, user.getRole().getId());
             int sizeAdd = preparedStatement.executeUpdate();
             if (sizeAdd > 0) {
                 logger.info("User = {} was added successfully", user);
@@ -137,7 +142,8 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
 
     @Override
     public User getByEmail(Connection connection, String email) {
-        String sqlQuery = "SELECT  role.name AS role, User.id, User.name, User.password FROM User JOIN Role ON Role.id=User.role_id WHERE User.email=?";
+        String sqlQuery = "SELECT  role.name AS role, User.id, User.name, User.password" +
+                " FROM User JOIN Role ON Role.id=User.role_id WHERE User.email=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setString(1, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {

@@ -44,7 +44,7 @@ public class ReviewRepositoryImpl extends GenericRepositoryImpl implements Revie
     }
 
     @Override
-    public Long getSizeData(Connection connection) {
+    public Long getCountOfReview(Connection connection) {
         String sqlQuery = "SELECT COUNT(*) AS number_of_reviews FROM Reviews WHERE Reviews.deleted = FALSE";
         try (Statement statement = connection.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(sqlQuery)) {

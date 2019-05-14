@@ -28,8 +28,8 @@ public class RoleValidatorImpl implements Validator {
     public void validate(Object target, Errors errors) {
         RoleDTO role = (RoleDTO) target;
         List<RoleDTO> roleDTOS = roleService.getRoles();
-        if (roleDTOS.stream().filter(roleDTO -> roleDTO.getName().equals(role.getName())).collect(Collectors.toList()).isEmpty()) {
-            errors.rejectValue("role", "role.error.not.exist");
+        if (roleDTOS.stream().filter(roleDTO -> roleDTO.getId().equals(role.getId())).collect(Collectors.toList()).isEmpty()) {
+            errors.rejectValue("name", "role.error.not.exist");
         }
     }
 }

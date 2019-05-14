@@ -15,7 +15,8 @@
                         <h1 id="tables">Table users</h1>
                     </div>
                     <div class="bs-component">
-                        <p class="text-success" th:text="${message}"></p>
+                        <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
+                        <p th:if="${#strings.trim(message)}" class="text-success" th:text="${error}"></p>
                         <form action="#" id="delete_users" th:action="@{/private/users/delete_users}" method="post">
                             <table class="table table-hover">
                                 <thead>
@@ -66,14 +67,14 @@
                                                                       hidden/></label>
                                                         <label>
                                                             <select name="role" class="custom-select"
-                                                                    th:field="${userDTO.roleDTO.name}">
+                                                                    th:field="${userDTO.roleDTO.id}">
                                                                 <option th:each="role : ${roles}"
-                                                                        th:value="${role.name}"
+                                                                        th:value="${role.id}"
                                                                         th:text="${role.name}"
                                                                         th:if="${role.name == user.roleDTO.name}"
                                                                         selected></option>
                                                                 <option th:each="role : ${roles}"
-                                                                        th:value="${role.name}"
+                                                                        th:value="${role.id}"
                                                                         th:unless="${role.name == user.roleDTO.name}"
                                                                         th:text="${role.name}"></option>
                                                             </select>

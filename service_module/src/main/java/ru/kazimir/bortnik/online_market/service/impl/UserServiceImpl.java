@@ -21,7 +21,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
-import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.*;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.ADD_USER_ERROR_MESSAGE;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.CONNECTION_ERROR_MESSAGE;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.NUMBER_OF_PAGES;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.USERS_GET_ERROR_MESSAGE;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.USER_ERROR_BY_EMAIL_MESSAGE;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.USER_ERROR_DELETE;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.USER_ERROR_UPDATE_PASSWORD;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.USER_ERROR_UPDATE_ROLE;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -44,7 +51,8 @@ public class UserServiceImpl implements UserService {
         try (Connection connection = userRepository.getConnection()) {
             try {
                 connection.setAutoCommit(false);
-                List<User> userList = userRepository.getUsers(connection, limitPositions, limitPositions * (positions - 1));
+                List<User> userList = userRepository.getUsers(connection, limitPositions,
+                        getPosition(limitPositions, positions));
                 List<UserDTO> userDTOList = userList.stream().map(userConverter::toDTO).collect(Collectors.toList());
                 connection.commit();
                 return userDTOList;
@@ -64,18 +72,9 @@ public class UserServiceImpl implements UserService {
         try (Connection connection = userRepository.getConnection()) {
             try {
                 connection.setAutoCommit(false);
-                Long sizeData = userRepository.getSizeData(connection);
-                if (sizeData % maxPositions > 0) {
-                    sizeData = sizeData / maxPositions;
-                    sizeData += 1;
-                } else {
-                    sizeData = sizeData / maxPositions;
-                    if (sizeData == 0) {
-                        sizeData++;
-                    }
-                }
+                Long countOfUsers = userRepository.getCountOfUsers(connection);
                 connection.commit();
-                return sizeData;
+                return calculationCountOfPages(countOfUsers, maxPositions);
             } catch (SQLException | UserRepositoryException e) {
                 connection.rollback();
                 logger.error(e.getMessage(), e);
@@ -113,7 +112,7 @@ public class UserServiceImpl implements UserService {
         try (Connection connection = userRepository.getConnection()) {
             try {
                 connection.setAutoCommit(false);
-                userRepository.updateRole(connection, userDTO.getRoleDTO().getName(), userDTO.getId());
+                userRepository.updateRole(connection, userDTO.getRoleDTO().getId(), userDTO.getId());
                 connection.commit();
             } catch (SQLException | UserRepositoryException e) {
                 connection.rollback();
@@ -130,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePasswordByEmail(String email) {
-        String password = generationRandomEncodePassword.getPassword(10, 66, 142);
+        String password = generationRandomEncodePassword.getPassword();
         try (Connection connection = userRepository.getConnection()) {
             try {
                 connection.setAutoCommit(false);
@@ -149,7 +148,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void add(UserDTO userDTO) {
-        String password = generationRandomEncodePassword.getPassword(10, 66, 142);
+        String password = generationRandomEncodePassword.getPassword();
         userDTO.setPassword(password);
         try (Connection connection = userRepository.getConnection()) {
             try {
@@ -190,5 +189,22 @@ public class UserServiceImpl implements UserService {
             logger.error(e.getMessage(), e);
             throw new ConnectionDataBaseExceptions(CONNECTION_ERROR_MESSAGE, e);
         }
+    }
+
+    private Long getPosition(Long limitPositions, Long positions) {
+        if (positions == 0) {
+            positions++;
+        }
+        return limitPositions * (positions - 1);
+    }
+
+    private Long calculationCountOfPages(Long countOfUsers, Long maxPositions) {
+        Long countOfPages;
+        if (countOfUsers % maxPositions > 0) {
+            countOfPages = (countOfUsers / maxPositions) + 1;
+        } else {
+            countOfPages = countOfUsers / maxPositions;
+        }
+        return countOfPages;
     }
 }

@@ -6,13 +6,14 @@ import java.sql.Connection;
 import java.util.List;
 
 public interface UserRepository extends GenericRepository {
+
     List<User> getUsers(Connection connection, Long limitPositions, Long positions);
 
-    Long getSizeData(Connection connection);
+    Long getCountOfUsers(Connection connection);
 
     void deleteUsersById(Connection connection, Long id);
 
-    void updateRole(Connection connection, String role, Long id);
+    void updateRole(Connection connection, Long idRole, Long idUser);
 
     void updatePasswordByEmail(Connection connection, String email, String password);
 
