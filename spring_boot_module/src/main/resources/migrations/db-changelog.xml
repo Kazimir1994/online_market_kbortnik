@@ -1,0 +1,138 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="ROLE_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <createTable tableName="Role">
+
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type= "varchar(254)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="INSERT_ROLE_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <insert tableName="Role">
+            <column name="name" value="ADMINISTRATOR"/>
+        </insert>
+        <insert tableName="Role">
+            <column name="name" value="SALE_USER"/>
+        </insert>
+        <insert tableName="Role">
+            <column name="name" value="CUSTOMER_USER"/>
+        </insert>
+        <insert tableName="Role">
+            <column name="name" value="SECURE_API_USER"/>
+        </insert>
+    </changeSet>
+
+
+    <changeSet id="USER_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <createTable tableName="User">
+
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="email" type="varchar(254)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="surname" type="varchar(254)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name" type="varchar(254)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="patronymic" type="varchar(254)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="password" type="varchar(254)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deleted" type="Boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="canBeRemoved" type="Boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="role_id" type="BIGINT">
+                <constraints foreignKeyName="role_id" references="Role(id)" nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="INSERT_USER_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <insert tableName="User">
+            <column name="email" value="kazimir@mail.ru"/>
+            <column name="surname" value="Bortnik"/>
+            <column name="name" value="Kazimir"/>
+            <column name="patronymic" value="Ivanovih"/>
+            <column name="password" value="$2a$12$24/cinhv/Kwi5wBzKlijt.T55RlDiLJtVIdAzSmB4drxCWKOQ4fBG"/>
+            <column name="canBeRemoved" valueComputed="false"/>
+            <column name="role_id" valueComputed="(SELECT r.id FROM Role r WHERE r.name = 'ADMINISTRATOR')"/>
+        </insert>
+        <insert tableName="User">
+            <column name="email" value="user@mail.ru"/>
+            <column name="surname" value="surname"/>
+            <column name="name" value="name"/>
+            <column name="patronymic" value="patronymic"/>
+            <column name="password" value="$2a$12$zJY/A7F1kTTv.eXYIOsEv.2ebIglNI9nUa/S4Tsp6mCQe0f9itG2W"/>
+            <column name="canBeRemoved" valueComputed="true"/>
+            <column name="role_id" valueComputed="(SELECT r.id FROM Role r WHERE r.name = 'SALE_USER')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="REVIEWS_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <createTable tableName="Reviews">
+
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="review" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="showing" type="Boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deleted" type="Boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="data_create" type="Timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="user_id" references="User(id)" nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="INSERT_REVIEWS_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <insert tableName="Reviews">
+            <column name="review"
+                    value=" RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_
+                     RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_ "/>
+            <column name="user_id" value="1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
