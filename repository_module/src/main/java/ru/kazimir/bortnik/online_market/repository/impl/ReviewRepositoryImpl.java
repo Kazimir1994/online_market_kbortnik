@@ -20,7 +20,7 @@ import static ru.kazimir.bortnik.online_market.repository.exception.messageexcep
 import static ru.kazimir.bortnik.online_market.repository.exception.messageexception.ErrorMessagesRepository.ERROR_QUERY_FAILED;
 
 @Repository
-public class ReviewRepositoryImpl extends GenericRepositoryImpl implements ReviewRepository {
+public class ReviewRepositoryImpl extends GenericRepositoryImpl<Long, Review> implements ReviewRepository {
     private static final Logger logger = LoggerFactory.getLogger(ReviewRepositoryImpl.class);
 
     @Override

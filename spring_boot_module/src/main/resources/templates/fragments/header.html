@@ -17,9 +17,9 @@
                 <a class="navbar-brand" href="/home">Online market</a>
             </div>
             <th:block sec:authorize="hasAuthority('ADMINISTRATOR')">
-            <li class="nav-item">
-                <a class="nav-link" href="/private/reviews/showing">Reviews</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/private/reviews/showing">Reviews</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/private/users/showing">Users</a>
                 </li>
@@ -28,7 +28,18 @@
                     <a class="nav-link" href="/private/users/form_add_users">Add new user</a>
                 </li>
             </th:block>
+
+            <th:block sec:authorize="hasAuthority('CUSTOMER_USER')">
+                <li class="nav-item">
+                    <a class="nav-link" href="/public/customer/users/show_Profile_User">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href=/public/customer/articles/showing>articles</a>
+                </li>
+            </th:block>
         </ul>
+
+
         <span class="navbar-text" style="padding-right: 50px;">
            <span sec:authorize="isAuthenticated()">
              <p style="color: #ff6749" sec:authentication="name"> </p>

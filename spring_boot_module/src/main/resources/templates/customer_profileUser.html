@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <div class="bs-docs-section">
+        <div class="bs-component" style="padding-top: 40px">
+            <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
+            <div class="jumbotron">
+                <form action="#" id="update_status_showing" th:action="@{/public/customer/users/update_profile}"
+                      th:object="${userDTO}" method="post">
+                    <fieldset>
+                        <legend>Profile user</legend>
+                        <div class="form-group">
+                            <label>User name</label>
+                            <input type="text" name="name" class="form-control" placeholder="name"
+                                   th:value="${Profile.name}">
+                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-warning"
+                               style="padding-top: 10px">Name Error.</p>
+                        </div>
+                        <hr class="my-4">
+                        <div class="form-group">
+                            <label>User surname</label>
+                            <input type="text" name="surname" class="form-control" placeholder="surname"
+                                   th:value="${Profile.surname}">
+                            <p th:if="${#fields.hasErrors('surname')}" th:errors="*{surname} " class="text-warning"
+                               style="padding-top: 10px">Surname Error.</p>
+                        </div>
+                        <hr class="my-4">
+                        <div class="form-group">
+                            <label>Residential address</label>
+                            <input type="text" th:field="${Profile.profileDTO.residentialAddress}" class="form-control"
+                                   placeholder="Residential Address"
+                                   th:value="${Profile.profileDTO.residentialAddress}">
+                            <p th:if="${#fields.hasErrors('profileDTO.residentialAddress')}"
+                               th:errors="*{profileDTO.residentialAddress}"
+                               class="text-warning" style="padding-top: 10px">Patronymic Error.</p>
+                        </div>
+                        <hr class="my-4">
+                        <div class="form-group">
+                            <label>Telephone</label>
+                            <input type="text" th:field="${Profile.profileDTO.Telephone}" class="form-control"
+                                   placeholder="Residential Address" th:value="${Profile.profileDTO.Telephone}">
+                            <p th:if="${#fields.hasErrors('profileDTO.telephone')}" th:errors="*{profileDTO.telephone}"
+                               class="text-warning" style="padding-top: 10px">Patronymic Error.</p>
+                        </div>
+                        <hr class="my-4">
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="text" name="password" class="form-control" aria-describedby="emailHelp"
+                                   placeholder="Password">
+                            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password} " class="text-warning"
+                               style="padding-top: 10px">Email Error.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Old password</label>
+                            <input type="text" name="password" class="form-control" aria-describedby="emailHelp"
+                                   placeholder="Password">
+                        </div>
+                        <hr class="my-4">
+                        <button type="submit" class="btn btn-outline-success">Update profile</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

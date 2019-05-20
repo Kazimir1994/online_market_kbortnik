@@ -5,7 +5,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
-import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidationJAR.*;
+import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidationJAR.REGEX_NAME;
+import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidationJAR.REGEX_SURNAME;
 
 public class UserDTO {
     @NotNull
@@ -18,21 +19,21 @@ public class UserDTO {
     @Pattern(regexp = REGEX_SURNAME, message = "{user.error.user.surname}")
     private String surname;
 
-    @NotNull
-    @Size(max = 40, message = "{user.error.patronymic.size}")
-    @Pattern(regexp = REGEX_PATRONYMIC, message = "{user.error.user.patronymic}")
     private String patronymic;
-
-    @NotNull
-    @Size(max = 40, message = "{user.error.email.size}")
-    @Pattern(regexp = REGEX_EMAIL,
-            message = "{user.error.user.email}")
     private String email;
-
     private Long id;
+    private ProfileDTO profileDTO;
     private RoleDTO roleDTO;
     private boolean canBeRemoved;
     private String password;
+
+    public UserDTO(Long id) {
+        this.id = id;
+    }
+
+    public UserDTO() {
+
+    }
 
     public String getName() {
         return name;
@@ -98,18 +99,27 @@ public class UserDTO {
         this.id = id;
     }
 
+    public ProfileDTO getProfileDTO() {
+        return profileDTO;
+    }
+
+    public void setProfileDTO(ProfileDTO profileDTO) {
+        this.profileDTO = profileDTO;
+    }
+
     @Override
     public String toString() {
         return "UserDTO{" +
                 "name='" + name + '\'' +
-                ", id=" + id +
                 ", surname='" + surname + '\'' +
                 ", patronymic='" + patronymic + '\'' +
                 ", email='" + email + '\'' +
+                ", id=" + id +
+                ", profileDTO=" + profileDTO +
                 ", roleDTO=" + roleDTO +
                 ", canBeRemoved=" + canBeRemoved +
                 ", password='" + password + '\'' +
-                "}\n\n";
+                '}';
     }
 
     @Override
@@ -122,6 +132,7 @@ public class UserDTO {
                 Objects.equals(surname, userDTO.surname) &&
                 Objects.equals(patronymic, userDTO.patronymic) &&
                 Objects.equals(email, userDTO.email) &&
+                Objects.equals(profileDTO, userDTO.profileDTO) &&
                 Objects.equals(id, userDTO.id) &&
                 Objects.equals(roleDTO, userDTO.roleDTO) &&
                 Objects.equals(password, userDTO.password);
@@ -129,7 +140,6 @@ public class UserDTO {
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(name, surname, patronymic, email, id, roleDTO, canBeRemoved, password);
+        return Objects.hash(name, surname, patronymic, email, profileDTO, id, roleDTO, canBeRemoved, password);
     }
 }

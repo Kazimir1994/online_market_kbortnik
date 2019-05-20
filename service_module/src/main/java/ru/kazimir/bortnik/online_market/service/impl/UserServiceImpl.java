@@ -5,11 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kazimir.bortnik.online_market.repository.UserRepository;
 import ru.kazimir.bortnik.online_market.repository.exception.ConnectionDataBaseExceptions;
 import ru.kazimir.bortnik.online_market.repository.exception.UserRepositoryException;
 import ru.kazimir.bortnik.online_market.repository.model.User;
-import ru.kazimir.bortnik.online_market.service.GenerationRandomEncodePassword;
+import ru.kazimir.bortnik.online_market.service.GenerationEncodePassword;
 import ru.kazimir.bortnik.online_market.service.UserService;
 import ru.kazimir.bortnik.online_market.service.converter.Converter;
 import ru.kazimir.bortnik.online_market.service.exception.UserServiceException;
@@ -21,29 +22,37 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
+import static ru.kazimir.bortnik.online_market.service.constans.MessagesLogger.MESSAGES_GET_PASSWORD;
+import static ru.kazimir.bortnik.online_market.service.constans.MessagesLogger.MESSAGES_GET_PROFILE;
+import static ru.kazimir.bortnik.online_market.service.constans.MessagesLogger.MESSAGES_UPDATE_PROFILE;
 import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.ADD_USER_ERROR_MESSAGE;
 import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.CONNECTION_ERROR_MESSAGE;
 import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.NUMBER_OF_PAGES;
 import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.USERS_GET_ERROR_MESSAGE;
 import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.USER_ERROR_BY_EMAIL_MESSAGE;
 import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.USER_ERROR_DELETE;
+import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.USER_ERROR_GET_USER;
 import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.USER_ERROR_UPDATE_PASSWORD;
 import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.USER_ERROR_UPDATE_ROLE;
 
 @Service
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private final Converter<UserDTO, User> userConverter;
+    private final Converter<UserDTO, User> userProfileConverter;
     private final UserRepository userRepository;
-    private final GenerationRandomEncodePassword generationRandomEncodePassword;
+    private final GenerationEncodePassword generationEncodePassword;
 
     @Autowired
     public UserServiceImpl(@Qualifier("userConverterImpl") Converter<UserDTO, User> userConverter,
+                           @Qualifier("userProfileConverterImpl") Converter<UserDTO, User> userProfileConverter,
                            UserRepository userRepository,
-                           GenerationRandomEncodePassword generationRandomEncodePassword) {
+                           GenerationEncodePassword generationEncodePassword) {
         this.userConverter = userConverter;
+        this.userProfileConverter = userProfileConverter;
         this.userRepository = userRepository;
-        this.generationRandomEncodePassword = generationRandomEncodePassword;
+        this.generationEncodePassword = generationEncodePassword;
     }
 
     @Override
@@ -129,7 +138,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePasswordByEmail(String email) {
-        String password = generationRandomEncodePassword.getPassword();
+        String password = generationEncodePassword.getPassword();
         try (Connection connection = userRepository.getConnection()) {
             try {
                 connection.setAutoCommit(false);
@@ -148,7 +157,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void add(UserDTO userDTO) {
-        String password = generationRandomEncodePassword.getPassword();
+        String password = generationEncodePassword.getPassword();
         userDTO.setPassword(password);
         try (Connection connection = userRepository.getConnection()) {
             try {
@@ -188,6 +197,54 @@ public class UserServiceImpl implements UserService {
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
             throw new ConnectionDataBaseExceptions(CONNECTION_ERROR_MESSAGE, e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public UserDTO getUserWithProfile(Long id) {
+        User user = userRepository.findById(id);
+        if (user != null) {
+            logger.info(MESSAGES_GET_PROFILE, id, user);
+            return userProfileConverter.toDTO(user);
+        } else {
+            logger.error(USER_ERROR_GET_USER, id);
+            throw new UserServiceException(String.format(USER_ERROR_GET_USER, id));
+        }
+    }
+
+    @Override
+    @Transactional
+    public String getPasswordById(Long id) {
+        User user = userRepository.findById(id);
+        if (user != null) {
+            String password = user.getPassword();
+            logger.info(MESSAGES_GET_PASSWORD, id, password);
+            return password;
+        } else {
+            logger.error(USER_ERROR_GET_USER, id);
+            throw new UserServiceException(String.format(USER_ERROR_GET_USER, id));
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateProfile(UserDTO userDTO) {
+        logger.info(MESSAGES_UPDATE_PROFILE, userDTO);
+        User user = userRepository.findById(userDTO.getId());
+        if (user != null) {
+            user.setName(userDTO.getName());
+            user.setSurname(userDTO.getSurname());
+            user.getProfile().setTelephone(userDTO.getProfileDTO().getTelephone());
+            user.getProfile().setResidentialAddress(userDTO.getProfileDTO().getResidentialAddress());
+            if (!userDTO.getPassword().isEmpty()) {
+                String newPassword = generationEncodePassword.encryptPassword(userDTO.getPassword());
+                user.setPassword(newPassword);
+            }
+            userRepository.merge(user);
+        } else {
+            logger.error(USER_ERROR_GET_USER, userDTO.getId());
+            throw new UserServiceException(String.format(USER_ERROR_GET_USER, userDTO.getId()));
         }
     }
 

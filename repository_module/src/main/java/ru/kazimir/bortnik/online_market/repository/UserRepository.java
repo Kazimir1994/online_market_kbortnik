@@ -5,7 +5,7 @@ import ru.kazimir.bortnik.online_market.repository.model.User;
 import java.sql.Connection;
 import java.util.List;
 
-public interface UserRepository extends GenericRepository {
+public interface UserRepository extends GenericRepository<Long, User> {
 
     List<User> getUsers(Connection connection, Long limitPositions, Long positions);
 
@@ -20,4 +20,5 @@ public interface UserRepository extends GenericRepository {
     void add(Connection connection, User user);
 
     User getByEmail(Connection connection, String email);
+
 }

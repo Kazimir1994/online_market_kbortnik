@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.kazimir.bortnik.online_market.repository.RoleRepository;
 import ru.kazimir.bortnik.online_market.repository.exception.RoleRepositoryException;
 import ru.kazimir.bortnik.online_market.repository.model.Role;
+import ru.kazimir.bortnik.online_market.repository.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +19,7 @@ import static ru.kazimir.bortnik.online_market.repository.exception.messageexcep
 
 
 @Repository
-public class RoleRepositoryImpl extends GenericRepositoryImpl implements RoleRepository {
+public class RoleRepositoryImpl extends GenericRepositoryImpl<Long,Role > implements RoleRepository {
     private static final Logger logger = LoggerFactory.getLogger(RoleRepositoryImpl.class);
 
     @Override
@@ -37,7 +38,6 @@ public class RoleRepositoryImpl extends GenericRepositoryImpl implements RoleRep
         }
         return userList;
     }
-
 
     private Role buildingRole(ResultSet resultSet) throws SQLException {
         Role role = new Role();

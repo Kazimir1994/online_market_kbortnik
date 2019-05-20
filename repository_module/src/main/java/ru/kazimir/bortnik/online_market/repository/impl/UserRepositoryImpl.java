@@ -24,7 +24,7 @@ import static ru.kazimir.bortnik.online_market.repository.exception.messageexcep
 
 
 @Repository
-public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRepository {
+public class UserRepositoryImpl extends GenericRepositoryImpl<Long, User> implements UserRepository {
     private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
     @Override

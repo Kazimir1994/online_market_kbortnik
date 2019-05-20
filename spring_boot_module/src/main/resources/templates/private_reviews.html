@@ -14,7 +14,7 @@
             </div>
             <div class="bs-component">
                 <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
-                <p th:if="${#strings.trim(message)}" class="text-success" th:text="${error}"></p>
+
                 <form action="#" id="update_status_showing" th:action="@{/private/reviews/update_showing}"
                       th:object="${reviews}"
                       method="post">

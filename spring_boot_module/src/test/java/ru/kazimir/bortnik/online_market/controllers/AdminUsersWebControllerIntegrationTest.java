@@ -26,7 +26,7 @@ import static ru.kazimir.bortnik.online_market.constant.RoleConstants.ADMIN_ROLE
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UsersWebControllerIntegrationTest {
+public class AdminUsersWebControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     private UserDTO userTestDTO;

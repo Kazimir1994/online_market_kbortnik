@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.kazimir.bortnik.online_market.controllers.web.AdminReviewsWebController;
 import ru.kazimir.bortnik.online_market.model.ShellAboveReviewSheet;
 import ru.kazimir.bortnik.online_market.service.ReviewService;
 import ru.kazimir.bortnik.online_market.service.model.ReviewDTO;
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ReviewsWebControllerTest {
+public class AdminReviewsWebControllerTest {
 
     @Mock
     private ReviewService reviewService;
@@ -35,14 +36,14 @@ public class ReviewsWebControllerTest {
     RedirectAttributes redirectAttributes;
 
     private MockMvc mockMvc;
-    private ReviewsWebController reviewsWebController;
+    private AdminReviewsWebController adminReviewsWebController;
     private ShellAboveReviewSheet shellAboveReviewSheet;
     private ArrayList<ReviewDTO> reviewDTOList;
 
     @Before
     public void init() {
-        reviewsWebController = new ReviewsWebController(reviewService);
-        mockMvc = MockMvcBuilders.standaloneSetup(reviewsWebController).build();
+        adminReviewsWebController = new AdminReviewsWebController(reviewService);
+        mockMvc = MockMvcBuilders.standaloneSetup(adminReviewsWebController).build();
 
         reviewDTOList = new ArrayList<>();
         ReviewDTO reviewDTO1 = new ReviewDTO();
@@ -83,7 +84,7 @@ public class ReviewsWebControllerTest {
     public void ifAnEmptyListOfTheUpdateDisplayStatusHasComeThenTheAddMethodShouldNotBeDone() {
         when(bindingResult.hasErrors()).thenReturn(true);
         ShellAboveReviewSheet shellAboveReviewSheet = new ShellAboveReviewSheet();
-        reviewsWebController.updateStatusShowing(shellAboveReviewSheet, bindingResult, redirectAttributes);
+        adminReviewsWebController.updateStatusShowing(shellAboveReviewSheet, bindingResult, redirectAttributes);
         verify(reviewService, never()).updateShowing(shellAboveReviewSheet.getReviewList());
     }
 
@@ -92,7 +93,7 @@ public class ReviewsWebControllerTest {
         when(bindingResult.hasErrors()).thenReturn(false);
         ShellAboveReviewSheet shellAboveReviewSheet = new ShellAboveReviewSheet();
         shellAboveReviewSheet.setReviewList(reviewDTOList);
-        reviewsWebController.updateStatusShowing(shellAboveReviewSheet, bindingResult, redirectAttributes);
+        adminReviewsWebController.updateStatusShowing(shellAboveReviewSheet, bindingResult, redirectAttributes);
         verify(reviewService, Mockito.times(1)).updateShowing(shellAboveReviewSheet.getReviewList());
     }
 
@@ -100,7 +101,7 @@ public class ReviewsWebControllerTest {
     public void ifNullObjectReviewsCameThenTheRemovalMethodShouldNotBeCalled() {
         when(bindingResult.hasErrors()).thenReturn(true);
         ReviewDTO reviewDTO = new ReviewDTO();
-        reviewsWebController.deleteReviews(reviewDTO, bindingResult, redirectAttributes);
+        adminReviewsWebController.deleteReviews(reviewDTO, bindingResult, redirectAttributes);
         verify(reviewService, never()).deleteReviewsById(reviewDTO.getId());
     }
 
@@ -109,7 +110,7 @@ public class ReviewsWebControllerTest {
         when(bindingResult.hasErrors()).thenReturn(false);
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setId(4L);
-        reviewsWebController.deleteReviews(reviewDTO, bindingResult, redirectAttributes);
+        adminReviewsWebController.deleteReviews(reviewDTO, bindingResult, redirectAttributes);
         verify(reviewService, Mockito.times(1)).deleteReviewsById(reviewDTO.getId());
     }
 }
