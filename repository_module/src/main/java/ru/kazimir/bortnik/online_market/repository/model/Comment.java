@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Comment")
-@SQLDelete(sql = "UPDATE Article SET deleted = 1  WHERE id = ? ")
+@SQLDelete(sql = "UPDATE Comment SET deleted = 1  WHERE id = ? ")
 @Where(clause = "deleted = '0'")
 public class Comment {
     @Id
@@ -34,11 +34,11 @@ public class Comment {
     private boolean deleted;
 
     @ManyToOne
-    @JoinColumn(name = "commentAuthorId")
+    @JoinColumn(name = "comment_author_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "commentArticleId")
+    @JoinColumn(name = "comment_article_id")
     private Article article;
 
     public Long getId() {

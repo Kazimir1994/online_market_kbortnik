@@ -44,7 +44,7 @@ public class Article {
     private boolean deleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "authorId")
+    @JoinColumn(name = "author_id")
     private User author;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")

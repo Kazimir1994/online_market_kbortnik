@@ -43,7 +43,8 @@ public class ArticlesAPIController {
 
     @GetMapping(API_ARTICLES_SHOWING_URL)
     public ResponseEntity<List<ArticleDTO>> getArticles(
-            @RequestParam(name = "limit", defaultValue = "10") int limit, @RequestParam(name = "offset", defaultValue = "0") int offset) {
+            @RequestParam(name = "limit", defaultValue = "10") int limit,
+            @RequestParam(name = "offset", defaultValue = "0") int offset) {
         logger.info("Request for receiving news from the position := {}, quantity := {}.", limit, offset);
         List<ArticleDTO> articleDTOS = articleService.getArticles(offset, limit);
         logger.info("Send a list of articles. := {}.", articleDTOS);

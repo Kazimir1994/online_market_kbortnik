@@ -54,7 +54,7 @@
                         <hr class="my-4">
                         <h6 th:text="${article.title}"></h6>
                         <h6 th:text="| ${article.author.name} ${article.author.surname}|"></h6>
-                        <p th:text="article.summary"></p>
+                        <p th:text="${article.summary}"></p>
                         <hr class="my-4">
                         <li>
                             <a th:href="@{/public/customer/articles/showing/more(articlesId=${article.id})}">more</a>

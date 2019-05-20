@@ -3,7 +3,7 @@ package ru.kazimir.bortnik.online_market.repository.impl;
 import org.springframework.stereotype.Repository;
 import ru.kazimir.bortnik.online_market.repository.ArticleRepository;
 import ru.kazimir.bortnik.online_market.repository.model.Article;
-import ru.kazimir.bortnik.online_market.repository.model.CommentID;
+import ru.kazimir.bortnik.online_market.repository.model.CommentArticleId;
 import ru.kazimir.bortnik.online_market.repository.model.Theme;
 
 import javax.persistence.Query;
@@ -50,7 +50,8 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public List<Article> getTop(int sizeTop) {
-        String query = "SELECT commentArticleId  FROM " + CommentID.class.getName() + " GROUP BY commentArticleId  ORDER BY commentArticleId DESC ";
+        String query = "SELECT commentArticleId  FROM " + CommentArticleId.class.getName()
+                + " GROUP BY commentArticleId  ORDER BY commentArticleId DESC ";
         Query queryManager = entityManager.createQuery(query);
         queryManager.setMaxResults(sizeTop);
         List<Long> aLong = queryManager.getResultList();

@@ -17,12 +17,12 @@ import java.util.Objects;
 @Table(name = "Profile")
 public class Profile {
     @GenericGenerator(
-            name = "generatorUserId",
+            name = "generator_user_id",
             strategy = "foreign",
             parameters = @Parameter(name = "property", value = "user"))
 
     @Id
-    @GeneratedValue(generator = "generatorUserId")
+    @GeneratedValue(generator = "generator_user_id")
     @Column(unique = true, nullable = false)
     private Long id;
 
