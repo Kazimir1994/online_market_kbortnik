@@ -19,7 +19,7 @@
                         <div class="form-group">
                             <label>User name</label>
                             <input type="text" name="name" class="form-control" placeholder="name">
-                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name} " class="text-warning"
+                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-warning"
                                style="padding-top: 10px">Name Error.</p>
                         </div>
                         <hr class="my-4">

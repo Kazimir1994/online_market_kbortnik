@@ -1,4 +1,4 @@
-package ru.kazimir.bortnik.online_market.model;
+package ru.kazimir.bortnik.online_market.service.model;
 
 public class Pageable {
     private Long limitPositions;

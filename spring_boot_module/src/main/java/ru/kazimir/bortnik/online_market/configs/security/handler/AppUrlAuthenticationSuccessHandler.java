@@ -14,8 +14,10 @@ import java.io.IOException;
 import java.util.Collection;
 
 import static ru.kazimir.bortnik.online_market.constant.RoleConstants.ADMIN_ROLE_NAME;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.HOME_PAGE_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.REDIRECT_USERS_SHOWING_URL;
+import static ru.kazimir.bortnik.online_market.constant.RoleConstants.CUSTOMER_ROLE_NAME;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.HOME_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_REDIRECT_ARTICLES_SHOWING_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_USERS_SHOWING_URL;
 
 public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -37,7 +39,11 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
                 case ADMIN_ROLE_NAME: {
                     redirectURL = REDIRECT_USERS_SHOWING_URL;
                     break;
-                }   // TODO ADD REDIRECT TO OTHER PAGES DEPENDING ON THE ROL.
+                }
+                case CUSTOMER_ROLE_NAME: {
+                    redirectURL = PUBLIC_SALE_REDIRECT_ARTICLES_SHOWING_URL;
+                    break;
+                }
                 default: {
                     redirectURL = HOME_PAGE_URL;
                 }

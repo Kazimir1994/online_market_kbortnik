@@ -1,4 +1,4 @@
-package ru.kazimir.bortnik.online_market.controllers;
+package ru.kazimir.bortnik.online_market.controllers.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.kazimir.bortnik.online_market.model.Pageable;
+import ru.kazimir.bortnik.online_market.service.model.Pageable;
 import ru.kazimir.bortnik.online_market.service.RoleService;
 import ru.kazimir.bortnik.online_market.service.UserService;
 import ru.kazimir.bortnik.online_market.service.exception.UserServiceException;
@@ -29,43 +29,43 @@ import java.util.stream.Collectors;
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_ADD_USER;
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_UPDATE_PASSWORD_USER_BY_EMAIL;
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_UPDATE_ROLE;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_ADD_FORM_USERS_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_ADD_USERS_PAGE;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_ADD_USERS_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_CHANGE_PASSWORD_USERS_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_DELETE_USERS_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_UPDATE_ROLE_USERS_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_USERS_PAGE;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_USERS_SHOWING_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_USERS_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.REDIRECT_ERROR_422;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.REDIRECT_PRIVATE_FORM_ADD_USERS;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.REDIRECT_PRIVATE_USERS_SHOWING;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_ADD_FORM_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_ADD_USERS_PAGE;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_ADD_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_CHANGE_PASSWORD_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_DELETE_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_UPDATE_ROLE_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_USERS_PAGE;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_USERS_SHOWING_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_USERS_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_ERROR_422;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_PRIVATE_FORM_ADD_USERS;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_PRIVATE_USERS_SHOWING;
 
 
 @Controller
 @RequestMapping(PRIVATE_USERS_URL)
-public class UsersWebController {
-    private final static Logger logger = LoggerFactory.getLogger(UsersWebController.class);
+public class AdminUsersWebController {
+    private final static Logger logger = LoggerFactory.getLogger(AdminUsersWebController.class);
 
     private final UserService userService;
     private final RoleService roleService;
     private final Validator addUserValidator;
     private final Validator roleValidator;
-    private final Validator updatePasswordValidator;
+    private final Validator updateByEmailPasswordValidator;
     private final Pageable pageable = new Pageable(10L);
 
     @Autowired
-    public UsersWebController(UserService userService,
-                              RoleService roleService,
-                              @Qualifier("addUserValidatorImpl") Validator addUserValidator,
-                              @Qualifier("roleValidatorImpl") Validator roleValidator,
-                              @Qualifier("updatePasswordValidatorImpl") Validator updatePasswordValidator) {
-        this.userService = userService;
-        this.roleService = roleService;
-        this.addUserValidator = addUserValidator;
-        this.roleValidator = roleValidator;
-        this.updatePasswordValidator = updatePasswordValidator;
+    public AdminUsersWebController(UserService userServiceImpl,
+                                   RoleService roleServiceImpl,
+                                   @Qualifier("saveUserValidatorImpl") Validator addUserValidatorImpl,
+                                   @Qualifier("roleValidatorImpl") Validator roleValidatorImpl,
+                                   @Qualifier("updateByEmailPasswordValidatorImpl") Validator updatePasswordValidatorImpl) {
+        this.userService = userServiceImpl;
+        this.roleService = roleServiceImpl;
+        this.addUserValidator = addUserValidatorImpl;
+        this.roleValidator = roleValidatorImpl;
+        this.updateByEmailPasswordValidator = updatePasswordValidatorImpl;
     }
 
     @GetMapping(PRIVATE_USERS_SHOWING_URL)
@@ -94,7 +94,7 @@ public class UsersWebController {
             RedirectAttributes redirectAttributes) {
         if (idDeleteUsers != null) {
             List<Long> longList = Arrays.stream(idDeleteUsers).filter(aLong -> aLong != null && aLong > 0).collect(Collectors.toList());
-            logger.info("Request to delete users by ID {}", longList);
+            logger.info("Request to delete users by ID {}.", longList);
             if (!longList.isEmpty()) {
                 try {
                     userService.deleteUsersById(longList);
@@ -109,10 +109,10 @@ public class UsersWebController {
 
     @PostMapping(PRIVATE_UPDATE_ROLE_USERS_URL)
     public String updateRole(UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        logger.info("Request to update role ( User = {} )", userDTO);
+        logger.info("Request to update role ( User := {}. )", userDTO);
         roleValidator.validate(userDTO.getRoleDTO(), bindingResult);
         if (bindingResult.hasErrors()) {
-            logger.info("Request denied. Error code := {}", ERROR_UPDATE_ROLE);
+            logger.info("Request denied. Error code := {},{}.", ERROR_UPDATE_ROLE, bindingResult.getAllErrors());
             return REDIRECT_ERROR_422;
         }
 
@@ -122,11 +122,11 @@ public class UsersWebController {
     }
 
     @PostMapping(PRIVATE_CHANGE_PASSWORD_USERS_URL)
-    public String updatePassword(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        logger.info("Password change request for user ( Email = {} )", userDTO.getEmail());
-        updatePasswordValidator.validate(userDTO, bindingResult);
+    public String updatePassword(UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        logger.info("Password change request for user ( Email := {} )", userDTO.getEmail());
+        updateByEmailPasswordValidator.validate(userDTO, bindingResult);
         if (bindingResult.hasFieldErrors("email")) {
-            logger.info("Request denied. Error code := {}", ERROR_UPDATE_PASSWORD_USER_BY_EMAIL);
+            logger.info("Request denied. Error code := {},{}.", ERROR_UPDATE_PASSWORD_USER_BY_EMAIL, bindingResult.getAllErrors());
             return REDIRECT_ERROR_422;
         }
         userService.updatePasswordByEmail(userDTO.getEmail());
@@ -151,11 +151,11 @@ public class UsersWebController {
 
     @PostMapping(PRIVATE_ADD_USERS_URL)
     public String addUsers(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        logger.info("Request to add a user ( User = {} )", userDTO);
+        logger.info("Request to add a user ( User := {}. )", userDTO);
         addUserValidator.validate(userDTO, bindingResult);
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors());
-            logger.info("Request denied. Error code := {}", ERROR_ADD_USER);
+            logger.info("Request denied. Error code := {},{}.", ERROR_ADD_USER, bindingResult.getAllErrors());
             return REDIRECT_PRIVATE_FORM_ADD_USERS;
         }
 

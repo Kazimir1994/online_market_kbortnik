@@ -1,6 +1,7 @@
 package ru.kazimir.bortnik.online_market.repository.model;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class Review extends Model {
     private User user;
@@ -50,4 +51,19 @@ public class Review extends Model {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Review review = (Review) o;
+        return showing == review.showing &&
+                Objects.equals(feedback, review.feedback) &&
+                Objects.equals(dataCreate, review.dataCreate);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(feedback, dataCreate, showing);
+    }
 }

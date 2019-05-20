@@ -8,7 +8,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
 public class MessageConfig {
-
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource

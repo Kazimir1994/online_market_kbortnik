@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+        <form method="post">
+            <div class="form-group" style="padding-top: 15px">
+                <p th:if="${#strings.trim(messageFilter)}" class="text-success" th:text="${messageFilter}"></p>
+                <h1>Themes</h1>
+                <select name="theme" class="custom-select">
+                    <option th:each="theme : ${ThemesDTO}"
+                            th:value="${theme.id}"
+                            th:text="${theme.name}"
+                            th:if="${theme.id == pageable.theme}"
+                            selected></option>
+                    <option th:each="theme : ${ThemesDTO}"
+                            th:value="${theme.id}"
+                            th:unless="${theme.id == pageable.theme}"
+                            th:text="${theme.name}"></option>
+                </select>
+                <h1>Number of news per page</h1>
+                <select name="limitPositions" class="custom-select">
+                    <option th:each="limit : ${pageable.limits}"
+                            th:value="${limit}"
+                            th:text="${limit}"
+                            th:if="${limit == pageable.limitPositions}"
+                            selected></option>
+                    <option th:each="limit : ${pageable.limits}"
+                            th:value="${limit}"
+                            th:unless="${limit == pageable.limitPositions}"
+                            th:text="${limit}"></option>
+                </select>
+
+                <label style="padding-top: 15px">
+                    <button type="submit" class="btn btn-outline-success"
+                            th:formaction="@{/public/customer/articles/update_filter}">Apply
+                    </button>
+                </label>
+            </div>
+        </form>
+    <div th:if="${!#lists.isEmpty(PageDTO.list)}">
+        <div class="bs-docs-section">
+            <div class="page-header" style="padding-top: 20px; padding-bottom: 5px; color: #ebebeb">
+                <h1>Articles</h1>
+            </div>
+            <div class="bs-component">
+                <th:block th:object="${PageDTO}">
+                    <div th:each="article,itemStat :*{list}" class="jumbotron">
+                        <p class="lead" th:text="${article.dataCreate}"></p>
+                        <hr class="my-4">
+                        <h6 th:text="${article.title}"></h6>
+                        <h6 th:text="| ${article.author.name} ${article.author.surname}|"></h6>
+                        <p th:text="article.summary"></p>
+                        <hr class="my-4">
+                        <li>
+                            <a th:href="@{/public/customer/articles/showing/more(articlesId=${article.id})}">more</a>
+                        </li>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+
+        <div class="float-none">
+            <ul class="pagination pagination-sm">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">&laquo;</a>
+                </li>
+
+                <li class="page-item" th:each="i : ${#numbers.sequence( 1,PageDTO.countOfPages)}"
+                    th:classappend="${PageDTO.currentPage}==${i}?'page-item active':''">
+                    <a th:href="@{/public/customer/articles/showing(currentPage=${i})}" th:text="${i}"
+                       class="page-link"> </a>
+                </li>
+
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer container-lg width-full px-3" role="contentinfo">
+        <div class="position-relative d-flex flex-justify-between pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+            <div style="text-align: center;">
+                <span>Online Marker__2018</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

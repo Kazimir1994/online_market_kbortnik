@@ -1,10 +1,10 @@
 package ru.kazimir.bortnik.online_market.configs.security;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -15,16 +15,18 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import ru.kazimir.bortnik.online_market.configs.security.handler.AppUrlAuthenticationSuccessHandler;
 
 import static ru.kazimir.bortnik.online_market.constant.RoleConstants.ADMIN_ROLE_NAME;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.CSS_CONTENT_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.DEFAULT_PAGE_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.ERROR_403_PAGE_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.ERROR_500_PAGE_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.HOME_PAGE_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.LOGIN_PAGE_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_URL;
-
+import static ru.kazimir.bortnik.online_market.constant.RoleConstants.CUSTOMER_ROLE_NAME;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.CSS_CONTENT_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.DEFAULT_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.ERROR_403_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.ERROR_500_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.HOME_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.LOGIN_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_ADMIN_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_USER_URL;
 
 @Configuration
+@Order(2)
 public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final AccessDeniedHandler accessDeniedHandler;
@@ -39,14 +41,14 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.authorizeRequests()
                 .antMatchers(DEFAULT_PAGE_URL,
                         ERROR_403_PAGE_URL,
                         ERROR_500_PAGE_URL,
                         HOME_PAGE_URL,
                         CSS_CONTENT_URL).permitAll()
-                .antMatchers(PRIVATE_URL).hasAuthority(ADMIN_ROLE_NAME)
+                .antMatchers(PRIVATE_ADMIN_URL).hasAuthority(ADMIN_ROLE_NAME)
+                .antMatchers(PUBLIC_SALE_USER_URL).hasAuthority(CUSTOMER_ROLE_NAME)
                 .anyRequest().authenticated().and()
                 .formLogin().loginPage(LOGIN_PAGE_URL)
                 .successHandler(authenticationSuccessHandler())

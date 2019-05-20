@@ -11,7 +11,7 @@
                 <constraints primaryKey="true"/>
             </column>
 
-            <column name="name" type= "varchar(254)">
+            <column name="name" type="varchar(254)">
                 <constraints nullable="false" unique="true"/>
             </column>
 
@@ -91,9 +91,9 @@
             <column name="surname" value="surname"/>
             <column name="name" value="name"/>
             <column name="patronymic" value="patronymic"/>
-            <column name="password" value="$2a$12$zJY/A7F1kTTv.eXYIOsEv.2ebIglNI9nUa/S4Tsp6mCQe0f9itG2W"/>
+            <column name="password" value="$2a$12$8bfPX.6k0VKckMpqm24al.w5qO5dSg3oiXR262D8.nogEcmnJ83Dy"/>
             <column name="canBeRemoved" valueComputed="true"/>
-            <column name="role_id" valueComputed="(SELECT r.id FROM Role r WHERE r.name = 'SALE_USER')"/>
+            <column name="role_id" valueComputed="(SELECT r.id FROM Role r WHERE r.name = 'CUSTOMER_USER')"/>
         </insert>
     </changeSet>
 
@@ -130,9 +130,454 @@
     <changeSet id="INSERT_REVIEWS_TABLE_1" author="kazimir_bortnik@mail.ru">
         <insert tableName="Reviews">
             <column name="review"
-                    value=" RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_
+                    value="  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_
+                     RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_ RANDOM_  RANDOM_
                      RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_ "/>
             <column name="user_id" value="1"/>
         </insert>
     </changeSet>
+
+    <changeSet id="PROFILE_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <createTable tableName="Profile">
+            <column name="id" type="BIGINT">
+                <constraints foreignKeyName="id" references="User(id)" nullable="false"/>
+            </column>
+            <column name="address" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="telephone" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="INSERT_PROFILE_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <insert tableName="Profile">
+            <column name="address" value="Moskovskaya 45/5"/>
+            <column name="telephone" value="+375447597989"/>
+            <column name="id" value="1"/>
+        </insert>
+        <insert tableName="Profile">
+            <column name="address" value="Frolikava 25/4"/>
+            <column name="telephone" value="+375447597989"/>
+            <column name="id" value="2"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="THEME_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <createTable tableName="Theme">
+
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(254)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="deleted" type="Boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="INSERT_THEME_TABLE_1" author="kazimir_bortnik@mail.ru">
+
+        <insert tableName="Theme">
+            <column name="name" value="THEME_1"/>
+        </insert>
+
+        <insert tableName="Theme">
+            <column name="name" value="THEME_2"/>
+        </insert>
+
+        <insert tableName="Theme">
+            <column name="name" value="THEME_3"/>
+        </insert>
+
+        <insert tableName="Theme">
+            <column name="name" value="THEME_4"/>
+        </insert>
+
+    </changeSet>
+
+
+    <changeSet id="ARTICLE_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <createTable tableName="Article">
+
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="data_create" type="Timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="title" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="content" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="summary" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deleted" type="Boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="author_id" type="BIGINT">
+                <constraints foreignKeyName="author_id" references="User(id)" nullable="false"/>
+            </column>
+
+            <column name="theme" type="BIGINT">
+                <constraints foreignKeyName="theme" references="Theme(id)" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="INSERT_ARTICLE_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <insert tableName="Article">
+            <column name="title" value="THEME_1As the capital was walking on the 'Night of Museums'. Our photo report"/>
+            <column name="content" value="In the main museum of the country this year the theme was “the nature of the senses”.
+   Joy, Fear, Sadness, Disgust, Anger - these are not only familiar emotions, but also characters of the Disney “Puzzle”.
+   The program included board games, creative zones, a quest, a mudbor, where one could leave his visualized dreams,
+   a performance from an experimental theater."/>
+            <column name="summary"
+                    value="In the main museum of the country this year the theme was “the nature of the senses......"/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title"
+                    value="THEME_1Free 'Avengers' and cool 'Night of Museums'. Where all your friends will go on a weekend in Minsk"/>
+            <column name="content" value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens. The whole Saturday at one o'clock in the afternoon at the Town Hall the Minsk groups will create a sound.
+    Who you know for sure is INTELLIGENCY (their output is at 21.30)."/>
+            <column name="summary"
+                    value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens....."/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+        <insert tableName="Article">
+            <column name="title" value="THEME_1As the capital was walking on the 'Night of Museums'. Our photo report"/>
+            <column name="content" value="In the main museum of the country this year the theme was “the nature of the senses”.
+   Joy, Fear, Sadness, Disgust, Anger - these are not only familiar emotions, but also characters of the Disney “Puzzle”.
+   The program included board games, creative zones, a quest, a mudbor, where one could leave his visualized dreams,
+   a performance from an experimental theater."/>
+            <column name="summary"
+                    value="In the main museum of the country this year the theme was “the nature of the senses......"/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title"
+                    value="THEME_1Free 'Avengers' and cool 'Night of Museums'. Where all your friends will go on a weekend in Minsk"/>
+            <column name="content" value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens. The whole Saturday at one o'clock in the afternoon at the Town Hall the Minsk groups will create a sound.
+    Who you know for sure is INTELLIGENCY (their output is at 21.30)."/>
+            <column name="summary"
+                    value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens....."/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+        <insert tableName="Article">
+            <column name="title" value="THEME_1As the capital was walking on the 'Night of Museums'. Our photo report"/>
+            <column name="content" value="In the main museum of the country this year the theme was “the nature of the senses”.
+   Joy, Fear, Sadness, Disgust, Anger - these are not only familiar emotions, but also characters of the Disney “Puzzle”.
+   The program included board games, creative zones, a quest, a mudbor, where one could leave his visualized dreams,
+   a performance from an experimental theater."/>
+            <column name="summary"
+                    value="In the main museum of the country this year the theme was “the nature of the senses......"/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title"
+                    value="THEME_1Free 'Avengers' and cool 'Night of Museums'. Where all your friends will go on a weekend in Minsk"/>
+            <column name="content" value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens. The whole Saturday at one o'clock in the afternoon at the Town Hall the Minsk groups will create a sound.
+    Who you know for sure is INTELLIGENCY (their output is at 21.30)."/>
+            <column name="summary"
+                    value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens....."/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+        <insert tableName="Article">
+            <column name="title" value="THEME_1As the capital was walking on the 'Night of Museums'. Our photo report"/>
+            <column name="content" value="In the main museum of the country this year the theme was “the nature of the senses”.
+   Joy, Fear, Sadness, Disgust, Anger - these are not only familiar emotions, but also characters of the Disney “Puzzle”.
+   The program included board games, creative zones, a quest, a mudbor, where one could leave his visualized dreams,
+   a performance from an experimental theater."/>
+            <column name="summary"
+                    value="In the main museum of the country this year the theme was “the nature of the senses......"/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title"
+                    value="THEME_1Free 'Avengers' and cool 'Night of Museums'. Where all your friends will go on a weekend in Minsk"/>
+            <column name="content" value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens. The whole Saturday at one o'clock in the afternoon at the Town Hall the Minsk groups will create a sound.
+    Who you know for sure is INTELLIGENCY (their output is at 21.30)."/>
+            <column name="summary"
+                    value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens....."/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+
+
+        <insert tableName="Article">
+            <column name="title" value="THEME_1As the capital was walking on the 'Night of Museums'. Our photo report"/>
+            <column name="content" value="In the main museum of the country this year the theme was “the nature of the senses”.
+   Joy, Fear, Sadness, Disgust, Anger - these are not only familiar emotions, but also characters of the Disney “Puzzle”.
+   The program included board games, creative zones, a quest, a mudbor, where one could leave his visualized dreams,
+   a performance from an experimental theater."/>
+            <column name="summary"
+                    value="In the main museum of the country this year the theme was “the nature of the senses......"/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title"
+                    value="THEME_1Free 'Avengers' and cool 'Night of Museums'. Where all your friends will go on a weekend in Minsk"/>
+            <column name="content" value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens. The whole Saturday at one o'clock in the afternoon at the Town Hall the Minsk groups will create a sound.
+    Who you know for sure is INTELLIGENCY (their output is at 21.30)."/>
+            <column name="summary"
+                    value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens....."/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+        <insert tableName="Article">
+            <column name="title" value="THEME_1As the capital was walking on the 'Night of Museums'. Our photo report"/>
+            <column name="content" value="In the main museum of the country this year the theme was “the nature of the senses”.
+   Joy, Fear, Sadness, Disgust, Anger - these are not only familiar emotions, but also characters of the Disney “Puzzle”.
+   The program included board games, creative zones, a quest, a mudbor, where one could leave his visualized dreams,
+   a performance from an experimental theater."/>
+            <column name="summary"
+                    value="In the main museum of the country this year the theme was “the nature of the senses......"/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title"
+                    value="THEME_1Free 'Avengers' and cool 'Night of Museums'. Where all your friends will go on a weekend in Minsk"/>
+            <column name="content" value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens. The whole Saturday at one o'clock in the afternoon at the Town Hall the Minsk groups will create a sound.
+    Who you know for sure is INTELLIGENCY (their output is at 21.30)."/>
+            <column name="summary"
+                    value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens....."/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+        <insert tableName="Article">
+            <column name="title" value="THEME_1As the capital was walking on the 'Night of Museums'. Our photo report"/>
+            <column name="content" value="In the main museum of the country this year the theme was “the nature of the senses”.
+   Joy, Fear, Sadness, Disgust, Anger - these are not only familiar emotions, but also characters of the Disney “Puzzle”.
+   The program included board games, creative zones, a quest, a mudbor, where one could leave his visualized dreams,
+   a performance from an experimental theater."/>
+            <column name="summary"
+                    value="In the main museum of the country this year the theme was “the nature of the senses......"/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title"
+                    value="THEME_1Free 'Avengers' and cool 'Night of Museums'. Where all your friends will go on a weekend in Minsk"/>
+            <column name="content" value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens. The whole Saturday at one o'clock in the afternoon at the Town Hall the Minsk groups will create a sound.
+    Who you know for sure is INTELLIGENCY (their output is at 21.30)."/>
+            <column name="summary"
+                    value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens....."/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+        <insert tableName="Article">
+            <column name="title" value="THEME_1As the capital was walking on the 'Night of Museums'. Our photo report"/>
+            <column name="content" value="In the main museum of the country this year the theme was “the nature of the senses”.
+   Joy, Fear, Sadness, Disgust, Anger - these are not only familiar emotions, but also characters of the Disney “Puzzle”.
+   The program included board games, creative zones, a quest, a mudbor, where one could leave his visualized dreams,
+   a performance from an experimental theater."/>
+            <column name="summary"
+                    value="In the main museum of the country this year the theme was “the nature of the senses......"/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title"
+                    value="THEME_1Free 'Avengers' and cool 'Night of Museums'. Where all your friends will go on a weekend in Minsk"/>
+            <column name="content" value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens. The whole Saturday at one o'clock in the afternoon at the Town Hall the Minsk groups will create a sound.
+    Who you know for sure is INTELLIGENCY (their output is at 21.30)."/>
+            <column name="summary"
+                    value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens....."/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_1')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title" value="THEME_2As the capital was walking on the 'Night of Museums'. Our photo report"/>
+            <column name="content" value="In the main museum of the country this year the theme was “the nature of the senses”.
+   Joy, Fear, Sadness, Disgust, Anger - these are not only familiar emotions, but also characters of the Disney “Puzzle”.
+   The program included board games, creative zones, a quest, a mudbor, where one could leave his visualized dreams,
+   a performance from an experimental theater."/>
+            <column name="summary"
+                    value="In the main museum of the country this year the theme was “the nature of the senses......"/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_2')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title"
+                    value="THEME_2Free 'Avengers' and cool 'Night of Museums'. Where all your friends will go on a weekend in Minsk"/>
+            <column name="content" value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens. The whole Saturday at one o'clock in the afternoon at the Town Hall the Minsk groups will create a sound.
+    Who you know for sure is INTELLIGENCY (their output is at 21.30)."/>
+            <column name="summary"
+                    value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens....."/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_2')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title" value="THEME_3As the capital was walking on the 'Night of Museums'. Our photo report"/>
+            <column name="content" value="In the main museum of the country this year the theme was “the nature of the senses”.
+   Joy, Fear, Sadness, Disgust, Anger - these are not only familiar emotions, but also characters of the Disney “Puzzle”.
+   The program included board games, creative zones, a quest, a mudbor, where one could leave his visualized dreams,
+   a performance from an experimental theater."/>
+            <column name="summary"
+                    value="In the main museum of the country this year the theme was “the nature of the senses......"/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_3')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title"
+                    value="THEME_3Free 'THEME_3Avengers' and cool 'Night of Museums'. Where all your friends will go on a weekend in Minsk"/>
+            <column name="content" value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens. The whole Saturday at one o'clock in the afternoon at the Town Hall the Minsk groups will create a sound.
+    Who you know for sure is INTELLIGENCY (their output is at 21.30)."/>
+            <column name="summary"
+                    value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens....."/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_3')"/>
+        </insert>
+
+        <insert tableName="Article">
+            <column name="title" value="THEME_4As the capital was walking on the 'Night of Museums'. Our photo report"/>
+            <column name="content" value="In the main museum of the country this year the theme was “the nature of the senses”.
+   Joy, Fear, Sadness, Disgust, Anger - these are not only familiar emotions, but also characters of the Disney “Puzzle”.
+   The program included board games, creative zones, a quest, a mudbor, where one could leave his visualized dreams,
+   a performance from an experimental theater."/>
+            <column name="summary"
+                    value="In the main museum of the country this year the theme was “the nature of the senses......"/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_4')"/>
+        </insert>
+        <insert tableName="Article">
+            <column name="title"
+                    value="THEME_4 Free 'THEME_4Avengers' and cool 'Night of Museums'. Where all your friends will go on a weekend in Minsk"/>
+            <column name="content" value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens. The whole Saturday at one o'clock in the afternoon at the Town Hall the Minsk groups will create a sound.
+    Who you know for sure is INTELLIGENCY (their output is at 21.30)."/>
+            <column name="summary"
+                    value="On the territory of the Upper Town in Minsk a new season of “Pedestrians” opens....."/>
+            <column name="author_id" value="2"/>
+            <column name="theme" valueComputed="(SELECT t.id FROM Theme t WHERE t.name = 'THEME_4')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="COMMENT_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <createTable tableName="Comment">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="data_create" type="Timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="content" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deleted" type="Boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="comment_author_id" type="BIGINT">
+                <constraints foreignKeyName="comment_author_id" references="User(id)" nullable="false"/>
+            </column>
+
+            <column name="comment_article_id" type="BIGINT">
+                <constraints foreignKeyName="comment_article_id" references="Article(id)" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="COMMENT_ARTICLE_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="1"/>
+        </insert>
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="3"/>
+        </insert>
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="3"/>
+        </insert>
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="3"/>
+        </insert>
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="5"/>
+        </insert>
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="5"/>
+        </insert>
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="5"/>
+        </insert>
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="5"/>
+        </insert>
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="6"/>
+        </insert>
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="6"/>
+        </insert>
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="6"/>
+        </insert>
+        <insert tableName="Comment">
+            <column name="content" value="1Aliquam a porta risus. Proin hendrerit lorem et mauris semper varius."/>
+            <column name="comment_author_id" value="2"/>
+            <column name="comment_article_id" value="6"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

@@ -7,12 +7,14 @@ import org.springframework.validation.Validator;
 import ru.kazimir.bortnik.online_market.service.UserService;
 import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 
+import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidationJAR.REGEX_EMAIL;
+
 @Component
-public class UpdatePasswordValidatorImpl implements Validator {
+public class UpdateByEmailPasswordValidatorImpl implements Validator {
     private final UserService userService;
 
     @Autowired
-    public UpdatePasswordValidatorImpl(UserService userService) {
+    public UpdateByEmailPasswordValidatorImpl(UserService userService) {
         this.userService = userService;
     }
 
@@ -24,10 +26,17 @@ public class UpdatePasswordValidatorImpl implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         UserDTO userDTO = (UserDTO) target;
+        if (userDTO.getEmail().length() < 40) {
+            if (!userDTO.getEmail().matches(REGEX_EMAIL)) {
+                errors.rejectValue("email", "user.error.user.email");
+            }
+        } else {
+            errors.rejectValue("email", "user.error.email.size");
+        }
         if (!errors.hasFieldErrors("email")) {
             UserDTO user = userService.getByEmail(userDTO.getEmail());
             if (user == null) {
-                errors.rejectValue("email", null, null);
+                errors.rejectValue("email", "user.error.user.email");
             }
         }
     }

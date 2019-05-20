@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.ERROR_403_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.ERROR_403_PAGE_URL;
 
 @Component
 public class MyAccessDeniedHandler implements AccessDeniedHandler {

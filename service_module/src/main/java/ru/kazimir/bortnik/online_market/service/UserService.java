@@ -19,4 +19,10 @@ public interface UserService {
     void add(UserDTO userDTO);
 
     UserDTO getByEmail(String email);
+
+    UserDTO getUserWithProfile(Long Id);
+
+    String getPasswordById(Long id);
+
+    void updateProfile(UserDTO userDTO);
 }

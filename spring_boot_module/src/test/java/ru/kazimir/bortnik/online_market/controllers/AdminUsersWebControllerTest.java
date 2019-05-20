@@ -6,17 +6,19 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.kazimir.bortnik.online_market.controllers.web.AdminUsersWebController;
 import ru.kazimir.bortnik.online_market.service.RoleService;
 import ru.kazimir.bortnik.online_market.service.UserService;
 import ru.kazimir.bortnik.online_market.service.model.RoleDTO;
 import ru.kazimir.bortnik.online_market.service.model.UserDTO;
-import ru.kazimir.bortnik.online_market.validators.AddUserValidatorImpl;
+import ru.kazimir.bortnik.online_market.validators.SaveUserValidatorImpl;
 import ru.kazimir.bortnik.online_market.validators.RoleValidatorImpl;
-import ru.kazimir.bortnik.online_market.validators.UpdatePasswordValidatorImpl;
+import ru.kazimir.bortnik.online_market.validators.UpdateByEmailPasswordValidatorImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,33 +36,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class UsersWebControllerTest {
-
+public class AdminUsersWebControllerTest {
     @Mock
     private UserService userService;
     @Mock
     private RoleService roleService;
     @Mock
-    private AddUserValidatorImpl addUserValidatorImpl;
+    private SaveUserValidatorImpl saveUserValidatorImpl;
     @Mock
     private RoleValidatorImpl roleValidatorImpl;
     @Mock
-    private UpdatePasswordValidatorImpl updatePasswordValidatorImpl;
+    private UpdateByEmailPasswordValidatorImpl updateByEmailPasswordValidatorImpl;
     @Mock
     private BindingResult bindingResult;
     @Mock
-    private
-    RedirectAttributes redirectAttributes;
+    private RedirectAttributes redirectAttributes;
+    @Mock
+    private Authentication authentication;
 
     private MockMvc mockMvc;
-    private UsersWebController usersWebController;
+    private AdminUsersWebController adminUsersWebController;
     private List<UserDTO> userDTOS = new ArrayList<>();
     private List<RoleDTO> roleDTOS = new ArrayList<>();
 
     @Before
     public void init() {
-        usersWebController = new UsersWebController(userService, roleService, addUserValidatorImpl, roleValidatorImpl, updatePasswordValidatorImpl);
-        mockMvc = MockMvcBuilders.standaloneSetup(usersWebController).build();
+        adminUsersWebController = new AdminUsersWebController(userService, roleService, saveUserValidatorImpl, roleValidatorImpl, updateByEmailPasswordValidatorImpl);
+        mockMvc = MockMvcBuilders.standaloneSetup(adminUsersWebController).build();
 
         UserDTO userDTO1 = new UserDTO();
         userDTO1.setId(1L);
@@ -143,7 +145,7 @@ public class UsersWebControllerTest {
     @Test
     public void ifTheIncomingSheetIdIsNullThenTheMethodForDeletionShouldNotBeCaused() {
         List<Long> longList = new ArrayList<>();
-        usersWebController.deleteUsers(null, null);
+        adminUsersWebController.deleteUsers(null, null);
         verify(userService, never()).deleteUsersById(longList);
     }
 
@@ -151,7 +153,7 @@ public class UsersWebControllerTest {
     public void ifTheSheetIdOfUsersIsNotNullButTheEmptyMethodOfDeletingUsersShouldNotBeCalled() {
         List<Long> longList = new ArrayList<>();
         Long[] ids = {};
-        usersWebController.deleteUsers(ids, null);
+        adminUsersWebController.deleteUsers(ids, null);
         verify(userService, never()).deleteUsersById(longList);
 
     }
@@ -159,7 +161,7 @@ public class UsersWebControllerTest {
     @Test
     public void ifTheSheetIdOfUsersIsNotNullButAndNotEmptyMethodOfDeletingUsersShouldCalled() {
         Long[] ids = {1L, 3L};
-        usersWebController.deleteUsers(ids, redirectAttributes);
+        adminUsersWebController.deleteUsers(ids, redirectAttributes);
         List<Long> longList = new ArrayList<>();
         longList.add(1L);
         longList.add(3L);
@@ -172,7 +174,7 @@ public class UsersWebControllerTest {
         when(bindingResult.hasErrors()).thenReturn(true);
         UserDTO userDTO = new UserDTO();
         userDTO.setRoleDTO(new RoleDTO());
-        String result = usersWebController.updateRole(userDTO, bindingResult, redirectAttributes);
+        String result = adminUsersWebController.updateRole(userDTO, bindingResult, redirectAttributes);
         assertEquals("redirect:/private/users/showing", result);
     }
 
@@ -182,7 +184,7 @@ public class UsersWebControllerTest {
         when(bindingResult.hasErrors()).thenReturn(true);
         UserDTO userDTO = new UserDTO();
         userDTO.setRoleDTO(new RoleDTO());
-        usersWebController.updateRole(userDTO, bindingResult, redirectAttributes);
+        adminUsersWebController.updateRole(userDTO, bindingResult, redirectAttributes);
         verify(userService, never()).updateRole(userDTO);
     }
 
@@ -193,7 +195,7 @@ public class UsersWebControllerTest {
         RoleDTO roleADMINISTRATOR = new RoleDTO();
         roleADMINISTRATOR.setName("ADMINISTRATOR");
         userDTO.setRoleDTO(roleADMINISTRATOR);
-        usersWebController.updateRole(userDTO, bindingResult, redirectAttributes);
+        adminUsersWebController.updateRole(userDTO, bindingResult, redirectAttributes);
         verify(userService, Mockito.times(1)).updateRole(userDTO);
     }
 
@@ -201,7 +203,7 @@ public class UsersWebControllerTest {
     public void ifTheUserComesWithAnEmptyEmailSendToRedirect() {
         when(bindingResult.hasFieldErrors("email")).thenReturn(true);
         UserDTO userDTO = new UserDTO();
-        String result = usersWebController.updatePassword(userDTO, bindingResult, redirectAttributes);
+        String result = adminUsersWebController.updatePassword(userDTO, bindingResult, redirectAttributes);
         assertEquals("redirect:/private/users/showing", result);
     }
 
@@ -210,7 +212,7 @@ public class UsersWebControllerTest {
         when(bindingResult.hasFieldErrors("email")).thenReturn(true);
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail("test@mail.ru");
-        usersWebController.updatePassword(userDTO, bindingResult, redirectAttributes);
+        adminUsersWebController.updatePassword(userDTO, bindingResult, redirectAttributes);
         verify(userService, never()).updatePasswordByEmail(userDTO.getEmail());
     }
 
@@ -219,7 +221,7 @@ public class UsersWebControllerTest {
         when(bindingResult.hasFieldErrors("email")).thenReturn(false);
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail("test@mail.ru");
-        usersWebController.updatePassword(userDTO, bindingResult, redirectAttributes);
+        adminUsersWebController.updatePassword(userDTO, bindingResult, redirectAttributes);
         verify(userService, Mockito.times(1)).updatePasswordByEmail(userDTO.getEmail());
     }
 
@@ -227,7 +229,7 @@ public class UsersWebControllerTest {
     public void ifAnEmptyUserHasArrivedSendToRedirect() {
         when(bindingResult.hasErrors()).thenReturn(false);
         UserDTO userDTO = new UserDTO();
-        String result = usersWebController.addUsers(userDTO, bindingResult, redirectAttributes);
+        String result = adminUsersWebController.addUsers(userDTO, bindingResult, redirectAttributes);
         assertEquals("redirect:/private/users/form_add_users", result);
     }
 
@@ -235,7 +237,7 @@ public class UsersWebControllerTest {
     public void ifAnEmptyUserHasComeTheAddMethodShouldNotBeCalled() {
         when(bindingResult.hasErrors()).thenReturn(true);
         UserDTO userDTO = new UserDTO();
-        usersWebController.addUsers(userDTO, bindingResult, redirectAttributes);
+        adminUsersWebController.addUsers(userDTO, bindingResult, redirectAttributes);
         verify(userService, never()).add(userDTO);
     }
 
@@ -247,7 +249,26 @@ public class UsersWebControllerTest {
         RoleDTO roleADMINISTRATOR = new RoleDTO();
         roleADMINISTRATOR.setName("ADMINISTRATOR");
         userDTO.setRoleDTO(roleADMINISTRATOR);
-        usersWebController.addUsers(userDTO, bindingResult, redirectAttributes);
+        adminUsersWebController.addUsers(userDTO, bindingResult, redirectAttributes);
         verify(userService, Mockito.times(1)).add(userDTO);
+    }
+
+    @Test
+    public void shouldSisplayAProfileFormWithFieldsFilledIn() throws Exception {
+        UserDTO userDTO1 = new UserDTO();
+        userDTO1.setId(1L);
+        userDTO1.setEmail("Test@mail.ru");
+        userDTO1.setSurname("SurnameTest");
+        userDTO1.setName("NameTest");
+        userDTO1.setPatronymic("PatronymicTest");
+        RoleDTO roleDTO1 = new RoleDTO();
+        roleDTO1.setName("ADMINISTRATOR");
+        userDTO1.setRoleDTO(roleDTO1);
+
+        when(authentication.getPrincipal()).thenReturn(userDTO1);
+        mockMvc.perform(get("/private/users/show_Profile_User.html"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("private_profileUser"));
     }
 }

@@ -18,6 +18,14 @@ public class UserDetail implements UserDetails {
         grantedAuthorities.add(new SimpleGrantedAuthority(userDTO.getRoleDTO().getName()));
     }
 
+    public UserDTO getUserDTO() {
+        return userDTO;
+    }
+
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return grantedAuthorities;
@@ -51,5 +59,12 @@ public class UserDetail implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDetail{"
+                + userDTO +
+                '}';
     }
 }

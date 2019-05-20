@@ -1,4 +1,4 @@
-package ru.kazimir.bortnik.online_market.controllers;
+package ru.kazimir.bortnik.online_market.controllers.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.kazimir.bortnik.online_market.model.Pageable;
+import ru.kazimir.bortnik.online_market.service.model.Pageable;
 import ru.kazimir.bortnik.online_market.model.ShellAboveReviewSheet;
 import ru.kazimir.bortnik.online_market.service.ReviewService;
 import ru.kazimir.bortnik.online_market.service.model.ReviewDTO;
@@ -21,23 +21,22 @@ import java.util.List;
 
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_DELETE_REVIEWS;
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_UPDATE_STATUS_SHOWING_REVIEWS;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_REVIEWS_DELETE_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_REVIEWS_PAGE;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_REVIEWS_SHOWING_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_REVIEWS_UPDATE_SHOWING_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.PRIVATE_REVIEWS_URL;
-import static ru.kazimir.bortnik.online_market.constant.URLConstants.REDIRECT_PRIVATE_REVIEWS_SHOWING;
-
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_REVIEWS_DELETE_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_REVIEWS_PAGE;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_REVIEWS_SHOWING_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_REVIEWS_UPDATE_SHOWING_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_REVIEWS_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_PRIVATE_REVIEWS_SHOWING;
 
 @Controller
 @RequestMapping(PRIVATE_REVIEWS_URL)
-public class ReviewsWebController {
-    private final static Logger logger = LoggerFactory.getLogger(ReviewsWebController.class);
+public class AdminReviewsWebController {
+    private final static Logger logger = LoggerFactory.getLogger(AdminReviewsWebController.class);
     private final Pageable pageable = new Pageable(10L);
     private final ReviewService reviewService;
 
     @Autowired
-    public ReviewsWebController(ReviewService reviewService) {
+    public AdminReviewsWebController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
 
