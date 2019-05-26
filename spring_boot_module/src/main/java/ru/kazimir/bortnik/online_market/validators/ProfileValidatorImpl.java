@@ -17,12 +17,13 @@ public class ProfileValidatorImpl implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         ProfileDTO profileDTO = (ProfileDTO) target;
-        if (!profileDTO.getTelephone().matches(REGEX_TELEPHONE)) {
-            errors.rejectValue("profileDTO.telephone", "profile.error.telephone");
-        }
+            if (!profileDTO.getTelephone().matches(REGEX_TELEPHONE)) {
+                errors.rejectValue("profileDTO.telephone", "profile.error.telephone");
+            }
 
-        if (profileDTO.getResidentialAddress().length() > 40 || profileDTO.getResidentialAddress().length() < 5) {
-            errors.rejectValue("profileDTO.residentialAddress", "profile.error.residential.address");
-        }
+            if (profileDTO.getResidentialAddress().length() > 40 || profileDTO.getResidentialAddress().length() < 5) {
+                errors.rejectValue("profileDTO.residentialAddress", "profile.error.residential.address");
+            }
+
     }
 }

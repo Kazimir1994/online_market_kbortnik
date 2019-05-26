@@ -4,9 +4,9 @@ import org.springframework.stereotype.Repository;
 import ru.kazimir.bortnik.online_market.repository.ArticleRepository;
 import ru.kazimir.bortnik.online_market.repository.model.Article;
 import ru.kazimir.bortnik.online_market.repository.model.CommentArticleId;
-import ru.kazimir.bortnik.online_market.repository.model.Theme;
 
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,13 +32,6 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> 
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public List<Theme> findAllTheme() {
-        String query = "from " + Theme.class.getName();
-        Query q = entityManager.createQuery(query);
-        return q.getResultList();
-    }
-
-    @Override
     public List<Article> findAll(int offset, int limit) {
         String query = "from " + Article.class.getName() + " order by dataCreate desc";
         Query q = entityManager.createQuery(query)
@@ -55,15 +48,19 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> 
         Query queryManager = entityManager.createQuery(query);
         queryManager.setMaxResults(sizeTop);
         List<Long> aLong = queryManager.getResultList();
-        String articleIS = aLong.stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(","));
+        if (!aLong.isEmpty()) {
+            String articleIS = aLong.stream()
+                    .map(Object::toString)
+                    .collect(Collectors.joining(","));
 
-        query = "from " + Article.class.getName() + " where id IN(" + articleIS + ")";
-        queryManager = entityManager.createQuery(query);
-        queryManager.setMaxResults(sizeTop);
+            query = "from " + Article.class.getName() + " where id IN(" + articleIS + ")";
+            queryManager = entityManager.createQuery(query);
+            queryManager.setMaxResults(sizeTop);
+            return queryManager.getResultList();
 
-        return queryManager.getResultList();
+        } else {
+            return new ArrayList<>();
+        }
     }
 }
 

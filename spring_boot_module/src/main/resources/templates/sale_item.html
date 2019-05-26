@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+
+        <div class="bs-docs-section">
+            <div class="page-header" style="padding-top: 20px; padding-bottom: 5px; color: #ebebeb">
+                <h1>Item</h1>
+            </div>
+            <div class="bs-component">
+                <th:block th:object="${Item}">
+                    <div class="jumbotron">
+                        <h5>Name</h5>
+                        <p class="lead" th:text="*{name}"></p>
+                        <hr class="my-4">
+                        <h5>Price</h5>
+                        <p class="lead" th:text="*{price}"></p>
+                        <hr class="my-4">
+                        <h5>Description</h5>
+                        <p class="lead" th:text="*{shortDescription}"></p>
+                        <hr class="my-4">
+                        <h5>UniqueNumber</h5>
+                        <p class="lead" th:text="*{uniqueNumber}"></p>
+                        <hr class="my-4">
+                    </div>
+                </th:block>
+            </div>
+        </div>
+
+    <div class="footer container-lg width-full px-3" role="contentinfo">
+        <div class="position-relative d-flex flex-justify-between pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+            <div style="text-align: center;">
+                <span>Online Marker__2018</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

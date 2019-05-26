@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <div class="bs-docs-section">
+        <div class="page-header" style="padding-top: 20px; padding-bottom: 5px; color: #ebebeb">
+            <h1 th:text="${Article.title}"></h1>
+        </div>
+        <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
+        <div class="bs-component">
+            <p class="lead" th:text="${Article.dataCreate}"></p>
+            <hr class="my-4">
+            <h6 th:text="| ${Article.author.name} ${Article.author.surname}|"></h6>
+            <p class="lead" th:text="${Article.content}"></p>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="float-lg-right">
+                        <form style="padding-top:5px" action="#"
+                              th:action="@{/public/sale/articles/form_article_update(articlesId=${Article.id})}"
+                              method="get">
+                            <label><input th:value="${Article.id}" name="articleId" hidden/></label>
+                            <button type="submit" class="btn btn-outline-primary">Update article</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+        </div>
+    </div>
+    <th:block th:object="${Article}">
+        <div th:each="comment,itemStat :*{commentDTOList}" class="jumbotron">
+            <p class="lead" th:text="${comment.dataCreate}"></p>
+            <h6 th:text="| ${comment.userDTO.name} ${comment.userDTO.surname}|"></h6>
+            <p class="lead" th:text="${comment.content}"></p>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="float-lg-right">
+                        <form style="padding-top:5px" action="#" th:action="@{/public/sale/articles/comment/delete}"
+                              method="post">
+                            <label><input th:value="${comment.id}" name="commentId" hidden/></label>
+                            <label><input th:value="${Article.id}" name="articleId" hidden/></label>
+                            <button type="submit" class="btn btn-outline-warning">Delete comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    <div class="footer container-lg width-full px-3" role="contentinfo">
+        <div class="position-relative d-flex flex-justify-between pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+            <div style="text-align: center;">
+                <span>Online Marker__2018</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

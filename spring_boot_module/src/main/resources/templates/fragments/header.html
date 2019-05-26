@@ -34,7 +34,21 @@
                     <a class="nav-link" href="/public/customer/users/show_Profile_User">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href=/public/customer/articles/showing>articles</a>
+                    <a class="nav-link" href=/public/customer/articles/showing>Articles</a>
+                </li>
+            </th:block>
+
+            <th:block sec:authorize="hasAuthority('SALE_USER')">
+                <li class="nav-item">
+                    <a class="nav-link" href=/public/sale/articles/showing>Articles</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href=/public/sale/articles/form_article_creation>Article creation</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href=/public/sale/items/showing>Items</a>
                 </li>
             </th:block>
         </ul>

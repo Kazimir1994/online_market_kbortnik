@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PageDTO<T> {
+    private List<T> list = new ArrayList<>();
     private Long countOfPages;
     private Long currentPage;
-    private List<T> list = new ArrayList<>();
 
     public Long getCountOfPages() {
         return countOfPages;
@@ -30,6 +30,15 @@ public class PageDTO<T> {
 
     public void setCurrentPage(Long currentPage) {
         this.currentPage = currentPage;
+    }
+
+    @Override
+    public String toString() {
+        return "PageDTO{" +
+                "list=" + list +
+                ", countOfPages=" + countOfPages +
+                ", currentPage=" + currentPage +
+                '}';
     }
 }
 

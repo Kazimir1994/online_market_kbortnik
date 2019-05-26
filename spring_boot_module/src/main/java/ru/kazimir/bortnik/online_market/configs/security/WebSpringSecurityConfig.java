@@ -16,6 +16,7 @@ import ru.kazimir.bortnik.online_market.configs.security.handler.AppUrlAuthentic
 
 import static ru.kazimir.bortnik.online_market.constant.RoleConstants.ADMIN_ROLE_NAME;
 import static ru.kazimir.bortnik.online_market.constant.RoleConstants.CUSTOMER_ROLE_NAME;
+import static ru.kazimir.bortnik.online_market.constant.RoleConstants.SALE_USER_ROLE_NAME;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.CSS_CONTENT_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.DEFAULT_PAGE_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.ERROR_403_PAGE_URL;
@@ -23,6 +24,7 @@ import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.ERROR_50
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.HOME_PAGE_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.LOGIN_PAGE_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_ADMIN_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_USER_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_USER_URL;
 
 @Configuration
@@ -33,7 +35,9 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public WebSpringSecurityConfig(@Qualifier("appUserDetailsService") UserDetailsService userDetailsService, AccessDeniedHandler accessDeniedHandler, PasswordEncoder passwordEncoder) {
+    public WebSpringSecurityConfig(@Qualifier("appUserDetailsService") UserDetailsService userDetailsService,
+                                   AccessDeniedHandler accessDeniedHandler,
+                                   PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
         this.accessDeniedHandler = accessDeniedHandler;
         this.passwordEncoder = passwordEncoder;
@@ -47,8 +51,11 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         ERROR_500_PAGE_URL,
                         HOME_PAGE_URL,
                         CSS_CONTENT_URL).permitAll()
+
                 .antMatchers(PRIVATE_ADMIN_URL).hasAuthority(ADMIN_ROLE_NAME)
-                .antMatchers(PUBLIC_SALE_USER_URL).hasAuthority(CUSTOMER_ROLE_NAME)
+                .antMatchers(PUBLIC_CUSTOMER_USER_URL).hasAuthority(CUSTOMER_ROLE_NAME)
+                .antMatchers(PUBLIC_SALE_USER_URL).hasAuthority(SALE_USER_ROLE_NAME)
+
                 .anyRequest().authenticated().and()
                 .formLogin().loginPage(LOGIN_PAGE_URL)
                 .successHandler(authenticationSuccessHandler())

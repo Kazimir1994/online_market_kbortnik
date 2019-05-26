@@ -27,13 +27,13 @@ public class UserAPIController {
     private final UserService userService;
 
     @Autowired
-    public UserAPIController(@Qualifier("saveUserValidatorImpl") Validator saveUserValidator, UserService userService) {
+    public UserAPIController(@Qualifier("addUserValidatorImpl") Validator saveUserValidator, UserService userService) {
         this.saveUserValidator = saveUserValidator;
         this.userService = userService;
     }
 
     @PostMapping(API_USER_SAVE_URL)
-    public ResponseEntity saveUser(@RequestBody UserDTO userDTO, BindingResult bindingResult) {
+    public ResponseEntity addUser(@RequestBody UserDTO userDTO, BindingResult bindingResult) {
         logger.info("Request API to add a user ( User := {}. )", userDTO);
         saveUserValidator.validate(userDTO, bindingResult);
         if (bindingResult.hasErrors()) {

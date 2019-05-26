@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <div class="bs-docs-section">
+        <div class="bs-component" style="padding-top: 40px">
+            <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
+            <div class="jumbotron">
+                <form action="#" th:action="@{/public/sale/articles/update}" th:object="${articleDTO}"
+                      method="post">
+                    <fieldset>
+                        <div class="page-header" style="padding-top: 20px; padding-bottom: 5px; color: #ebebeb">
+                            <h1 id="tables">Update Article</h1>
+                        </div>
+                        <hr class="my-4">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <div class="form-group">
+                                <textarea name="title" class="form-control" th:text="${article.title}" rows="2"
+                                          required></textarea>
+                            </div>
+                            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-warning"
+                               style="padding-top: 10px">Name Error.</p>
+                        </div>
+
+                        <hr class="my-4">
+                        <div class="form-group">
+                            <label>Content</label>
+                            <div class="form-group">
+                                <textarea name="content" th:text="${article.content}" class="form-control" rows="10"
+                                          required></textarea>
+                            </div>
+                            <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="text-warning"
+                               style="padding-top: 10px">Name Error.</p>
+                        </div>
+
+                        <hr class="my-4">
+                        <div class="form-group">
+                            <label>Theme</label>
+                            <select name="role" class="custom-select" th:field="*{themeDTO.id}">
+                                <option th:each="theme : ${themes}" th:value="${theme.id}"
+                                        th:text="${theme.name}"
+                                        th:if="${theme.id == article.themeDTO.id}"
+                                        selected></option>
+                                <option th:each="theme : ${themes}"
+                                        th:value="${theme.id}"
+                                        th:unless="${theme.id == article.themeDTO.id}"
+                                        th:text="${theme.name}"></option>
+                            </select>
+                        </div>
+                        <label><input th:value="${article.id}" name="id" hidden/></label>
+                        <button type="submit" class="btn btn-outline-success"> Add new article</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

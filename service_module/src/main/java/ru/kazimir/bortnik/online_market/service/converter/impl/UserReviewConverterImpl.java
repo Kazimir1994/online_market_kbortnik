@@ -13,7 +13,6 @@ public class UserReviewConverterImpl implements Converter<UserDTO, User> {
         UserDTO userDTO = new UserDTO();
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
-        userDTO.setPatronymic(user.getPatronymic());
         return userDTO;
     }
 
@@ -24,7 +23,6 @@ public class UserReviewConverterImpl implements Converter<UserDTO, User> {
             user.setId(userDTO.getId());
             user.setName(userDTO.getName());
             user.setSurname(userDTO.getSurname());
-            user.setPatronymic(userDTO.getPatronymic());
         }
         return user;
     }

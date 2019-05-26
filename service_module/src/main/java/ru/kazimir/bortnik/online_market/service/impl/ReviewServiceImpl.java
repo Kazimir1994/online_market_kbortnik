@@ -4,29 +4,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kazimir.bortnik.online_market.repository.ReviewRepository;
-import ru.kazimir.bortnik.online_market.repository.exception.ConnectionDataBaseExceptions;
-import ru.kazimir.bortnik.online_market.repository.exception.ReviewRepositoryException;
 import ru.kazimir.bortnik.online_market.repository.model.Review;
 import ru.kazimir.bortnik.online_market.service.ReviewService;
 import ru.kazimir.bortnik.online_market.service.converter.Converter;
 import ru.kazimir.bortnik.online_market.service.exception.ReviewServiceException;
+import ru.kazimir.bortnik.online_market.service.model.PageDTO;
 import ru.kazimir.bortnik.online_market.service.model.ReviewDTO;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.CONNECTION_ERROR_MESSAGE;
-import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.NUMBER_OF_PAGES;
+import static ru.kazimir.bortnik.online_market.service.constans.MessagesLogger.MESSAGES_GET_REVIEWS;
 import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.REVIEW_ERROR_DELETE;
-import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.REVIEW_ERROR_MESSAGE;
 import static ru.kazimir.bortnik.online_market.service.exception.messageexception.ErrorMessagesService.REVIEW_ERROR_UPDATE_SHOWING;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
     private static final Logger logger = LoggerFactory.getLogger(ReviewServiceImpl.class);
+
     private final ReviewRepository reviewRepository;
     private final Converter<ReviewDTO, Review> reviewConverter;
 
@@ -36,82 +33,54 @@ public class ReviewServiceImpl implements ReviewService {
         this.reviewConverter = reviewConverter;
     }
 
+    @Transactional
     @Override
-    public List<ReviewDTO> getReviews(Long limitPositions, Long positions) {
-        try (Connection connection = reviewRepository.getConnection()) {
-            try {
-                connection.setAutoCommit(false);
-                List<Review> userList = reviewRepository.getReviews(connection, limitPositions,
-                        getPosition(limitPositions, positions));
-                List<ReviewDTO> reviewDTOList = userList.stream().map(reviewConverter::toDTO).collect(Collectors.toList());
-                connection.commit();
-                return reviewDTOList;
-            } catch (SQLException | ReviewRepositoryException e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ReviewServiceException(REVIEW_ERROR_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionDataBaseExceptions(CONNECTION_ERROR_MESSAGE, e);
+    public PageDTO<ReviewDTO> getReviews(Long limitPositions, Long currentPage) {
+        PageDTO<ReviewDTO> pageDTO = new PageDTO<>();
+        Long countOfUsers = reviewRepository.getCountOfEntities();
+        Long countOfPages = calculationCountOfPages(countOfUsers, limitPositions);
+        pageDTO.setCountOfPages(countOfPages);
+
+        if (currentPage > countOfPages) {
+            currentPage = countOfPages;
+        } else if (currentPage < countOfPages) {
+            currentPage = 1L;
+        }
+        Long offset = getPosition(limitPositions, currentPage);
+        logger.info(MESSAGES_GET_REVIEWS, limitPositions, offset);
+        List<Review> userList = reviewRepository.findAll(offset, limitPositions);
+        List<ReviewDTO> reviewDTOList = userList.stream().map(reviewConverter::toDTO).collect(Collectors.toList());
+        pageDTO.setList(reviewDTOList);
+        return pageDTO;
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long id) {
+        Review review = reviewRepository.findById(id);
+        if (review != null) {
+            reviewRepository.remove(review);
+        } else {
+            throw new ReviewServiceException(String.format(REVIEW_ERROR_DELETE, id));
         }
     }
 
+    @Transactional
     @Override
-    public Long getNumberOfPages(Long maxPositions) {
-        try (Connection connection = reviewRepository.getConnection()) {
-            try {
-                connection.setAutoCommit(false);
-                Long countOfReview = reviewRepository.getCountOfReview(connection);
-                connection.commit();
-                return calculationCountOfPages(countOfReview, maxPositions);
-            } catch (SQLException | ReviewRepositoryException e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ReviewServiceException(NUMBER_OF_PAGES, e);
+    public void updateHidden(List<ReviewDTO> reviewDTOS) {
+        reviewDTOS.forEach(reviewDTO -> {
+            Review review = reviewRepository.findById(reviewDTO.getId());
+            if (review != null) {
+                if (review.isHidden() != reviewDTO.isHidden()) {
+                    review.setHidden(reviewDTO.isHidden());
+                    reviewRepository.merge(review);
+                }
+            } else {
+                throw new ReviewServiceException(REVIEW_ERROR_UPDATE_SHOWING);
             }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionDataBaseExceptions(CONNECTION_ERROR_MESSAGE, e);
-        }
+        });
     }
 
-    @Override
-    public void deleteReviewsById(Long id) {
-        try (Connection connection = reviewRepository.getConnection()) {
-            try {
-                connection.setAutoCommit(false);
-                reviewRepository.deleteReviewsById(connection, id);
-                connection.commit();
-            } catch (SQLException | ReviewRepositoryException e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ReviewServiceException(String.format(REVIEW_ERROR_DELETE, id), e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionDataBaseExceptions(CONNECTION_ERROR_MESSAGE, e);
-        }
-    }
-
-    @Override
-    public void updateShowing(List<ReviewDTO> reviewDTOS) {
-        try (Connection connection = reviewRepository.getConnection()) {
-            try {
-                connection.setAutoCommit(false);
-                List<Review> reviewList = reviewDTOS.stream().map(reviewConverter::fromDTO).collect(Collectors.toList());
-                reviewList.forEach(review -> reviewRepository.updateShowing(connection, review));
-                connection.commit();
-            } catch (SQLException | ReviewRepositoryException e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ReviewServiceException(REVIEW_ERROR_UPDATE_SHOWING, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionDataBaseExceptions(CONNECTION_ERROR_MESSAGE, e);
-        }
-    }
 
     private Long getPosition(Long limitPositions, Long positions) {
         if (positions == 0) {

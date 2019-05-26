@@ -11,13 +11,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.kazimir.bortnik.online_market.controllers.web.AdminUsersWebController;
+import ru.kazimir.bortnik.online_market.controllers.web.admin.AdminUsersWebController;
 import ru.kazimir.bortnik.online_market.service.RoleService;
 import ru.kazimir.bortnik.online_market.service.UserService;
+import ru.kazimir.bortnik.online_market.service.model.PageDTO;
 import ru.kazimir.bortnik.online_market.service.model.RoleDTO;
 import ru.kazimir.bortnik.online_market.service.model.UserDTO;
-import ru.kazimir.bortnik.online_market.validators.SaveUserValidatorImpl;
 import ru.kazimir.bortnik.online_market.validators.RoleValidatorImpl;
+import ru.kazimir.bortnik.online_market.validators.AddUserValidatorImpl;
 import ru.kazimir.bortnik.online_market.validators.UpdateByEmailPasswordValidatorImpl;
 
 import java.util.ArrayList;
@@ -34,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class AdminUsersWebControllerTest {
     @Mock
@@ -42,7 +42,7 @@ public class AdminUsersWebControllerTest {
     @Mock
     private RoleService roleService;
     @Mock
-    private SaveUserValidatorImpl saveUserValidatorImpl;
+    private AddUserValidatorImpl addUserValidatorImpl;
     @Mock
     private RoleValidatorImpl roleValidatorImpl;
     @Mock
@@ -61,7 +61,7 @@ public class AdminUsersWebControllerTest {
 
     @Before
     public void init() {
-        adminUsersWebController = new AdminUsersWebController(userService, roleService, saveUserValidatorImpl, roleValidatorImpl, updateByEmailPasswordValidatorImpl);
+        adminUsersWebController = new AdminUsersWebController(userService, roleService, addUserValidatorImpl, roleValidatorImpl, updateByEmailPasswordValidatorImpl);
         mockMvc = MockMvcBuilders.standaloneSetup(adminUsersWebController).build();
 
         UserDTO userDTO1 = new UserDTO();
@@ -69,7 +69,6 @@ public class AdminUsersWebControllerTest {
         userDTO1.setEmail("Test@mail.ru");
         userDTO1.setSurname("SurnameTest");
         userDTO1.setName("NameTest");
-        userDTO1.setPatronymic("PatronymicTest");
         RoleDTO roleDTO1 = new RoleDTO();
         roleDTO1.setName("ADMINISTRATOR");
         userDTO1.setRoleDTO(roleDTO1);
@@ -79,7 +78,6 @@ public class AdminUsersWebControllerTest {
         userDTO2.setEmail("Test@mail.ru");
         userDTO2.setSurname("SurnameTest");
         userDTO2.setName("NameTest");
-        userDTO2.setPatronymic("PatronymicTest");
         RoleDTO roleDTO2 = new RoleDTO();
         roleDTO2.setName("ADMINISTRATOR");
         userDTO2.setRoleDTO(roleDTO2);
@@ -103,7 +101,7 @@ public class AdminUsersWebControllerTest {
 
     @Test
     public void shouldGetAUserPageWithAFilledTable() throws Exception {
-        when(userService.getUsers(10L, 0L)).thenReturn(userDTOS);
+        when(userService.getUsers(10L, 0L)).thenReturn((PageDTO<UserDTO>) userDTOS);
         mockMvc.perform(get("/private/users/showing.html"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -121,16 +119,7 @@ public class AdminUsersWebControllerTest {
                 .andExpect(forwardedUrl("private_users"));
     }
 
-    @Test
-    public void shouldGetAPageWithFilledPaginationFields() throws Exception {
-        when(userService.getNumberOfPages(10L)).thenReturn(5L);
-        mockMvc.perform(get("/private/users/showing.html"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("SizePage", equalTo(5L)))
-                .andExpect(model().attribute("currentPage", equalTo(1L)))
-                .andExpect(forwardedUrl("private_users"));
-    }
+
 
     @Test
     public void shouldReturnTheAddUserPageWithTheRoleFieldsFilled() throws Exception {
@@ -260,7 +249,6 @@ public class AdminUsersWebControllerTest {
         userDTO1.setEmail("Test@mail.ru");
         userDTO1.setSurname("SurnameTest");
         userDTO1.setName("NameTest");
-        userDTO1.setPatronymic("PatronymicTest");
         RoleDTO roleDTO1 = new RoleDTO();
         roleDTO1.setName("ADMINISTRATOR");
         userDTO1.setRoleDTO(roleDTO1);

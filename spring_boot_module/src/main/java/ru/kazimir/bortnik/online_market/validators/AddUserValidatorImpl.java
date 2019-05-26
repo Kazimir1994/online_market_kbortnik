@@ -9,18 +9,21 @@ import ru.kazimir.bortnik.online_market.service.UserService;
 import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 
 import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidationJAR.REGEX_EMAIL;
-import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidationJAR.REGEX_PATRONYMIC;
 
 @Component
-public class SaveUserValidatorImpl implements Validator {
+public class AddUserValidatorImpl implements Validator {
     private final UserService userService;
     private final Validator roleValidator;
+    private final Validator profileValidator;
 
     @Autowired
-    public SaveUserValidatorImpl(UserService userService,
-                                 @Qualifier("roleValidatorImpl") Validator roleValidator) {
+    public AddUserValidatorImpl(UserService userService,
+                                @Qualifier("roleValidatorImpl") Validator roleValidator,
+                                @Qualifier("profileValidatorImpl") Validator profileValidator) {
         this.userService = userService;
         this.roleValidator = roleValidator;
+
+        this.profileValidator = profileValidator;
     }
 
     @Override
@@ -31,17 +34,6 @@ public class SaveUserValidatorImpl implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         UserDTO userDTO = (UserDTO) target;
-        if (userDTO.getPatronymic() != null) {
-            if (userDTO.getPatronymic().length() < 40) {
-                if (!userDTO.getPatronymic().matches(REGEX_PATRONYMIC)) {
-                    errors.rejectValue("patronymic", "user.error.user.patronymic");
-                }
-            } else {
-                errors.rejectValue("patronymic", "user.error.patronymic.size");
-            }
-        } else {
-            errors.rejectValue("patronymic", "user.error.user.patronymic");
-        }
         if (userDTO.getEmail() != null) {
             if (userDTO.getEmail().length() < 40) {
                 if (!userDTO.getEmail().matches(REGEX_EMAIL)) {
@@ -52,6 +44,11 @@ public class SaveUserValidatorImpl implements Validator {
             }
         } else {
             errors.rejectValue("email", "user.error.user.email");
+        }
+        if (userDTO.getProfileDTO() != null) {
+            profileValidator.validate(userDTO.getProfileDTO(), errors);
+        } else {
+            errors.rejectValue("ProfileDTO", "profile.error.null");
         }
         if (!errors.hasFieldErrors()) {
             UserDTO user = userService.getByEmail(userDTO.getEmail());

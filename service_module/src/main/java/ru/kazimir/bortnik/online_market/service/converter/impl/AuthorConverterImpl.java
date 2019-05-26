@@ -6,7 +6,7 @@ import ru.kazimir.bortnik.online_market.service.converter.Converter;
 import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 
 @Component
-public class UserNewsPageConverterImpl implements Converter<UserDTO, User> {
+public class AuthorConverterImpl implements Converter<UserDTO, User> {
 
     @Override
     public UserDTO toDTO(User user) {

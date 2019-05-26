@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ public class Article {
     private Long id;
 
     @Column(name = "data_create")
-    private Timestamp dataCreate;
+    private Date dataCreate;
 
     @Column(name = "title")
     private String title;
@@ -63,11 +63,11 @@ public class Article {
         this.id = id;
     }
 
-    public Timestamp getDataCreate() {
+    public Date getDataCreate() {
         return dataCreate;
     }
 
-    public void setDataCreate(Timestamp dataCreate) {
+    public void setDataCreate(Date dataCreate) {
         this.dataCreate = dataCreate;
     }
 
@@ -151,13 +151,12 @@ public class Article {
                 Objects.equals(id, article.id) &&
                 Objects.equals(dataCreate, article.dataCreate) &&
                 Objects.equals(title, article.title) &&
-                Objects.equals(content, article.content) &&
-                Objects.equals(summary, article.summary);
+                Objects.equals(content, article.content);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, dataCreate, title, content, summary);
+        return Objects.hash(id, dataCreate, title, content);
     }
 }

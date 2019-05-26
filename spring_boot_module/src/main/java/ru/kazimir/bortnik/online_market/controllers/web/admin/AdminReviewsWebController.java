@@ -1,4 +1,4 @@
-package ru.kazimir.bortnik.online_market.controllers.web;
+package ru.kazimir.bortnik.online_market.controllers.web.admin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.kazimir.bortnik.online_market.service.model.Pageable;
-import ru.kazimir.bortnik.online_market.model.ShellAboveReviewSheet;
+import ru.kazimir.bortnik.online_market.model.WrappingSheetReviews;
 import ru.kazimir.bortnik.online_market.service.ReviewService;
+import ru.kazimir.bortnik.online_market.service.exception.ReviewServiceException;
+import ru.kazimir.bortnik.online_market.service.model.PageDTO;
+import ru.kazimir.bortnik.online_market.service.model.Pageable;
 import ru.kazimir.bortnik.online_market.service.model.ReviewDTO;
 
 import javax.validation.Valid;
-import java.util.List;
 
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_DELETE_REVIEWS;
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_UPDATE_STATUS_SHOWING_REVIEWS;
@@ -26,6 +27,7 @@ import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_REVIEWS_SHOWING_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_REVIEWS_UPDATE_SHOWING_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PRIVATE_REVIEWS_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_ERROR_404;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_PRIVATE_REVIEWS_SHOWING;
 
 @Controller
@@ -42,33 +44,30 @@ public class AdminReviewsWebController {
 
     @GetMapping(PRIVATE_REVIEWS_SHOWING_URL)
     public String showReviews(@RequestParam(defaultValue = "1", value = "currentPage") Long currentPage, Model model) {
-        Long amountOfPages = reviewService.getNumberOfPages(pageable.getLimitPositions());
-        if (currentPage > amountOfPages) {
-            currentPage = amountOfPages;
-        } else if (currentPage < amountOfPages) {
-            currentPage = 1L;
-        }
-        List<ReviewDTO> reviewDTOS = reviewService.getReviews(pageable.getLimitPositions(), currentPage);
-        ShellAboveReviewSheet shellAboveReviewSheet = new ShellAboveReviewSheet();
-        shellAboveReviewSheet.setReviewList(reviewDTOS);
-        model.addAttribute("reviews", shellAboveReviewSheet);
-        model.addAttribute("SizePage", amountOfPages);
-        model.addAttribute("currentPage", currentPage);
-        logger.info("List of reviews for submission {}.", reviewDTOS);
+        PageDTO<ReviewDTO> pageDTO = reviewService.getReviews(pageable.getLimitPositions(), currentPage);
+        logger.info("List of reviews for submission {}.", pageDTO.getList());
+        WrappingSheetReviews WrappingSheetReviews = new WrappingSheetReviews();
+        WrappingSheetReviews.setReviewList(pageDTO.getList());
+        model.addAttribute("reviews", WrappingSheetReviews);
+        model.addAttribute("page", pageDTO);
         return PRIVATE_REVIEWS_PAGE;
     }
 
     @PostMapping(PRIVATE_REVIEWS_UPDATE_SHOWING_URL)
-    public String updateStatusShowing(@Valid ShellAboveReviewSheet shellAboveReviewSheet,
+    public String updateStatusShowing(@Valid WrappingSheetReviews WrappingSheetReviews,
                                       BindingResult bindingResult,
                                       RedirectAttributes redirectAttributes) {
-        logger.info("Order status change request", shellAboveReviewSheet.getReviewList());
+        logger.info("Order status change request {} ", WrappingSheetReviews.getReviewList());
         if (bindingResult.hasErrors()) {
             logger.info("Request denied. Error code := {}", ERROR_UPDATE_STATUS_SHOWING_REVIEWS);
             return REDIRECT_PRIVATE_REVIEWS_SHOWING;
         }
 
-        reviewService.updateShowing(shellAboveReviewSheet.getReviewList());
+        try {
+            reviewService.updateHidden(WrappingSheetReviews.getReviewList());
+        } catch (ReviewServiceException e) {
+            return REDIRECT_ERROR_404;
+        }
         redirectAttributes.addFlashAttribute("message", "Review's showing status was changed successfully.");
         return REDIRECT_PRIVATE_REVIEWS_SHOWING;
     }
@@ -83,7 +82,11 @@ public class AdminReviewsWebController {
             redirectAttributes.addFlashAttribute("message", "Incorrect data to delete.");
             return REDIRECT_PRIVATE_REVIEWS_SHOWING;
         }
-        reviewService.deleteReviewsById(reviewDTO.getId());
+        try {
+            reviewService.deleteById(reviewDTO.getId());
+        } catch (ReviewServiceException e) {
+            return REDIRECT_ERROR_404;
+        }
         redirectAttributes.addFlashAttribute("message", "Review was deleted successfully.");
         return REDIRECT_PRIVATE_REVIEWS_SHOWING;
     }

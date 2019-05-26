@@ -22,7 +22,9 @@ public class ApiSpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ApiSpringSecurityConfig(@Qualifier("appUserDetailsService") UserDetailsService userDetailsService, AccessDeniedHandler accessDeniedHandler, PasswordEncoder passwordEncoder) {
+    public ApiSpringSecurityConfig(@Qualifier("appUserDetailsService") UserDetailsService userDetailsService,
+                                   AccessDeniedHandler accessDeniedHandler,
+                                   PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
         this.accessDeniedHandler = accessDeniedHandler;
         this.passwordEncoder = passwordEncoder;
@@ -30,7 +32,6 @@ public class ApiSpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.antMatcher(API_V1_URL)
                 .authorizeRequests()
                 .anyRequest()

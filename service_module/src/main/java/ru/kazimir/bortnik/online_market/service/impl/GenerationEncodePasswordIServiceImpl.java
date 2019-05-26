@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidationJAR.DEFAULT_SIZE_OF_PASSWORDS;
 
 @Service
-public class GenerationEncodePasswordImpl implements GenerationEncodePassword {
+public class GenerationEncodePasswordIServiceImpl implements GenerationEncodePassword {
     private final PasswordEncoder passwordEncoder;
 
-    public GenerationEncodePasswordImpl(PasswordEncoder passwordEncoder) {
+    public GenerationEncodePasswordIServiceImpl(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 

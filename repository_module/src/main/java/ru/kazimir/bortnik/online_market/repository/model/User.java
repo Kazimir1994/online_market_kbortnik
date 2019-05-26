@@ -18,12 +18,12 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "User")
-@SQLDelete(sql = "UPDATE user SET deleted = 1  WHERE id = ? ")
+@SQLDelete(sql = "UPDATE user SET deleted = 1  WHERE id = ? AND unchangeable = 0")
 @Where(clause = "deleted = '0'")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -32,22 +32,19 @@ public class User {
     @Column(name = "surname", nullable = false)
     private String surname;
 
-    @Column(name = "patronymic", nullable = false)
-    private String patronymic;
-
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "canberemoved", nullable = false)
-    private boolean canBeRemoved;
+    @Column(name = "deleted", nullable = false)
+    private boolean isDeleted;
 
-    @Column(name = "deleted")
-    private boolean deleted;
+    @Column(name = "unchangeable")
+    private boolean unchangeable;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -58,6 +55,14 @@ public class User {
             orphanRemoval = true
     )
     private Profile profile;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -75,14 +80,6 @@ public class User {
         this.surname = surname;
     }
 
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -91,20 +88,20 @@ public class User {
         this.email = email;
     }
 
-    public Role getRole() {
-        return role;
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void setRole(Role roleDTO) {
-        this.role = roleDTO;
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
-    public boolean isCanBeRemoved() {
-        return canBeRemoved;
+    public boolean isUnchangeable() {
+        return unchangeable;
     }
 
-    public void setCanBeRemoved(boolean canBeRemoved) {
-        this.canBeRemoved = canBeRemoved;
+    public void setUnchangeable(boolean unchangeable) {
+        this.unchangeable = unchangeable;
     }
 
     public String getPassword() {
@@ -115,12 +112,12 @@ public class User {
         this.password = password;
     }
 
-    public Long getId() {
-        return id;
+    public Role getRole() {
+        return role;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Profile getProfile() {
@@ -131,48 +128,22 @@ public class User {
         this.profile = profile;
     }
 
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return canBeRemoved == user.canBeRemoved &&
+        return isDeleted == user.isDeleted &&
+                unchangeable == user.unchangeable &&
                 Objects.equals(id, user.id) &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(surname, user.surname) &&
-                Objects.equals(patronymic, user.patronymic) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
-                Objects.equals(role.getId(), user.role.getId()) &&
-                Objects.equals(profile.getId(), user.profile.getId());
+                Objects.equals(role.getId(), user.role.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname, patronymic, email, canBeRemoved, password, role, profile);
-    }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", patronymic='" + patronymic + '\'' +
-                ", email='" + email + '\'' +
-                ", canBeRemoved=" + canBeRemoved +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                ", profile=" + profile +
-                '}';
+        return Objects.hash(id,email,password,role);
     }
-
 }

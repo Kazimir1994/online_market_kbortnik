@@ -41,23 +41,19 @@
                 <constraints primaryKey="true"/>
             </column>
 
-            <column name="email" type="varchar(254)">
+            <column name="email" type="varchar(100)">
                 <constraints nullable="false" unique="true"/>
             </column>
 
-            <column name="surname" type="varchar(254)">
+            <column name="surname" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="name" type="varchar(254)">
+            <column name="name" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="patronymic" type="varchar(254)">
-                <constraints nullable="false"/>
-            </column>
-
-            <column name="password" type="varchar(254)">
+            <column name="password" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
 
@@ -65,7 +61,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="canBeRemoved" type="Boolean" defaultValue="true">
+            <column name="unchangeable" type="Boolean" defaultValue="false">
                 <constraints nullable="false"/>
             </column>
 
@@ -79,31 +75,74 @@
     <changeSet id="INSERT_USER_TABLE_1" author="kazimir_bortnik@mail.ru">
         <insert tableName="User">
             <column name="email" value="kazimir@mail.ru"/>
-            <column name="surname" value="Bortnik"/>
-            <column name="name" value="Kazimir"/>
-            <column name="patronymic" value="Ivanovih"/>
+            <column name="surname" value="Bortnik_ADMINISTRATOR"/>
+            <column name="name" value="Kazimir_ADMINISTRATOR"/>
             <column name="password" value="$2a$12$24/cinhv/Kwi5wBzKlijt.T55RlDiLJtVIdAzSmB4drxCWKOQ4fBG"/>
-            <column name="canBeRemoved" valueComputed="false"/>
+            <column name="unchangeable" valueComputed="true"/>
             <column name="role_id" valueComputed="(SELECT r.id FROM Role r WHERE r.name = 'ADMINISTRATOR')"/>
         </insert>
         <insert tableName="User">
             <column name="email" value="user@mail.ru"/>
-            <column name="surname" value="surname"/>
-            <column name="name" value="name"/>
-            <column name="patronymic" value="patronymic"/>
+            <column name="surname" value="Bortnik_CUSTOMER_USER"/>
+            <column name="name" value="Kazimir_CUSTOMER_USER"/>
             <column name="password" value="$2a$12$8bfPX.6k0VKckMpqm24al.w5qO5dSg3oiXR262D8.nogEcmnJ83Dy"/>
-            <column name="canBeRemoved" valueComputed="true"/>
+            <column name="unchangeable" valueComputed="false"/>
             <column name="role_id" valueComputed="(SELECT r.id FROM Role r WHERE r.name = 'CUSTOMER_USER')"/>
         </insert>
-
         <insert tableName="User">
             <column name="email" value="Api@mail.ru"/>
-            <column name="surname" value="api"/>
-            <column name="name" value="api"/>
-            <column name="patronymic" value="api"/>
+            <column name="surname" value="Bortnik_SECURE_API_USER"/>
+            <column name="name" value="Kazimir_SECURE_API_USER"/>
             <column name="password" value="$2a$12$8bfPX.6k0VKckMpqm24al.w5qO5dSg3oiXR262D8.nogEcmnJ83Dy"/>
-            <column name="canBeRemoved" valueComputed="false"/>
+            <column name="unchangeable" valueComputed="false"/>
             <column name="role_id" valueComputed="(SELECT r.id FROM Role r WHERE r.name = 'SECURE_API_USER')"/>
+        </insert>
+        <insert tableName="User">
+            <column name="email" value="SaleUser@mail.ru"/>
+            <column name="surname" value="Bortnik_SALE_USER"/>
+            <column name="name" value="Kazimir_SALE_USER"/>
+            <column name="password" value="$2a$12$8bfPX.6k0VKckMpqm24al.w5qO5dSg3oiXR262D8.nogEcmnJ83Dy"/>
+            <column name="unchangeable" valueComputed="false"/>
+            <column name="role_id" valueComputed="(SELECT r.id FROM Role r WHERE r.name = 'SALE_USER')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="PROFILE_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <createTable tableName="Profile">
+            <column name="id" type="BIGINT">
+                <constraints foreignKeyName="id" references="User(id)" nullable="false"/>
+            </column>
+
+            <column name="address" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="telephone" type="varchar(13)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="INSERT_PROFILE_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <insert tableName="Profile">
+            <column name="address" value="Moskovskaya 45/5"/>
+            <column name="telephone" value="+375447597989"/>
+            <column name="id" value="1"/>
+        </insert>
+        <insert tableName="Profile">
+            <column name="address" value="Frolikava 25/6"/>
+            <column name="telephone" value="+375447597989"/>
+            <column name="id" value="2"/>
+        </insert>
+        <insert tableName="Profile">
+            <column name="address" value="Frolikava 65/7"/>
+            <column name="telephone" value="+375447597989"/>
+            <column name="id" value="3"/>
         </insert>
     </changeSet>
 
@@ -118,15 +157,15 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="showing" type="Boolean" defaultValue="true">
+            <column name="data_create" type="Timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="hidden" type="Boolean" defaultValue="true">
                 <constraints nullable="false"/>
             </column>
 
             <column name="deleted" type="Boolean" defaultValue="false">
-                <constraints nullable="false"/>
-            </column>
-
-            <column name="data_create" type="Timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
 
@@ -140,37 +179,66 @@
     <changeSet id="INSERT_REVIEWS_TABLE_1" author="kazimir_bortnik@mail.ru">
         <insert tableName="Reviews">
             <column name="review"
-                    value="  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_
-                     RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_ RANDOM_  RANDOM_
-                     RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_  RANDOM_ "/>
+                    value=" (1) Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                     Etiam accumsan a elit commodo dapibus.
+                      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                       Suspendisse id risus accumsan, pellentesque turpis accumsan, porta leo.
+                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus"/>
             <column name="user_id" value="1"/>
         </insert>
-    </changeSet>
-
-    <changeSet id="PROFILE_TABLE_1" author="kazimir_bortnik@mail.ru">
-        <createTable tableName="Profile">
-            <column name="id" type="BIGINT">
-                <constraints foreignKeyName="id" references="User(id)" nullable="false"/>
-            </column>
-            <column name="address" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="telephone" type="varchar(20)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="INSERT_PROFILE_TABLE_1" author="kazimir_bortnik@mail.ru">
-        <insert tableName="Profile">
-            <column name="address" value="Moskovskaya 45/5"/>
-            <column name="telephone" value="+375447597989"/>
-            <column name="id" value="1"/>
+        <insert tableName="Reviews">
+            <column name="review"
+                    value=" (2) Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                     Etiam accumsan a elit commodo dapibus.
+                      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                       Suspendisse id risus accumsan, pellentesque turpis accumsan, porta leo.
+                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus"/>
+            <column name="user_id" value="1"/>
         </insert>
-        <insert tableName="Profile">
-            <column name="address" value="Frolikava 25/4"/>
-            <column name="telephone" value="+375447597989"/>
-            <column name="id" value="2"/>
+        <insert tableName="Reviews">
+            <column name="review"
+                    value=" (3) Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                     Etiam accumsan a elit commodo dapibus.
+                      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                       Suspendisse id risus accumsan, pellentesque turpis accumsan, porta leo.
+                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus"/>
+            <column name="user_id" value="1"/>
+        </insert>
+        <insert tableName="Reviews">
+            <column name="review"
+                    value=" (4) Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                     Etiam accumsan a elit commodo dapibus.
+                      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                       Suspendisse id risus accumsan, pellentesque turpis accumsan, porta leo.
+                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus"/>
+            <column name="user_id" value="1"/>
+        </insert>
+        <insert tableName="Reviews">
+            <column name="review"
+                    value=" (5) Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                     Etiam accumsan a elit commodo dapibus.
+                      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                       Suspendisse id risus accumsan, pellentesque turpis accumsan, porta leo.
+                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus"/>
+            <column name="user_id" value="1"/>
+        </insert>
+        <insert tableName="Reviews">
+            <column name="review"
+                    value=" (6) Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                     Etiam accumsan a elit commodo dapibus.
+                      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                       Suspendisse id risus accumsan, pellentesque turpis accumsan, porta leo.
+                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus"/>
+            <column name="user_id" value="1"/>
+        </insert>
+        <insert tableName="Reviews">
+            <column name="review"
+                    value=" (7) Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                     Etiam accumsan a elit commodo dapibus.
+                      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                       Suspendisse id risus accumsan, pellentesque turpis accumsan, porta leo.
+                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus"/>
+            <column name="user_id" value="1"/>
         </insert>
     </changeSet>
 
@@ -197,15 +265,12 @@
         <insert tableName="Theme">
             <column name="name" value="THEME_1"/>
         </insert>
-
         <insert tableName="Theme">
             <column name="name" value="THEME_2"/>
         </insert>
-
         <insert tableName="Theme">
             <column name="name" value="THEME_3"/>
         </insert>
-
         <insert tableName="Theme">
             <column name="name" value="THEME_4"/>
         </insert>
@@ -247,6 +312,7 @@
             <column name="theme" type="BIGINT">
                 <constraints foreignKeyName="theme" references="Theme(id)" nullable="false"/>
             </column>
+
         </createTable>
     </changeSet>
 
@@ -505,7 +571,7 @@
                 <constraints primaryKey="true"/>
             </column>
 
-            <column name="data_create" type="Timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="data_create" type="DATETIME" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
 
@@ -590,4 +656,118 @@
         </insert>
     </changeSet>
 
+    <changeSet id="ITEM_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <createTable tableName="Item">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="price" type="DECIMAL(8,1)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="unique_number" type="varchar(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="description" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deleted" type="Boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="ITEM_INSERT_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <insert tableName="Item">
+            <column name="name" value="AITEM1"/>
+            <column name="price" value="37.4"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff22"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+
+        <insert tableName="Item">
+            <column name="name" value="BITEM2"/>
+            <column name="price" value="36.3"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff21"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+
+        <insert tableName="Item">
+            <column name="name" value="VITEM3"/>
+            <column name="price" value="34.9"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff20"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+
+        <insert tableName="Item">
+            <column name="name" value="GITEM4"/>
+            <column name="price" value="34.8"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff19"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+
+        <insert tableName="Item">
+            <column name="name" value="DITEM5"/>
+            <column name="price" value="34.7"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff18"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+
+        <insert tableName="Item">
+            <column name="name" value="ITEM6"/>
+            <column name="price" value="34.6"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff17"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+
+        <insert tableName="Item">
+            <column name="name" value="EITEM7"/>
+            <column name="price" value="34.5"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff16"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+
+        <insert tableName="Item">
+            <column name="name" value="KITEM8"/>
+            <column name="price" value="34.4"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff15"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+
+        <insert tableName="Item">
+            <column name="name" value="LITEM9"/>
+            <column name="price" value="34.3"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff14"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+
+        <insert tableName="Item">
+            <column name="name" value="NITEM10"/>
+            <column name="price" value="34.2"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff13"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+
+        <insert tableName="Item">
+            <column name="name" value="PITEM11"/>
+            <column name="price" value="34.1"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff12"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+
+        <insert tableName="Item">
+            <column name="name" value="AITEM1"/>
+            <column name="price" value="34.0"/>
+            <column name="unique_number" value="067e6162-3b6f-4ae2-a171-2470b63dff11"/>
+            <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

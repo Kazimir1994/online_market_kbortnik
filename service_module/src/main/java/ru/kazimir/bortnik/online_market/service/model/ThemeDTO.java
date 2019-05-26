@@ -1,8 +1,12 @@
 package ru.kazimir.bortnik.online_market.service.model;
 
-public class ThemeDTO {
-    private Long id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
+public class ThemeDTO {
+    @NotNull
+    @Min(1)
+    private Long id;
     private String name;
 
     public Long getId() {

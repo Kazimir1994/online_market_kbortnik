@@ -1,14 +1,13 @@
 package ru.kazimir.bortnik.online_market.service;
 
+import ru.kazimir.bortnik.online_market.service.model.PageDTO;
 import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<UserDTO> getUsers(Long limitPositions, Long positions);
-
-    Long getNumberOfPages(Long maxPositions);
+    PageDTO<UserDTO> getUsers(Long limitPositions, Long currentPage);
 
     void deleteUsersById(List<Long> listID);
 
@@ -20,7 +19,9 @@ public interface UserService {
 
     UserDTO getByEmail(String email);
 
-    UserDTO getUserWithProfile(Long Id);
+    UserDTO getUserWithProfile(Long id);
+
+    UserDTO checkUserForExist(Long id);
 
     String getPasswordById(Long id);
 

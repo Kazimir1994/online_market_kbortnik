@@ -1,5 +1,7 @@
 package ru.kazimir.bortnik.online_market.repository.model;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Comment")
+@Where(clause = "deleted = '0'")
 public class CommentArticleId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +21,17 @@ public class CommentArticleId {
 
     @Column(name = "comment_article_id")
     private Long commentArticleId;
+
+    @Column(name = "deleted")
+    private boolean deleted;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -30,7 +44,6 @@ public class CommentArticleId {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, commentArticleId);
     }
 }
