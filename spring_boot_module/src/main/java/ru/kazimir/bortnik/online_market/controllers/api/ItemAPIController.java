@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kazimir.bortnik.online_market.service.ItemService;
-import ru.kazimir.bortnik.online_market.service.exception.ItemServiceException;
 import ru.kazimir.bortnik.online_market.service.model.ItemDTO;
 
 import javax.validation.Valid;
@@ -51,34 +50,17 @@ public class ItemAPIController {
     @GetMapping(API_ITEM_SHOWING_ID_URL)
     public ResponseEntity<ItemDTO> getItem(@PathVariable("id") Long id) {
         logger.info("Request for news by id := {}.", id);
-        if (id != null) {
-            try {
-                ItemDTO itemDTO = itemService.getById(id);
-                logger.info("Send a list of article. := {}.", itemDTO);
-                return new ResponseEntity<>(itemDTO, HttpStatus.OK);
-            } catch (ItemServiceException e) {
-                logger.error(e.getMessage(), e);
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        ItemDTO itemDTO = itemService.getById(id);
+        logger.info("Send a list of article. := {}.", itemDTO);
+        return new ResponseEntity<>(itemDTO, HttpStatus.OK);
     }
 
     @DeleteMapping(API_ITEM_DELETE_ID_URL)
-    public ResponseEntity deleteItem(@PathVariable("id") Long id) {
+    public ResponseEntity deleteItem(@PathVariable("id")  Long id) {
         logger.info("Requests delete Item  by id := {}.", id);
-        if (id != null) {
-            try {
-                itemService.deleteById(id);
-                return new ResponseEntity(HttpStatus.ACCEPTED);
-            } catch (ItemServiceException e) {
-                logger.error(e.getMessage(), e);
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        itemService.deleteById(id);
+        logger.info("Item removed successfully.");
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     @PostMapping(API_ITEM_ADD_URL)
@@ -88,8 +70,7 @@ public class ItemAPIController {
             logger.info("error := {}.", bindingResult.getAllErrors());
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-
-        logger.error("Add new item {}", articleDTO);
+        logger.info("Add new item {}", articleDTO);
         itemService.add(articleDTO);
         return new ResponseEntity(HttpStatus.CREATED);
     }

@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kazimir.bortnik.online_market.service.ArticleService;
-import ru.kazimir.bortnik.online_market.service.exception.ArticleServiceException;
 import ru.kazimir.bortnik.online_market.service.model.ArticleDTO;
-import ru.kazimir.bortnik.online_market.service.model.ThemeDTO;
 import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 import ru.kazimir.bortnik.online_market.service.model.UserDetail;
 
@@ -61,26 +59,17 @@ public class ArticlesAPIController {
     @GetMapping(API_ARTICLES_SHOWING_ID_URL)
     public ResponseEntity<ArticleDTO> getArticle(@PathVariable("id") Long id) {
         logger.info("Request for article by id := {}.", id);
-        try {
-            ArticleDTO articleDTO = articleService.getById(id);
-            logger.info("Send a list of article. := {}.", articleDTO);
-            return new ResponseEntity<>(articleDTO, HttpStatus.OK);
-        } catch (ArticleServiceException e) {
-            logger.error(e.getMessage(), e);
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        ArticleDTO articleDTO = articleService.getById(id);
+        logger.info("Send a list of article. := {}.", articleDTO);
+        return new ResponseEntity<>(articleDTO, HttpStatus.OK);
     }
 
     @DeleteMapping(API_ARTICLES_DELETE_ID_URL)
     public ResponseEntity deleteArticle(@PathVariable("id") Long id) {
-        try {
-            logger.info("Requests delete by id := {}.", id);
-            articleService.deleteArticle(id);
-            return new ResponseEntity(HttpStatus.ACCEPTED);
-        } catch (ArticleServiceException e) {
-            logger.error(e.getMessage(), e);
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        logger.info("Requests delete by id := {}.", id);
+        articleService.deleteArticle(id);
+        logger.info("Article removed successfully.");
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     @PostMapping(API_ARTICLES_SAVE_URL)

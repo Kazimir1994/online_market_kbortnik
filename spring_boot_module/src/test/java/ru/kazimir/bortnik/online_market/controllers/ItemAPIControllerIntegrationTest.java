@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -39,7 +40,6 @@ public class ItemAPIControllerIntegrationTest {
         ItemDTO[] itemDTOS =
                 restTemplate.withBasicAuth(login, password).getForObject(Url, ItemDTO[].class);
         Assert.assertNotNull(itemDTOS);
-
     }
 
     @Test
@@ -53,23 +53,26 @@ public class ItemAPIControllerIntegrationTest {
     }
 
     @Test
+    public void shouldReturnTheStatusNotFound() {
+        final String uri = "http://localhost:" + randomServerPort + "/api/v1/items/2444";
+        ResponseEntity<ItemDTO> responseEntity = restTemplate.withBasicAuth(login, password).getForEntity(uri, ItemDTO.class);
+        Assert.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void ifYouDeleteTheItemWhichDoesNotExistShouldCome() {
+        final String uri = "http://localhost:" + randomServerPort + "/api/v1/items/2444";
+        ResponseEntity responseEntity = restTemplate
+                .withBasicAuth(login, password).exchange(uri, HttpMethod.DELETE,null,ResponseEntity.class);
+        Assert.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @Test
     public void shouldDeleteItems() {
-        final String Url = "http://localhost:" + randomServerPort + "/api/v1/items/1";
-        ItemDTO itemDTO = restTemplate
-                .withBasicAuth(login, password)
-                .getForObject(Url, ItemDTO.class);
-        Long id = 1L;
-        Assert.assertEquals(id, itemDTO.getId());
-
-        restTemplate
-                .withBasicAuth(login, password)
-                .delete(Url, ResponseEntity.class);
-
-        ItemDTO itemDTO2 = restTemplate
-                .withBasicAuth(login, password)
-                .getForObject(Url, ItemDTO.class);
-
-        Assert.assertNull(itemDTO2);
+        final String uri = "http://localhost:" + randomServerPort + "/api/v1/items/1";
+        ResponseEntity responseEntity = restTemplate
+                .withBasicAuth(login, password).exchange(uri, HttpMethod.DELETE,null,ResponseEntity.class);
+        Assert.assertEquals(HttpStatus.ACCEPTED, responseEntity.getStatusCode());
     }
 
     @Test
@@ -83,6 +86,5 @@ public class ItemAPIControllerIntegrationTest {
                 .withBasicAuth(login, password)
                 .postForEntity(Url, itemDTO, ResponseEntity.class);
         Assert.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-
     }
 }

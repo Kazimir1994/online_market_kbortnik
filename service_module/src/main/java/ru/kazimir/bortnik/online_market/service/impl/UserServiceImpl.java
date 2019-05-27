@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     private final Converter<UserDTO, User> userConverter;
     private final Converter<UserDTO, User> userProfileConverter;
     private final Converter<UserDTO, User> checkUserForExistConverter;
-    private final Converter<UserDTO, User> serSaveConverter;
+    private final Converter<UserDTO, User> userAddConverter;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final GenerationEncodePassword generationEncodePassword;
@@ -47,12 +47,12 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(@Qualifier("userConverterImpl") Converter<UserDTO, User> userConverter,
                            @Qualifier("userProfileConverterImpl") Converter<UserDTO, User> userProfileConverter,
                            @Qualifier("checkUserForExistConverterImpl") Converter<UserDTO, User> checkUserForExistConverter,
-                           @Qualifier("userSaveConverterImpl") Converter<UserDTO, User> serSaveConverter, UserRepository userRepository,
+                           @Qualifier("userSaveConverterImpl") Converter<UserDTO, User> userAddConverter, UserRepository userRepository,
                            RoleRepository roleRepository, GenerationEncodePassword generationEncodePassword) {
         this.userConverter = userConverter;
         this.userProfileConverter = userProfileConverter;
         this.checkUserForExistConverter = checkUserForExistConverter;
-        this.serSaveConverter = serSaveConverter;
+        this.userAddConverter = userAddConverter;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.generationEncodePassword = generationEncodePassword;
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
         try {
             String password = generationEncodePassword.getPassword();
             userDTO.setPassword(password);
-            User user = serSaveConverter.fromDTO(userDTO);
+            User user = userAddConverter.fromDTO(userDTO);
             user.getProfile().setUser(user);
             userRepository.persist(user);
         } catch (Exception e) {
