@@ -12,6 +12,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.kazimir.bortnik.online_market.service.model.ProfileDTO;
 import ru.kazimir.bortnik.online_market.service.model.RoleDTO;
 import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 
@@ -34,12 +35,15 @@ public class UserAPIControllerIntegrationTest {
         userTestDTO = new UserDTO();
         userTestDTO.setEmail("kAzImImR@mail.ru");
         userTestDTO.setName("Kazimir");
-        userTestDTO.setPatronymic("Ivanovih");
         userTestDTO.setSurname("Bortnik");
         RoleDTO correctRole = new RoleDTO();
         correctRole.setId(1L);
-        correctRole.setName("SALE_USER");
+        correctRole.setName("ADMINISTRATOR");
         userTestDTO.setRoleDTO(correctRole);
+        ProfileDTO profileDTO = new ProfileDTO();
+        profileDTO.setTelephone("+375447598943");
+        profileDTO.setResidentialAddress("frolikova 32");
+        userTestDTO.setProfileDTO(profileDTO);
     }
 
     @Test

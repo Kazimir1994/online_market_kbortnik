@@ -1,27 +1,16 @@
 package ru.kazimir.bortnik.online_market.repository.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import ru.kazimir.bortnik.online_market.repository.GenericRepository;
-import ru.kazimir.bortnik.online_market.repository.exception.ConnectionDataBaseExceptions;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.sql.DataSource;
 import java.lang.reflect.ParameterizedType;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
-import static ru.kazimir.bortnik.online_market.repository.exception.messageexception.ErrorMessagesRepository.NO_CONNECTION;
-
 public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
-    private static Logger logger = LoggerFactory.getLogger(GenericRepositoryImpl.class);
 
-    protected Class<T> entityClass;
+    private Class<T> entityClass;
 
     @SuppressWarnings("unchecked")
     public GenericRepositoryImpl() {
@@ -55,25 +44,26 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public List<T> findAll(int offset, int limit) {
+    public List<T> findAll() {
         String query = "from " + entityClass.getName() + " c";
-        Query q = entityManager.createQuery(query)
-                .setMaxResults(limit)
-                .setFirstResult(offset);
+        Query q = entityManager.createQuery(query);
         return q.getResultList();
     }
 
-    @Qualifier("dataSource")
-    @Autowired
-    private DataSource dataSource;
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public List<T> findAll(Long offset, Long limit) {
+        String query = "from " + entityClass.getName() + " c";
+        Query q = entityManager.createQuery(query);
+        q.setMaxResults(Math.toIntExact(limit));
+        q.setFirstResult(Math.toIntExact(offset));
+        return q.getResultList();
+    }
 
     @Override
-    public Connection getConnection() {
-        try {
-            return dataSource.getConnection();
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionDataBaseExceptions(NO_CONNECTION, e);
-        }
+    public Long getCountOfEntities() {
+        String query = "SELECT COUNT(*) FROM " + entityClass.getName() + " c";
+        Query q = entityManager.createQuery(query);
+        return ((Number) q.getSingleResult()).longValue();
     }
 }

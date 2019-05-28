@@ -11,4 +11,13 @@ public class ApiURLConstants {
     public static final String API_ARTICLES_SAVE_URL = "/articles";
     public static final String API_ARTICLES_SHOWING_ID_URL = "/articles/{id}";
     public static final String API_ARTICLES_DELETE_ID_URL = "/articles/{id}";
+
+    public static final String API_SALE_ITEM_URL = "/api/v1";
+    public static final String API_ITEMS_SHOWING_URL = "/items";
+    public static final String API_ITEM_SHOWING_ID_URL = "/items/{id}";
+    public static final String API_ITEM_DELETE_ID_URL = "/items/{id}";
+    public static final String API_ITEM_ADD_URL = "/items";
+
+    public static final String API_SALE_THEME_URL = "/api/v1";
+    public static final String API_THEMES_SAVE_URL = "/themes";
 }

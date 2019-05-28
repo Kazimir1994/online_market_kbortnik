@@ -7,41 +7,41 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container">
-        <form method="post">
-            <div class="form-group" style="padding-top: 15px">
-                <p th:if="${#strings.trim(messageFilter)}" class="text-success" th:text="${messageFilter}"></p>
-                <h1>Themes</h1>
-                <select name="theme" class="custom-select">
-                    <option th:each="theme : ${ThemesDTO}"
-                            th:value="${theme.id}"
-                            th:text="${theme.name}"
-                            th:if="${theme.id == pageable.theme}"
-                            selected></option>
-                    <option th:each="theme : ${ThemesDTO}"
-                            th:value="${theme.id}"
-                            th:unless="${theme.id == pageable.theme}"
-                            th:text="${theme.name}"></option>
-                </select>
-                <h1>Number of news per page</h1>
-                <select name="limitPositions" class="custom-select">
-                    <option th:each="limit : ${pageable.limits}"
-                            th:value="${limit}"
-                            th:text="${limit}"
-                            th:if="${limit == pageable.limitPositions}"
-                            selected></option>
-                    <option th:each="limit : ${pageable.limits}"
-                            th:value="${limit}"
-                            th:unless="${limit == pageable.limitPositions}"
-                            th:text="${limit}"></option>
-                </select>
+    <form method="post">
+        <div class="form-group" style="padding-top: 15px">
+            <p th:if="${#strings.trim(messageFilter)}" class="text-success" th:text="${messageFilter}"></p>
+            <h1>Themes</h1>
+            <select name="theme" class="custom-select">
+                <option th:each="theme : ${ThemesDTO}"
+                        th:value="${theme.id}"
+                        th:text="${theme.name}"
+                        th:if="${theme.id == pageable.theme}"
+                        selected></option>
+                <option th:each="theme : ${ThemesDTO}"
+                        th:value="${theme.id}"
+                        th:unless="${theme.id == pageable.theme}"
+                        th:text="${theme.name}"></option>
+            </select>
+            <h1>Number of news per page</h1>
+            <select name="limitPositions" class="custom-select">
+                <option th:each="limit : ${pageable.limits}"
+                        th:value="${limit}"
+                        th:text="${limit}"
+                        th:if="${limit == pageable.limitPositions}"
+                        selected></option>
+                <option th:each="limit : ${pageable.limits}"
+                        th:value="${limit}"
+                        th:unless="${limit == pageable.limitPositions}"
+                        th:text="${limit}"></option>
+            </select>
 
-                <label style="padding-top: 15px">
-                    <button type="submit" class="btn btn-outline-success"
-                            th:formaction="@{/public/customer/articles/update_filter}">Apply
-                    </button>
-                </label>
-            </div>
-        </form>
+            <label style="padding-top: 15px">
+                <button type="submit" class="btn btn-outline-success"
+                        th:formaction="@{/public/customer/articles/update_filter}">Apply
+                </button>
+            </label>
+        </div>
+    </form>
     <div th:if="${!#lists.isEmpty(PageDTO.list)}">
         <div class="bs-docs-section">
             <div class="page-header" style="padding-top: 20px; padding-bottom: 5px; color: #ebebeb">
@@ -50,14 +50,21 @@
             <div class="bs-component">
                 <th:block th:object="${PageDTO}">
                     <div th:each="article,itemStat :*{list}" class="jumbotron">
+                        <p class="text-primary">Data create</p>
                         <p class="lead" th:text="${article.dataCreate}"></p>
                         <hr class="my-4">
+                        <p class="text-primary">Title</p>
                         <h6 th:text="${article.title}"></h6>
+                        <hr class="my-4">
+                        <p class="text-primary">Author</p>
                         <h6 th:text="| ${article.author.name} ${article.author.surname}|"></h6>
+                        <hr class="my-4">
+                        <p class="text-primary">Summary</p>
                         <p th:text="${article.summary}"></p>
                         <hr class="my-4">
                         <li>
-                            <a th:href="@{/public/customer/articles/showing/more(articlesId=${article.id})}">more</a>
+                            <a th:href="@{/public/customer/articles/showing/more(articlesId=${article.id})}">
+                                More about the article</a>
                         </li>
                     </div>
                 </th:block>

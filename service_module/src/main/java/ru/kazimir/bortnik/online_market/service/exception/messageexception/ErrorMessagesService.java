@@ -5,11 +5,10 @@ public class ErrorMessagesService {
     private ErrorMessagesService() {
     }
 
-    public static final String CONNECTION_ERROR_MESSAGE = "Error while closing connection.";
     public static final String USER_ERROR_BY_EMAIL_MESSAGE = "Error while getting user by email. Email:= %s";
     public static final String USERS_GET_ERROR_MESSAGE = "Error while getting users from data source. Value positions" +
             ":= %d, positions:= %d";
-    public static final String NUMBER_OF_PAGES = "Error while getting amount of users pages.";
+
     public static final String USER_ERROR_DELETE = "Error while deleting user. List ID:= %s";
     public static final String USER_ERROR_UPDATE_ROLE = "Error while changing user's role. Name new Role:= %s, ID user:= %d";
     public static final String USER_ERROR_UPDATE_PASSWORD = "Error while changing user's password. Email:= %s";
@@ -25,4 +24,7 @@ public class ErrorMessagesService {
 
     public static final String ERROR_GET_ARTICLE_BY_ID = "News id :=%d found";
     public static final String ERROR_DELETE_ARTICLE_BY_ID = "It is impossible to delete news from id := %d because it no longer exists.";
+    public static final String ERROR_DELETE_COMMENT_BY_ID = "It is impossible to delete comment from id := %d because it no longer exists.";
+
+    public static final String USER_ERROR_GET_ITEM = "item by id := %d does not exist.";
 }

@@ -1,11 +1,8 @@
 package ru.kazimir.bortnik.online_market.repository;
 
-import java.sql.Connection;
 import java.util.List;
 
 public interface GenericRepository<I, T> {
-
-    Connection getConnection();
 
     void persist(T entity);
 
@@ -15,5 +12,9 @@ public interface GenericRepository<I, T> {
 
     T findById(I id);
 
-    List<T> findAll(int offset, int limit);
+    List<T> findAll(Long offset, Long limit);
+
+    List<T> findAll();
+
+    Long getCountOfEntities();
 }

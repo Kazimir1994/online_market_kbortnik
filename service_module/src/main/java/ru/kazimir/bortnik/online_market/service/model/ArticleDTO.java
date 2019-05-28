@@ -1,32 +1,36 @@
 package ru.kazimir.bortnik.online_market.service.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 public class ArticleDTO {
-
     private Long id;
 
-    private Timestamp dataCreate;
     @NotNull
-    @Size(max = 200)
+    @Size(min = 10, max = 200,message = "{article.error.title}")
     private String title;
+
     @NotNull
-    @Size(max = 1000)
+    @Size(min = 10, max = 1000, message = "{article.error.content}")
     private String content;
 
     private String summary;
 
-    private boolean deleted;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private Date dataCreate;
 
-    private UserDTO author;
-
-    private List<CommentDTO> commentDTOList;
-
+    @NotNull
+    @Valid
     private ThemeDTO themeDTO;
 
+    private boolean deleted;
+    private UserDTO author;
+    private List<CommentDTO> commentDTOList;
 
     public Long getId() {
         return id;
@@ -36,11 +40,11 @@ public class ArticleDTO {
         this.id = id;
     }
 
-    public Timestamp getDataCreate() {
+    public Date getDataCreate() {
         return dataCreate;
     }
 
-    public void setDataCreate(Timestamp dataCreate) {
+    public void setDataCreate(Date dataCreate) {
         this.dataCreate = dataCreate;
     }
 

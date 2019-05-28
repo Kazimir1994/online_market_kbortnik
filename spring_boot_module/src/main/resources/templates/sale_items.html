@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+
+    <div th:if="${!#lists.isEmpty(PageDTO.list)}">
+        <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
+        <div class="bs-docs-section">
+            <div class="page-header" style="padding-top: 20px; padding-bottom: 5px; color: #ebebeb">
+                <h1>Articles</h1>
+            </div>
+            <div class="bs-component">
+                <th:block th:object="${PageDTO}">
+                    <div th:each="item,itemStat :*{list}" class="jumbotron">
+                        <h5>Name</h5>
+                        <p class="lead" th:text="${item.name}"></p>
+                        <hr class="my-4">
+                        <h5>Price</h5>
+                        <p class="lead" th:text="${item.price}"></p>
+                        <hr class="my-4">
+                        <h5>UniqueNumber</h5>
+                        <p class="lead" th:text="${item.uniqueNumber}"></p>
+                        <hr class="my-4">
+                        <li>
+                            <a th:href="@{/public/sale/items/showing/more(itemId=${item.id})}"> More about the item</a>
+                        </li>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="float-lg-right">
+                                    <form style="padding-top:5px" action="#" th:action="@{/public/sale/items/delete}"
+                                          method="post">
+                                        <label><input th:value="${item.id}" name="id" hidden/></label>
+                                        <button type="submit" class="btn btn-outline-warning">Delete item</button>
+                                    </form>
+                                    <form style="padding-top:5px" action="#" th:action="@{/public/sale/items/copy_form_item}"
+                                          method="get">
+                                        <label><input th:value="${item.id}" name="itemId" hidden/></label>
+                                        <button type="submit" class="btn btn-outline-success">Copying item</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+
+        <div class="float-none">
+            <ul class="pagination pagination-sm">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">&laquo;</a>
+                </li>
+
+                <li class="page-item" th:each="i : ${#numbers.sequence( 1,PageDTO.countOfPages)}"
+                    th:classappend="${PageDTO.currentPage}==${i}?'page-item active':''">
+                    <a th:href="@{/public/sale/items/showing(currentPage=${i})}" th:text="${i}"
+                       class="page-link"> </a>
+                </li>
+
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer container-lg width-full px-3" role="contentinfo">
+        <div class="position-relative d-flex flex-justify-between pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+            <div style="text-align: center;">
+                <span>Online Marker__2018</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

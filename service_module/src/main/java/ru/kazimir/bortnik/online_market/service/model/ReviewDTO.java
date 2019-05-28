@@ -3,16 +3,15 @@ package ru.kazimir.bortnik.online_market.service.model;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 public class ReviewDTO {
-    private UserDTO userDTO;
     @NotNull
     @Min(1)
     private Long id;
-    private String feedback;
+    private String review;
     private Timestamp dataCreate;
-    private boolean showing;
+    private UserDTO userDTO;
+    private boolean hidden;
 
     public UserDTO getUserDTO() {
         return userDTO;
@@ -30,22 +29,6 @@ public class ReviewDTO {
         this.userDTO = userDTO;
     }
 
-    public String getFeedback() {
-        return feedback;
-    }
-
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
-    }
-
-    public boolean isShowing() {
-        return showing;
-    }
-
-    public void setShowing(boolean showing) {
-        this.showing = showing;
-    }
-
     public Long getId() {
         return id;
     }
@@ -54,31 +37,30 @@ public class ReviewDTO {
         this.id = id;
     }
 
+    public String getReview() {
+        return review;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
     @Override
     public String toString() {
         return "ReviewDTO{" +
                 "userDTO=" + userDTO +
                 ", id=" + id +
-                ", feedback='" + feedback + '\'' +
+                ", review='" + review + '\'' +
                 ", dataCreate=" + dataCreate +
-                ", showing=" + showing +
-                "}\n";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ReviewDTO reviewDTO = (ReviewDTO) o;
-        return showing == reviewDTO.showing &&
-                Objects.equals(userDTO, reviewDTO.userDTO) &&
-                Objects.equals(id, reviewDTO.id) &&
-                Objects.equals(feedback, reviewDTO.feedback) &&
-                Objects.equals(dataCreate, reviewDTO.dataCreate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userDTO, id, feedback, dataCreate, showing);
+                ", hidden=" + hidden +
+                '}';
     }
 }

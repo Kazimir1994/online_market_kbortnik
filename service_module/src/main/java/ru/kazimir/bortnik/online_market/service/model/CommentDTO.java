@@ -3,15 +3,10 @@ package ru.kazimir.bortnik.online_market.service.model;
 import java.sql.Timestamp;
 
 public class CommentDTO {
-
     private Long id;
-
     private Timestamp dataCreate;
-
     private String content;
-
     private UserDTO userDTO;
-
     private ArticleDTO articleDTO;
 
     public Long getId() {

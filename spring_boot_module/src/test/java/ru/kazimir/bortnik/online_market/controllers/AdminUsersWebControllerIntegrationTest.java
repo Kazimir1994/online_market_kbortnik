@@ -36,7 +36,6 @@ public class AdminUsersWebControllerIntegrationTest {
         userTestDTO = new UserDTO();
         userTestDTO.setEmail("kAzImImR@mail.ru");
         userTestDTO.setName("Kazimir");
-        userTestDTO.setPatronymic("Ivanovih");
         userTestDTO.setSurname("Bortnik");
         RoleDTO correctRole = new RoleDTO();
         correctRole.setId(1L);
@@ -54,7 +53,6 @@ public class AdminUsersWebControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("email", userTestDTO.getEmail())
                 .param("name", userTestDTO.getName())
-                .param("patronymic", userTestDTO.getPatronymic())
                 .param("surname", userTestDTO.getSurname())
                 .param("roleDTO.id", String.valueOf(userTestDTO.getRoleDTO().getId()))
                 .requestAttr("userDTO", userDTO)
@@ -71,7 +69,6 @@ public class AdminUsersWebControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("email", userTestDTO.getEmail())
                 .param("name", userTestDTO.getName())
-                .param("patronymic", userTestDTO.getPatronymic())
                 .param("surname", userTestDTO.getSurname())
                 .param("roleDTO.id", idRole.toString())
         )

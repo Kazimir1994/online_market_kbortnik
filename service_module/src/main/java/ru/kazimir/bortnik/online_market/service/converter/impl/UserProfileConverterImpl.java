@@ -33,7 +33,6 @@ public class UserProfileConverterImpl implements Converter<UserDTO, User> {
         User user = new User();
         user.setId(user.getId());
         user.setName(user.getName());
-        user.setPatronymic(user.getPatronymic());
         Profile profile = profileConverter.fromDTO(userDTO.getProfileDTO());
         user.setProfile(profile);
         return user;

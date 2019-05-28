@@ -10,20 +10,20 @@ import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 
 @Component
 public class ReviewConverterImpl implements Converter<ReviewDTO, Review> {
-    private final Converter<UserDTO, User> userConverter;
+    private final Converter<UserDTO, User> authorConverter;
 
-    public ReviewConverterImpl(@Qualifier("userReviewConverterImpl") Converter<UserDTO, User> userConverter) {
-        this.userConverter = userConverter;
+    public ReviewConverterImpl(@Qualifier("authorConverterImpl") Converter<UserDTO, User> authorConverter) {
+        this.authorConverter = authorConverter;
     }
 
     @Override
     public ReviewDTO toDTO(Review role) {
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setId(role.getId());
-        reviewDTO.setFeedback(role.getFeedback());
+        reviewDTO.setReview(role.getReview());
         reviewDTO.setDataCreate(role.getDataCreate());
-        reviewDTO.setShowing(role.isShowing());
-        reviewDTO.setUserDTO(userConverter.toDTO(role.getUser()));
+        reviewDTO.setHidden(role.isHidden());
+        reviewDTO.setUserDTO(authorConverter.toDTO(role.getUser()));
         return reviewDTO;
     }
 
@@ -31,10 +31,10 @@ public class ReviewConverterImpl implements Converter<ReviewDTO, Review> {
     public Review fromDTO(ReviewDTO roleDTO) {
         Review review = new Review();
         review.setId(roleDTO.getId());
-        review.setFeedback(roleDTO.getFeedback());
+        review.setReview(roleDTO.getReview());
         review.setDataCreate(roleDTO.getDataCreate());
-        review.setShowing(roleDTO.isShowing());
-        review.setUser(userConverter.fromDTO(roleDTO.getUserDTO()));
+        review.setHidden(roleDTO.isHidden());
+        review.setUser(authorConverter.fromDTO(roleDTO.getUserDTO()));
         return review;
     }
 }

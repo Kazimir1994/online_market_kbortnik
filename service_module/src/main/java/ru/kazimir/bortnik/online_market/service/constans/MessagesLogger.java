@@ -15,4 +15,10 @@ public class MessagesLogger {
     public static final String MESSAGES_GET_THEME = "List theme : = {}";
     public static final String MESSAGES_GET_ARTICLES = "Worth list of articles by the following parameters:" +
             "Amount of news := {}, limit:={} ,offset := {}.";
+    public static final String MESSAGES_GET_USERS = "List of users by the following parameters:" +
+            " Amount of Users := {}, From the position := {}.";
+    public static final String MESSAGES_GET_REVIEWS = "List of reviews by the following parameters:" +
+            " Amount of Reviews := {}, From the position := {}.";
+    public static final String MESSAGES_GET_ITEMS = "List of items by the following parameters:" +
+            " Amount of items := {}, From the position := {}.";
 }

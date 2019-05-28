@@ -12,7 +12,7 @@ import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 public class CommentConverterImpl implements Converter<CommentDTO, Comment> {
     private final Converter<UserDTO, User> userNewsPageConverter;
 
-    public CommentConverterImpl(@Qualifier("userNewsPageConverterImpl") Converter<UserDTO, User> userNewsPageConverter) {
+    public CommentConverterImpl(@Qualifier("authorConverterImpl") Converter<UserDTO, User> userNewsPageConverter) {
         this.userNewsPageConverter = userNewsPageConverter;
     }
 

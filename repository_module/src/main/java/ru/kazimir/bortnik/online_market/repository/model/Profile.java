@@ -2,6 +2,8 @@ package ru.kazimir.bortnik.online_market.repository.model;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Profile")
+@SQLDelete(sql = "UPDATE Profile SET deleted = 1 WHERE id = ?")
+@Where(clause = "deleted = 0")
 public class Profile {
     @GenericGenerator(
             name = "generator_user_id",

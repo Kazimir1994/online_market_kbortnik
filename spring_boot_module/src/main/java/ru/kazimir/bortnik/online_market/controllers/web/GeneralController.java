@@ -28,7 +28,7 @@ public class GeneralController {
 
     @GetMapping({HOME_PAGE_URL, DEFAULT_PAGE_URL})
     public String home(Model mode) {
-        List<ArticleDTO> articleDTOS = articleService.getTop(filterGeneralPage.getAmountOfNewsDisplayed());
+        List<ArticleDTO> articleDTOS = articleService.getTopArticle(filterGeneralPage.getAmountOfNewsDisplayed());
         mode.addAttribute("Article", articleDTOS);
         return HOME_PAGE;
     }

@@ -1,8 +1,7 @@
 package ru.kazimir.bortnik.online_market.service.model;
 
-import java.util.Objects;
-
 public class ProfileDTO {
+    private Long id;
     private String telephone;
     private String residentialAddress;
 
@@ -22,25 +21,19 @@ public class ProfileDTO {
         this.residentialAddress = residentialAddress;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProfileDTO that = (ProfileDTO) o;
-        return Objects.equals(telephone, that.telephone) &&
-                Objects.equals(residentialAddress, that.residentialAddress);
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(telephone, residentialAddress);
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "ProfileDTO{" +
-                "telephone='" + telephone + '\'' +
+                "id=" + id +
+                ", telephone='" + telephone + '\'' +
                 ", residentialAddress='" + residentialAddress + '\'' +
                 '}';
     }

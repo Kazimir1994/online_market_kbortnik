@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
+    <div class="bs-docs-section">
+        <div class="page-header" style="padding-top: 20px; padding-bottom: 5px; color: #ebebeb">
+            <h1>Form to copy item</h1>
+        </div>
+        <div class="bs-component">
+            <th:block th:object="${Item}">
+                <div class="jumbotron">
+                    <form action="#" id="update_status_showing" th:action="@{/public/sale/items/copy}"
+                          th:object="${itemDTO}" method="post">
+                        <fieldset>
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" name="name" class="form-control" placeholder="name"
+                                       th:value="${Item.name}">
+                                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-warning"
+                                   style="padding-top: 10px">Name Error.</p>
+                            </div>
+                            <hr class="my-4">
+                            <div class="form-group">
+                                <label>Price</label>
+                                <input type="text" name="price" class="form-control" placeholder="Price"
+                                       th:value="${Item.price}">
+                                <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-warning"
+                                   style="padding-top: 10px">Name Error.</p>
+                            </div>
+                            <hr class="my-4">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea name="shortDescription" class="form-control" rows="2"
+                                          th:text="${Item.shortDescription}" required></textarea>
+                                <p th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}"
+                                   class="text-warning"></p>
+                            </div>
+
+                            <hr class="my-4">
+                            <label><input th:value="${Item.id}" name="itemId" hidden/></label>
+                            <button type="submit" class="btn btn-outline-success"> Copy item</button>
+                        </fieldset>
+                    </form>
+
+
+                </div>
+            </th:block>
+        </div>
+    </div>
+
+    <div class="footer container-lg width-full px-3" role="contentinfo">
+        <div class="position-relative d-flex flex-justify-between pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+            <div style="text-align: center;">
+                <span>Online Marker__2018</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

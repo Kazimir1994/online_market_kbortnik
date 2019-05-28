@@ -1,16 +1,15 @@
 package ru.kazimir.bortnik.online_market.service;
 
+import ru.kazimir.bortnik.online_market.service.model.PageDTO;
 import ru.kazimir.bortnik.online_market.service.model.ReviewDTO;
 
 import java.util.List;
 
 public interface ReviewService {
 
-    List<ReviewDTO> getReviews(Long limitPositions, Long positions);
+    PageDTO<ReviewDTO> getReviews(Long limitPositions, Long currentPage);
 
-    Long getNumberOfPages(Long maxPositions);
+    void deleteById(Long id);
 
-    void deleteReviewsById(Long id);
-
-    void updateShowing(List<ReviewDTO> reviewDTOS);
+    void updateHidden(List<ReviewDTO> reviewDTOS);
 }

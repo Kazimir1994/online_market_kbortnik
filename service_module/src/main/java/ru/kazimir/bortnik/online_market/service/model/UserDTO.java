@@ -3,12 +3,13 @@ package ru.kazimir.bortnik.online_market.service.model;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidationJAR.REGEX_NAME;
 import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidationJAR.REGEX_SURNAME;
 
 public class UserDTO {
+    private Long id;
+
     @NotNull
     @Pattern(regexp = REGEX_NAME, message = "{user.error.user.name}")
     @Size(min = 2, max = 20, message = "{user.error.name.size}")
@@ -19,20 +20,18 @@ public class UserDTO {
     @Pattern(regexp = REGEX_SURNAME, message = "{user.error.user.surname}")
     private String surname;
 
-    private String patronymic;
     private String email;
-    private Long id;
-    private ProfileDTO profileDTO;
-    private RoleDTO roleDTO;
-    private boolean canBeRemoved;
+    private boolean isDeleted;
+    private boolean unchangeable;
     private String password;
+    private RoleDTO roleDTO;
+    private ProfileDTO profileDTO;
 
     public UserDTO(Long id) {
         this.id = id;
     }
 
     public UserDTO() {
-
     }
 
     public String getName() {
@@ -51,6 +50,14 @@ public class UserDTO {
         this.surname = surname;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -59,28 +66,20 @@ public class UserDTO {
         this.email = email;
     }
 
-    public RoleDTO getRoleDTO() {
-        return roleDTO;
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void setRoleDTO(RoleDTO roleDTO) {
-        this.roleDTO = roleDTO;
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
-    public String getPatronymic() {
-        return patronymic;
+    public boolean isUnchangeable() {
+        return unchangeable;
     }
 
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public boolean isCanBeRemoved() {
-        return canBeRemoved;
-    }
-
-    public void setCanBeRemoved(boolean canBeRemoved) {
-        this.canBeRemoved = canBeRemoved;
+    public void setUnchangeable(boolean unchangeable) {
+        this.unchangeable = unchangeable;
     }
 
     public String getPassword() {
@@ -91,12 +90,12 @@ public class UserDTO {
         this.password = password;
     }
 
-    public Long getId() {
-        return id;
+    public RoleDTO getRoleDTO() {
+        return roleDTO;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRoleDTO(RoleDTO roleDTO) {
+        this.roleDTO = roleDTO;
     }
 
     public ProfileDTO getProfileDTO() {
@@ -110,36 +109,15 @@ public class UserDTO {
     @Override
     public String toString() {
         return "UserDTO{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", patronymic='" + patronymic + '\'' +
                 ", email='" + email + '\'' +
-                ", id=" + id +
-                ", profileDTO=" + profileDTO +
-                ", roleDTO=" + roleDTO +
-                ", canBeRemoved=" + canBeRemoved +
+                ", isDeleted=" + isDeleted +
+                ", unchangeable=" + unchangeable +
                 ", password='" + password + '\'' +
+                ", roleDTO=" + roleDTO +
+                ", profileDTO=" + profileDTO +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserDTO userDTO = (UserDTO) o;
-        return canBeRemoved == userDTO.canBeRemoved &&
-                Objects.equals(name, userDTO.name) &&
-                Objects.equals(surname, userDTO.surname) &&
-                Objects.equals(patronymic, userDTO.patronymic) &&
-                Objects.equals(email, userDTO.email) &&
-                Objects.equals(profileDTO, userDTO.profileDTO) &&
-                Objects.equals(id, userDTO.id) &&
-                Objects.equals(roleDTO, userDTO.roleDTO) &&
-                Objects.equals(password, userDTO.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, surname, patronymic, email, profileDTO, id, roleDTO, canBeRemoved, password);
     }
 }

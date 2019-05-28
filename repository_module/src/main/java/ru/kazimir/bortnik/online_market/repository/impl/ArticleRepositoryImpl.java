@@ -4,11 +4,10 @@ import org.springframework.stereotype.Repository;
 import ru.kazimir.bortnik.online_market.repository.ArticleRepository;
 import ru.kazimir.bortnik.online_market.repository.model.Article;
 import ru.kazimir.bortnik.online_market.repository.model.CommentArticleId;
-import ru.kazimir.bortnik.online_market.repository.model.Theme;
 
 import javax.persistence.Query;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> implements ArticleRepository {
@@ -32,13 +31,6 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> 
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public List<Theme> findAllTheme() {
-        String query = "from " + Theme.class.getName();
-        Query q = entityManager.createQuery(query);
-        return q.getResultList();
-    }
-
-    @Override
     public List<Article> findAll(int offset, int limit) {
         String query = "from " + Article.class.getName() + " order by dataCreate desc";
         Query q = entityManager.createQuery(query)
@@ -54,16 +46,16 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> 
                 + " GROUP BY commentArticleId  ORDER BY commentArticleId DESC ";
         Query queryManager = entityManager.createQuery(query);
         queryManager.setMaxResults(sizeTop);
-        List<Long> aLong = queryManager.getResultList();
-        String articleIS = aLong.stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(","));
 
-        query = "from " + Article.class.getName() + " where id IN(" + articleIS + ")";
-        queryManager = entityManager.createQuery(query);
-        queryManager.setMaxResults(sizeTop);
-
-        return queryManager.getResultList();
+        List<Long> idTopArticle = queryManager.getResultList();
+        if (!idTopArticle.isEmpty()) {
+            query = "from " + Article.class.getName() + " where id IN(:idTopArticle)";
+            Query q = entityManager.createQuery(query).setParameter("idTopArticles", idTopArticle);
+            q.setMaxResults(sizeTop);
+            return q.getResultList();
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
 

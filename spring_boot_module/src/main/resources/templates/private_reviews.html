@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <div th:replace="fragments/header :: header-css"></div>
@@ -19,9 +20,9 @@
                       th:object="${reviews}"
                       method="post">
                     <div th:each="review,itemStat :*{reviewList}" class="jumbotron">
-                        <p class="lead" th:text="${review.feedback}"></p>
+                        <p class="lead" th:text="${review.review}"></p>
                         <hr class="my-4">
-                        <h6 th:text="| ${review.userDTO.name} ${review.userDTO.surname} ${review.userDTO.patronymic}|"></h6>
+                        <h6 th:text="| ${review.userDTO.name} ${review.userDTO.surname}|"></h6>
                         <h6 th:text="${review.dataCreate}"></h6>
                         <label style="padding-top: 10px">
                             <button type="submit" class="btn btn-outline-warning"
@@ -35,7 +36,7 @@
                                     <p class="text-success">Show feedback
                                         <label style="padding-left: 10px">
                                             <input type="checkbox"
-                                                   th:field="*{reviewList[__${itemStat.index}__].showing}">
+                                                   th:field="*{reviewList[__${itemStat.index}__].hidden}">
                                         </label>
                                         <label>
                                             <input hidden th:name="|reviewList[${itemStat.index}].id|"
@@ -65,8 +66,8 @@
                     <a class="page-link" href="#">&laquo;</a>
                 </li>
 
-                <li class="page-item" th:each="i : ${#numbers.sequence( 1,SizePage)}"
-                    th:classappend="${currentPage}==${i}?'page-item active':''">
+                <li class="page-item" th:each="i : ${#numbers.sequence( 1,page.countOfPages)}"
+                    th:classappend="${page.currentPage}==${i}?'page-item active':''">
                     <a th:href="@{/private/reviews/showing(currentPage=${i})}" th:text="${i}" class="page-link"> </a>
                 </li>
 

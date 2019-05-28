@@ -1,4 +1,4 @@
-package ru.kazimir.bortnik.online_market.controllers.web;
+package ru.kazimir.bortnik.online_market.controllers.web.customer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,15 +25,15 @@ import java.util.Objects;
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_GET_UNAUTHORIZED_USER;
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_UNAUTHORIZED_USER;
 import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_UPDATE_PROFILE;
-import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_PROFILE_USER_PAGE;
-import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_SHOW_PROFILE_USER_URl;
-import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_UPRATE_PROFILE_USER_URl;
-import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_USERS_SAIL_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_PROFILE_USER_PAGE;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_REDIRECT_SHOW_PROFILE_USER;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_SAIL_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_SHOW_PROFILE_USER_URl;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_UPRATE_PROFILE_USER_URl;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_LOGIN_URL;
-import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_REDIRECT_SHOW_PROFILE_USER;
 
 @Controller
-@RequestMapping(PUBLIC_USERS_SAIL_URL)
+@RequestMapping(PUBLIC_CUSTOMER_SAIL_URL)
 public class CustomerUserWebController {
     private final static Logger logger = LoggerFactory.getLogger(CustomerUserWebController.class);
 
@@ -48,7 +48,7 @@ public class CustomerUserWebController {
         this.updateProfileUserValidator = updateProfileUserValidatorImpl;
     }
 
-    @GetMapping(PUBLIC_SALE_SHOW_PROFILE_USER_URl)
+    @GetMapping(PUBLIC_CUSTOMER_SHOW_PROFILE_USER_URl)
     public String showProfileUser(Authentication authentication, UserDTO user, BindingResult results, Model model) {
         Long idUser;
         try {
@@ -71,10 +71,10 @@ public class CustomerUserWebController {
                 results.addError(error);
             }
         }
-        return PUBLIC_SALE_PROFILE_USER_PAGE;
+        return PUBLIC_CUSTOMER_PROFILE_USER_PAGE;
     }
 
-    @PostMapping(PUBLIC_SALE_UPRATE_PROFILE_USER_URl)
+    @PostMapping(PUBLIC_CUSTOMER_UPRATE_PROFILE_USER_URl)
     public String updateProfile(Authentication authentication, @Valid UserDTO userDTO,
                                 BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
@@ -97,10 +97,10 @@ public class CustomerUserWebController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors());
             logger.info("Request denied. Error code := {},{}", ERROR_UPDATE_PROFILE, bindingResult.getAllErrors());
-            return PUBLIC_SALE_REDIRECT_SHOW_PROFILE_USER;
+            return PUBLIC_CUSTOMER_REDIRECT_SHOW_PROFILE_USER;
         }
         userService.updateProfile(userDTO);
         redirectAttributes.addFlashAttribute("message", "Profile was successfully changed");
-        return PUBLIC_SALE_REDIRECT_SHOW_PROFILE_USER;
+        return PUBLIC_CUSTOMER_REDIRECT_SHOW_PROFILE_USER;
     }
 }

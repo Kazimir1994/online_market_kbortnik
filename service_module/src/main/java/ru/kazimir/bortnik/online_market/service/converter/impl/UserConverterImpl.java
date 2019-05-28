@@ -23,10 +23,9 @@ public class UserConverterImpl implements Converter<UserDTO, User> {
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
-        userDTO.setPatronymic(user.getPatronymic());
-        userDTO.setPassword(user.getPassword());
         userDTO.setEmail(user.getEmail());
-        userDTO.setCanBeRemoved(user.isCanBeRemoved());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setUnchangeable(user.isUnchangeable());
         userDTO.setRoleDTO(roleConverter.toDTO(user.getRole()));
         return userDTO;
     }
@@ -37,10 +36,8 @@ public class UserConverterImpl implements Converter<UserDTO, User> {
         user.setId(userDTO.getId());
         user.setName(userDTO.getName());
         user.setSurname(userDTO.getSurname());
-        user.setPatronymic(userDTO.getPatronymic());
         user.setPassword(userDTO.getPassword());
         user.setEmail(userDTO.getEmail());
-        user.setCanBeRemoved(userDTO.isCanBeRemoved());
         user.setRole(roleConverter.fromDTO(userDTO.getRoleDTO()));
         return user;
     }

@@ -15,7 +15,9 @@ import java.util.Collection;
 
 import static ru.kazimir.bortnik.online_market.constant.RoleConstants.ADMIN_ROLE_NAME;
 import static ru.kazimir.bortnik.online_market.constant.RoleConstants.CUSTOMER_ROLE_NAME;
+import static ru.kazimir.bortnik.online_market.constant.RoleConstants.SALE_USER_ROLE_NAME;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.HOME_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_REDIRECT_ARTICLES_SHOWING_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_REDIRECT_ARTICLES_SHOWING_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_USERS_SHOWING_URL;
 
@@ -41,6 +43,10 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
                     break;
                 }
                 case CUSTOMER_ROLE_NAME: {
+                    redirectURL = PUBLIC_CUSTOMER_REDIRECT_ARTICLES_SHOWING_URL;
+                    break;
+                }
+                case SALE_USER_ROLE_NAME: {
                     redirectURL = PUBLIC_SALE_REDIRECT_ARTICLES_SHOWING_URL;
                     break;
                 }

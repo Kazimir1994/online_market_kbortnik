@@ -1,18 +1,14 @@
 package ru.kazimir.bortnik.online_market.model;
 
-
 import ru.kazimir.bortnik.online_market.service.model.ReviewDTO;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-public class ShellAboveReviewSheet {
+public class WrappingSheetReviews {
     @NotNull
     private List<ReviewDTO> reviewList;
-
-    public ShellAboveReviewSheet() {
-    }
 
     public List<ReviewDTO> getReviewList() {
         return reviewList;
@@ -24,7 +20,7 @@ public class ShellAboveReviewSheet {
 
     @Override
     public String toString() {
-        return "ShellAboveReviewSheet{" +
+        return "WrappingSheetReviews{" +
                 "reviewList=" + reviewList +
                 "}\n";
     }
@@ -33,7 +29,7 @@ public class ShellAboveReviewSheet {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ShellAboveReviewSheet that = (ShellAboveReviewSheet) o;
+        WrappingSheetReviews that = (WrappingSheetReviews) o;
         return Objects.equals(reviewList, that.reviewList);
     }
 
