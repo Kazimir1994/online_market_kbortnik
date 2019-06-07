@@ -1,5 +1,7 @@
 package ru.kazimir.bortnik.online_market.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.kazimir.bortnik.online_market.service.Parsing;
 import ru.kazimir.bortnik.online_market.service.model.ItemDTO;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @Service
 public class StAXParserImpl implements Parsing {
+    private static final Logger logger = LoggerFactory.getLogger(StAXParserImpl.class);
 
     @Override
     public List<ItemDTO> parse(InputStream fileXML) {
@@ -85,8 +88,7 @@ public class StAXParserImpl implements Parsing {
                 }
             }
         } catch (XMLStreamException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return itemList;
     }
