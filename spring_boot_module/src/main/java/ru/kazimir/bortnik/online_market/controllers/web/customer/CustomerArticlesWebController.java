@@ -40,7 +40,6 @@ import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT
 @RequestMapping(PUBLIC_CUSTOMER_ARTICLES_URL)
 public class CustomerArticlesWebController {
     private final static Logger logger = LoggerFactory.getLogger(AdminUsersWebController.class);
-
     private final ArticleService articleService;
     private final ThemeService themeService;
     private final FilterNewsPage filterNewsPage = new FilterNewsPage(10L, 1L);

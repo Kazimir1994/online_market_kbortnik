@@ -64,5 +64,4 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
             session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         }
     }
-
 }

@@ -56,7 +56,7 @@ public class ItemAPIController {
     }
 
     @DeleteMapping(API_ITEM_DELETE_ID_URL)
-    public ResponseEntity deleteItem(@PathVariable("id")  Long id) {
+    public ResponseEntity deleteItem(@PathVariable("id") Long id) {
         logger.info("Requests delete Item  by id := {}.", id);
         itemService.deleteById(id);
         logger.info("Item removed successfully.");
@@ -64,14 +64,14 @@ public class ItemAPIController {
     }
 
     @PostMapping(API_ITEM_ADD_URL)
-    public ResponseEntity addItem(@RequestBody @Valid ItemDTO articleDTO,
+    public ResponseEntity addItem(@RequestBody @Valid ItemDTO itemDTO,
                                   BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             logger.info("error := {}.", bindingResult.getAllErrors());
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        logger.info("Add new item {}", articleDTO);
-        itemService.add(articleDTO);
+        logger.info("Add new item {}", itemDTO);
+        itemService.add(itemDTO);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 }

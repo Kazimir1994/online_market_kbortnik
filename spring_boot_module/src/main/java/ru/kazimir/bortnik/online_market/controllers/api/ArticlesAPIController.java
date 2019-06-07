@@ -36,7 +36,6 @@ import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_GET_
 @RequestMapping(API_ARTICLES_URL)
 public class ArticlesAPIController {
     private final static Logger logger = LoggerFactory.getLogger(ArticlesAPIController.class);
-
     private final ArticleService articleService;
     private final Validator themeValidator;
 
@@ -60,7 +59,7 @@ public class ArticlesAPIController {
     public ResponseEntity<ArticleDTO> getArticle(@PathVariable("id") Long id) {
         logger.info("Request for article by id := {}.", id);
         ArticleDTO articleDTO = articleService.getById(id);
-        logger.info("Send a list of article. := {}.", articleDTO);
+        logger.info("Send a article of article. := {}.", articleDTO);
         return new ResponseEntity<>(articleDTO, HttpStatus.OK);
     }
 

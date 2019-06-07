@@ -8,7 +8,6 @@ import ru.kazimir.bortnik.online_market.service.MailService;
 
 @Service
 public class MailServiceImpl implements MailService {
-
     private final JavaMailSender mailSender;
 
     @Autowired

@@ -48,7 +48,6 @@ import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT
 @RequestMapping(PRIVATE_USERS_URL)
 public class AdminUsersWebController {
     private final static Logger logger = LoggerFactory.getLogger(AdminUsersWebController.class);
-
     private final UserService userService;
     private final RoleService roleService;
     private final Validator addUserValidator;
@@ -86,12 +85,14 @@ public class AdminUsersWebController {
             @RequestParam(value = "id_delete_users", required = false) Long[] idDeleteUsers,
             RedirectAttributes redirectAttributes) {
         if (idDeleteUsers != null) {
-            List<Long> longList = Arrays.stream(idDeleteUsers).filter(aLong -> aLong != null && aLong > 0).collect(Collectors.toList());
+            List<Long> longList = Arrays.stream(idDeleteUsers).filter(aLong -> aLong != null && aLong > 0)
+                    .collect(Collectors.toList());
             logger.info("Request to delete users by ID {}.", longList);
             if (!longList.isEmpty()) {
                 try {
                     userService.deleteUsersById(longList);
-                    redirectAttributes.addFlashAttribute("message", "Selected users were successfully deleted");
+                    redirectAttributes.addFlashAttribute("message",
+                            "Selected users were successfully deleted");
                 } catch (UserServiceException e) {
                     return REDIRECT_ERROR_404;
                 }
@@ -127,7 +128,8 @@ public class AdminUsersWebController {
         logger.info("Password change request for user ( Email := {} )", userDTO.getEmail());
         updateByEmailPasswordValidator.validate(userDTO, bindingResult);
         if (bindingResult.hasFieldErrors("email")) {
-            logger.info("Request denied. Error code := {},{}.", ERROR_UPDATE_PASSWORD_USER_BY_EMAIL, bindingResult.getAllErrors());
+            logger.info("Request denied. Error code := {},{}.", ERROR_UPDATE_PASSWORD_USER_BY_EMAIL,
+                    bindingResult.getAllErrors());
             return REDIRECT_ERROR_422;
         }
         try {

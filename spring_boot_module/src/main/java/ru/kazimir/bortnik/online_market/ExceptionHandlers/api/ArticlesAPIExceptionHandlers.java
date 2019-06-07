@@ -18,5 +18,4 @@ public class ArticlesAPIExceptionHandlers {
     public final void notExistentHandler(Exception ex) {
         logger.info("Error:= {} ", ex.getMessage());
     }
-
 }

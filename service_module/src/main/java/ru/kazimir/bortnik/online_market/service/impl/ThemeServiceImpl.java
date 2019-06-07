@@ -18,7 +18,6 @@ import static ru.kazimir.bortnik.online_market.service.constans.MessagesLogger.M
 @Service
 public class ThemeServiceImpl implements ThemeService {
     private final static Logger logger = LoggerFactory.getLogger(ThemeServiceImpl.class);
-
     private final Converter<ThemeDTO, Theme> themeConverter;
     private final ThemeRepository themeRepository;
 

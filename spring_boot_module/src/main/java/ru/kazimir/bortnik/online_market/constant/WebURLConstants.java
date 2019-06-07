@@ -1,10 +1,6 @@
 package ru.kazimir.bortnik.online_market.constant;
 
 public class WebURLConstants {
-
-    private WebURLConstants() {
-    }
-
     public static final String ERROR_URL = "/error";
     public static final String REDIRECT_ERROR_403 = "/error/403";
     public static final String ERROR_403_PAGE_URL = "/403";
@@ -127,4 +123,6 @@ public class WebURLConstants {
     public static final String PUBLIC_SALE_ORDERS_UPDATE_STATUS_URL = "/update_status";
     public static final String PUBLIC_SALE_REDIRECT_ORDERS_SHOWING_MORE_URL = "redirect:/public/sale/orders/showing/more?orderId=%d";
 
+    private WebURLConstants() {
+    }
 }

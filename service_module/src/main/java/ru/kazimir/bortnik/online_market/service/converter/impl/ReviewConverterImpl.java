@@ -1,5 +1,6 @@
 package ru.kazimir.bortnik.online_market.service.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.kazimir.bortnik.online_market.repository.model.Review;
@@ -12,6 +13,7 @@ import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 public class ReviewConverterImpl implements Converter<ReviewDTO, Review> {
     private final Converter<UserDTO, User> authorConverter;
 
+    @Autowired
     public ReviewConverterImpl(@Qualifier("authorConverterImpl") Converter<UserDTO, User> authorConverter) {
         this.authorConverter = authorConverter;
     }

@@ -23,7 +23,6 @@ public class AddUserValidatorImpl implements Validator {
                                 @Qualifier("profileValidatorImpl") Validator profileValidator) {
         this.userService = userService;
         this.roleValidator = roleValidator;
-
         this.profileValidator = profileValidator;
     }
 

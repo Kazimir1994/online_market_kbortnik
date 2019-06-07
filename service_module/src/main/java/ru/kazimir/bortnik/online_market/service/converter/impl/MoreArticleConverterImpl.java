@@ -1,5 +1,6 @@
 package ru.kazimir.bortnik.online_market.service.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.kazimir.bortnik.online_market.repository.model.Article;
@@ -21,6 +22,7 @@ public class MoreArticleConverterImpl implements Converter<ArticleDTO, Article> 
     private final Converter<ThemeDTO, Theme> themeConverter;
     private final Converter<CommentDTO, Comment> commentConverter;
 
+    @Autowired
     public MoreArticleConverterImpl(@Qualifier("authorConverterImpl") Converter<UserDTO, User> userNewsPageConverter,
                                     Converter<ThemeDTO, Theme> themeConverter,
                                     Converter<CommentDTO, Comment> commentConverter) {

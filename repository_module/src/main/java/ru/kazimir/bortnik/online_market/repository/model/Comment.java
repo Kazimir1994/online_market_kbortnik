@@ -111,8 +111,6 @@ public class Comment {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, dataCreate, content);
     }
-
 }

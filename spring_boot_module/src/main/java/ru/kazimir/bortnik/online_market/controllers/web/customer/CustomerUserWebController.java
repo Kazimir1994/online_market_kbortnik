@@ -36,7 +36,6 @@ import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT
 @RequestMapping(PUBLIC_CUSTOMER_SAIL_URL)
 public class CustomerUserWebController {
     private final static Logger logger = LoggerFactory.getLogger(CustomerUserWebController.class);
-
     private final UserService userService;
     private final Validator updateProfileUserValidator;
 
@@ -77,7 +76,6 @@ public class CustomerUserWebController {
     @PostMapping(PUBLIC_CUSTOMER_UPRATE_PROFILE_USER_URl)
     public String updateProfile(Authentication authentication, @Valid UserDTO userDTO,
                                 BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
         try {
             UserDetail userDetail = (UserDetail) authentication.getPrincipal();
             logger.info("Get user out of session := {}.", userDetail);
@@ -91,7 +89,6 @@ public class CustomerUserWebController {
             logger.error(e.getMessage(), e);
             return REDIRECT_LOGIN_URL;
         }
-
         logger.info("Profile change request := {}.", userDTO);
         updateProfileUserValidator.validate(userDTO, bindingResult);
         if (bindingResult.hasErrors()) {

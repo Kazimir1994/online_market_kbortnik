@@ -32,7 +32,6 @@ import static ru.kazimir.bortnik.online_market.service.exception.messageexceptio
 @Service
 public class OrderServiceImpl implements OrderService {
     private final static Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
-
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;

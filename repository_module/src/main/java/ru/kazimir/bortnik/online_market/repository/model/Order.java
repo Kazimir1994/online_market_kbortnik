@@ -135,5 +135,4 @@ public class Order implements Serializable {
     public int hashCode() {
         return Objects.hash(id, orderNumber, quantity, status, dataCreation);
     }
-
 }

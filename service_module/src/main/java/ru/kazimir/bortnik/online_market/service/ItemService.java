@@ -18,5 +18,4 @@ public interface ItemService {
     void add(ItemDTO itemDTO);
 
     void add(List<ItemDTO> items);
-
 }

@@ -31,5 +31,4 @@ public class UserRepositoryImpl extends GenericRepositoryImpl<Long, User> implem
         q.setFirstResult(Math.toIntExact(offset));
         return q.getResultList();
     }
-
 }

@@ -64,5 +64,4 @@ public class SaleOrdersWebController {
         redirectAttributes.addFlashAttribute("message", "Status changed successfully");
         return String.format(PUBLIC_SALE_REDIRECT_ORDERS_SHOWING_MORE_URL, Order.getId());
     }
-
 }

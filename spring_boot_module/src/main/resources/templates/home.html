@@ -6,9 +6,7 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
-
 <div class="container">
-
     <div th:if="${!#lists.isEmpty(Article)}">
         <div class="bs-docs-section">
             <div class="page-header" style="padding-top: 20px; padding-bottom: 5px; color: #ebebeb">
@@ -29,7 +27,6 @@
             </div>
         </div>
     </div>
-
     <div class="bs-docs-section">
         <div class="bs-component" style="padding-top: 50px">
             <div class="jumbotron">

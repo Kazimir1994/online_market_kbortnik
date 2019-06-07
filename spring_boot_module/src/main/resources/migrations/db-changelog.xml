@@ -277,7 +277,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="price" type="DECIMAL(8,1)">
+            <column name="price" type="DECIMAL(15,2)">
                 <constraints nullable="false"/>
             </column>
 

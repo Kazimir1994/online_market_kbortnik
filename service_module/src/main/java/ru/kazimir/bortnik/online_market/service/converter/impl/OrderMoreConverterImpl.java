@@ -1,5 +1,6 @@
 package ru.kazimir.bortnik.online_market.service.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.kazimir.bortnik.online_market.repository.model.Order;
@@ -13,6 +14,7 @@ public class OrderMoreConverterImpl implements Converter<OrderDTO, Order> {
     private final Converter<OrderDTO, Order> orderConverter;
     private final Converter<UserDTO, User> userOrderConverter;
 
+    @Autowired
     public OrderMoreConverterImpl(@Qualifier("orderConverterImpl") Converter<OrderDTO, Order> orderConverter,
                                   @Qualifier("userOrderConverterImpl") Converter<UserDTO, User> userOrderConverter) {
         this.orderConverter = orderConverter;

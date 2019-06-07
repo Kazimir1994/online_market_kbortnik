@@ -26,7 +26,6 @@ import static ru.kazimir.bortnik.online_market.service.exception.messageexceptio
 @Service
 public class ReviewServiceImpl implements ReviewService {
     private static final Logger logger = LoggerFactory.getLogger(ReviewServiceImpl.class);
-
     private final ReviewRepository reviewRepository;
     private final Converter<ReviewDTO, Review> reviewConverter;
     private final UserRepository userRepository;

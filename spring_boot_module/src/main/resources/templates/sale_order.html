@@ -7,8 +7,6 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container">
-
-
     <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
     <div class="bs-docs-section">
         <div class="page-header" style="padding-top: 20px; padding-bottom: 5px; color: #ebebeb">
@@ -37,7 +35,6 @@
                     <h5>Telephone</h5>
                     <p class="lead" th:text="*{user.profileDTO.telephone}"></p>
                     <hr class="my-4">
-
                     <h5>Order status</h5>
                     <form style="padding-top:5px" action="#" th:action="@{/public/sale/orders/update_status}"
                           th:object="${Order}" method="post">
@@ -58,12 +55,9 @@
                         <hr class="my-4">
                     </form>
                 </div>
-
             </th:block>
         </div>
     </div>
-
-
     <div class="footer container-lg width-full px-3" role="contentinfo">
         <div class="position-relative d-flex flex-justify-between pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
             <div style="text-align: center;">

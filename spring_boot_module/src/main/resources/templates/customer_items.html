@@ -7,7 +7,6 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container">
-
     <div th:if="${!#lists.isEmpty(PageDTO.list)}">
         <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
         <div class="bs-docs-section">
@@ -30,7 +29,6 @@
                             <a th:href="@{/public/customer/items/showing/more(itemId=${item.id})}"> More about the
                                 item</a>
                         </li>
-
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="float-lg-right">
@@ -38,7 +36,7 @@
                                           th:object="${orderDTO}" method="post">
                                         <div class="form-group">
                                             <p class="text-primary">Number of items</p>
-                                            <input type="number" th:name="quantity" class="form-control" min="1"
+                                            <input type="number" th:name="quantity" class="form-control" min="1" max="60"
                                                    VALUE="1"
                                                    placeholder="Quantity" required>
                                         </div>
@@ -55,26 +53,22 @@
                 </th:block>
             </div>
         </div>
-
         <div class="float-none">
             <ul class="pagination pagination-sm">
                 <li class="page-item disabled">
                     <a class="page-link" href="#">&laquo;</a>
                 </li>
-
                 <li class="page-item" th:each="i : ${#numbers.sequence( 1,PageDTO.countOfPages)}"
                     th:classappend="${PageDTO.currentPage}==${i}?'page-item active':''">
                     <a th:href="@{/public/customer/items/showing(currentPage=${i})}" th:text="${i}"
                        class="page-link"> </a>
                 </li>
-
                 <li class="page-item disabled">
                     <a class="page-link" href="#">&raquo;</a>
                 </li>
             </ul>
         </div>
     </div>
-
     <div class="footer container-lg width-full px-3" role="contentinfo">
         <div class="position-relative d-flex flex-justify-between pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
             <div style="text-align: center;">

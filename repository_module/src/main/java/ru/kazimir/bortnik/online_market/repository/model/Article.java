@@ -156,7 +156,6 @@ public class Article {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, dataCreate, title, content);
     }
 }

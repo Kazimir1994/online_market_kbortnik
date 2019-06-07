@@ -1,5 +1,6 @@
 package ru.kazimir.bortnik.online_market.service.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kazimir.bortnik.online_market.repository.model.Profile;
 import ru.kazimir.bortnik.online_market.repository.model.User;
@@ -11,6 +12,7 @@ import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 public class UserOrderConverterImpl implements Converter<UserDTO, User> {
     private final Converter<ProfileDTO, Profile> profileConverter;
 
+    @Autowired
     public UserOrderConverterImpl(Converter<ProfileDTO, Profile> profileConverter) {
         this.profileConverter = profileConverter;
     }

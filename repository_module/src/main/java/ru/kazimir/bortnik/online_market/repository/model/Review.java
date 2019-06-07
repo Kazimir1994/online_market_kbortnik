@@ -91,7 +91,6 @@ public class Review {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, review, dataCreate, hidden);
     }
 }

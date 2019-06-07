@@ -24,7 +24,6 @@ import static ru.kazimir.bortnik.online_market.service.exception.messageexceptio
 @Service
 public class ItemServiceImpl implements ItemService {
     private final static Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
-
     private final ItemRepository itemRepository;
     private final Converter<ItemDTO, Item> itemConverter;
 

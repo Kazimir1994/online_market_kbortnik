@@ -21,10 +21,8 @@ public class ProfileValidatorImpl implements Validator {
             if (!profileDTO.getTelephone().matches(REGEX_TELEPHONE)) {
                 errors.rejectValue("profileDTO.telephone", "profile.error.telephone");
             }
-
             if (profileDTO.getResidentialAddress().length() > 40 || profileDTO.getResidentialAddress().length() < 5) {
                 errors.rejectValue("profileDTO.residentialAddress", "profile.error.residential.address");
             }
-
     }
 }

@@ -44,7 +44,6 @@ import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT
 @RequestMapping(PUBLIC_SALE_ITEMS_URL)
 public class SaleItemsController {
     private final static Logger logger = LoggerFactory.getLogger(AdminUsersWebController.class);
-
     private final ItemService itemService;
     private final XmlService xmlService;
     private final Pageable pageable = new Pageable(10L);

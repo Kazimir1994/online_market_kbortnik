@@ -2,9 +2,6 @@ package ru.kazimir.bortnik.online_market.service.exception.messageexception;
 
 public class ErrorMessagesService {
 
-    private ErrorMessagesService() {
-    }
-
     public static final String USER_ERROR_DELETE = "Error while deleting user. List ID:= %s";
     public static final String USER_ERROR_UPDATE_ROLE = "Error while changing user's role. Name new Role:= %s, ID user:= %d";
     public static final String USER_ERROR_UPDATE_PASSWORD = "Error while changing user's password. Email:= %s";
@@ -20,4 +17,7 @@ public class ErrorMessagesService {
     public static final String ERROR_DELETE_COMMENT_BY_ID = "It is impossible to delete comment from id := %d because it no longer exists.";
 
     public static final String USER_ERROR_GET_ITEM = "item by id := %d does not exist.";
+
+    private ErrorMessagesService() {
+    }
 }

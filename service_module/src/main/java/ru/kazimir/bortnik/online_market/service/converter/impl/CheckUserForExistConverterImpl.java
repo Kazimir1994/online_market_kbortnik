@@ -1,5 +1,6 @@
 package ru.kazimir.bortnik.online_market.service.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kazimir.bortnik.online_market.repository.model.Role;
 import ru.kazimir.bortnik.online_market.repository.model.User;
@@ -11,6 +12,7 @@ import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 public class CheckUserForExistConverterImpl implements Converter<UserDTO, User> {
     private final Converter<RoleDTO, Role> roleConverter;
 
+    @Autowired
     public CheckUserForExistConverterImpl(Converter<RoleDTO, Role> roleConverter) {
         this.roleConverter = roleConverter;
     }

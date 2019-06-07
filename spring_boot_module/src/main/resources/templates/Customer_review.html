@@ -16,7 +16,6 @@
                     <fieldset>
                         <h5>"Your feedback is very important to us"</h5>
                         <hr class="my-4">
-
                         <div class="form-group">
                             <label>Only gods can comment here because only gods can comment on divine sites</label>
                             <div class="form-group">
@@ -25,8 +24,6 @@
                             <p th:if="${#fields.hasErrors('review')}" th:errors="*{review}" class="text-warning"
                                style="padding-top: 10px">Name Error.</p>
                         </div>
-
-
                         <button type="submit" class="btn btn-outline-primary"> Add review</button>
                     </fieldset>
                 </form>

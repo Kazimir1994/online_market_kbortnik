@@ -36,7 +36,6 @@ import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.*;
 @RequestMapping(PUBLIC_SALE_ARTICLES_URL)
 public class SaleArticlesWebController {
     private final static Logger logger = LoggerFactory.getLogger(AdminUsersWebController.class);
-
     private final ArticleService articleService;
     private final ThemeService themeService;
     private final Validator themeValidator;
@@ -61,7 +60,6 @@ public class SaleArticlesWebController {
         model.addAttribute("pageable", filterNewsPage);
         return PUBLIC_SALE_ARTICLES_PAGE;
     }
-
 
     @PostMapping(PUBLIC_SALE_ARTICLES_UPDATE_FILTER_URL)
     public String updateFilter(@RequestParam(defaultValue = "1") Long theme, @RequestParam(defaultValue = "10") Long limitPositions,
@@ -212,7 +210,6 @@ public class SaleArticlesWebController {
             redirectAttributes.addFlashAttribute("error", results.getAllErrors());
             return String.format(PUBLIC_SALE_REDIRECT_ARTICLES_FORM_UPDATE_ARTICLE_URL, articleDTO.getId());
         }
-
         try {
             articleService.update(articleDTO);
             redirectAttributes.addFlashAttribute("message", "Article successfully creation");

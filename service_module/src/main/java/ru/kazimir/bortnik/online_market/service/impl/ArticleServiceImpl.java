@@ -36,7 +36,6 @@ import static ru.kazimir.bortnik.online_market.service.exception.messageexceptio
 @Service
 public class ArticleServiceImpl implements ArticleService {
     private final static Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
-
     private final ArticleRepository articleRepository;
     private final Converter<ArticleDTO, Article> newsPageConverter;
     private final Converter<ArticleDTO, Article> moreArticleConverter;

@@ -98,7 +98,6 @@ public class Item {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, price, uniqueNumber, description, deleted);
     }
 }

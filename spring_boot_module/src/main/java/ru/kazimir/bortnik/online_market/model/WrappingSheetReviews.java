@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class WrappingSheetReviews {
+
     @NotNull
     private List<ReviewDTO> reviewList;
 
@@ -35,7 +36,6 @@ public class WrappingSheetReviews {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(reviewList);
     }
 }

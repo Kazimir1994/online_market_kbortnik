@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Service
 public class RoleServiceImpl implements RoleService {
     private static final Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
-
     private final RoleRepository roleRepository;
     private final Converter<RoleDTO, Role> roleConverter;
 

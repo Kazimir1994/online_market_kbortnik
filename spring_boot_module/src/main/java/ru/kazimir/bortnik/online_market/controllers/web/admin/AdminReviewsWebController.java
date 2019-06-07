@@ -33,7 +33,7 @@ import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT
 @Controller
 @RequestMapping(PRIVATE_REVIEWS_URL)
 public class AdminReviewsWebController {
-    private final static Logger logger = LoggerFactory.getLogger(AdminReviewsWebController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminReviewsWebController.class);
     private final Pageable pageable = new Pageable(10L);
     private final ReviewService reviewService;
 
@@ -46,24 +46,24 @@ public class AdminReviewsWebController {
     public String showReviews(@RequestParam(defaultValue = "1", value = "currentPage") Long currentPage, Model model) {
         PageDTO<ReviewDTO> pageDTO = reviewService.getReviews(pageable.getLimitPositions(), currentPage);
         logger.info("List of reviews for submission {}.", pageDTO.getList());
-        WrappingSheetReviews WrappingSheetReviews = new WrappingSheetReviews();
-        WrappingSheetReviews.setReviewList(pageDTO.getList());
-        model.addAttribute("reviews", WrappingSheetReviews);
+        WrappingSheetReviews wrappingSheetReviews = new WrappingSheetReviews();
+        wrappingSheetReviews.setReviewList(pageDTO.getList());
+        model.addAttribute("reviews", wrappingSheetReviews);
         model.addAttribute("page", pageDTO);
         return PRIVATE_REVIEWS_PAGE;
     }
 
     @PostMapping(PRIVATE_REVIEWS_UPDATE_SHOWING_URL)
-    public String updateStatusShowing(@Valid WrappingSheetReviews WrappingSheetReviews,
+    public String updateStatusShowing(@Valid WrappingSheetReviews wrappingSheetReviews,
                                       BindingResult bindingResult,
                                       RedirectAttributes redirectAttributes) {
-        logger.info("OrderDTO status change request {} ", WrappingSheetReviews.getReviewList());
+        logger.info("OrderDTO status change request {} ", wrappingSheetReviews.getReviewList());
         if (bindingResult.hasErrors()) {
             logger.info("Request denied. Error code := {}", ERROR_UPDATE_STATUS_SHOWING_REVIEWS);
             return REDIRECT_PRIVATE_REVIEWS_SHOWING;
         }
         try {
-            reviewService.updateHidden(WrappingSheetReviews.getReviewList());
+            reviewService.updateHidden(wrappingSheetReviews.getReviewList());
         } catch (ReviewServiceException e) {
             return REDIRECT_ERROR_404;
         }

@@ -35,7 +35,6 @@ import static ru.kazimir.bortnik.online_market.service.exception.messageexceptio
 @Service
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
     private final Converter<UserDTO, User> userConverter;
     private final Converter<UserDTO, User> userProfileConverter;
     private final Converter<UserDTO, User> checkUserForExistConverter;
@@ -232,5 +231,4 @@ public class UserServiceImpl implements UserService {
         }
         return countOfPages;
     }
-
 }

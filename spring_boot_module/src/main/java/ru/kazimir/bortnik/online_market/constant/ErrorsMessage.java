@@ -1,10 +1,6 @@
 package ru.kazimir.bortnik.online_market.constant;
 
 public class ErrorsMessage {
-
-    private ErrorsMessage() {
-    }
-
     public static final String ERROR_UPDATE_PASSWORD_USER_BY_EMAIL = "The password does not match the template or the User with such a password no longer exists.";
     public static final String ERROR_ADD_USER = "Cannot add user. Incorrect data.";
     public static final String ERROR_UPDATE_ROLE = "The role cannot be updated because the role no longer exists.";
@@ -16,4 +12,7 @@ public class ErrorsMessage {
     public static final String ERROR_GET_UNAUTHORIZED_USER = "No user found in current session.";
     public static final String ERROR_UPDATE_PROFILE = "Incorrect data for profile changes";
     public static final String ERROR_ADD_REVIEW = "Incorrect data review";
+
+    private ErrorsMessage() {
+    }
 }
