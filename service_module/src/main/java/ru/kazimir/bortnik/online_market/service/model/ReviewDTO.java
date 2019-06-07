@@ -2,8 +2,6 @@ package ru.kazimir.bortnik.online_market.service.model;
 
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 public class ReviewDTO {

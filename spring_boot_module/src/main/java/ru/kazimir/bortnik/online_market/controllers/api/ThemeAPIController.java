@@ -14,15 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kazimir.bortnik.online_market.service.ThemeService;
-import ru.kazimir.bortnik.online_market.service.model.RoleDTO;
 import ru.kazimir.bortnik.online_market.service.model.ThemeDTO;
 
 import java.util.List;
 
-import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_ROLE_SHOWING_URL;
+import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_THEMES_SAVE_URL;
 import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_THEMES_SHOWING_URL;
 import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_THEME_URL;
-import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_THEMES_SAVE_URL;
 
 @RestController
 @RequestMapping(API_THEME_URL)

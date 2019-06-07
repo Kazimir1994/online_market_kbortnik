@@ -1,6 +1,5 @@
 package ru.kazimir.bortnik.online_market.repository.model;
 
-
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
