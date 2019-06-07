@@ -36,6 +36,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href=/public/customer/articles/showing>Articles</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href=/public/customer/items/showing>Items</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href=/public/customer/orders/showing_orders_user>Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href=/public/customer/reviews/show_form_send_reviews>Add review</a>
+                </li>
+
             </th:block>
 
             <th:block sec:authorize="hasAuthority('SALE_USER')">
@@ -49,6 +59,10 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href=/public/sale/items/showing>Items</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href=/public/sale/orders/showing>Orders</a>
                 </li>
             </th:block>
         </ul>

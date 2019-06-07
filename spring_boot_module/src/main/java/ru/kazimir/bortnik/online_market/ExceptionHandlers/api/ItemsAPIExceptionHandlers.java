@@ -1,4 +1,4 @@
-package ru.kazimir.bortnik.online_market.ExceptionHandlers;
+package ru.kazimir.bortnik.online_market.ExceptionHandlers.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

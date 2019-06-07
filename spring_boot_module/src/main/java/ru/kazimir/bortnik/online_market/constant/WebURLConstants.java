@@ -6,6 +6,7 @@ public class WebURLConstants {
     }
 
     public static final String ERROR_URL = "/error";
+    public static final String REDIRECT_ERROR_403 = "/error/403";
     public static final String ERROR_403_PAGE_URL = "/403";
     public static final String ERROR_403_PAGE = "error/403";
     public static final String ERROR_500_PAGE_URL = "/500";
@@ -16,6 +17,7 @@ public class WebURLConstants {
     public static final String ERROR_422_PAGE_URL = "/422";
     public static final String ERROR_422_PAGE = "error/422";
     public static final String REDIRECT_ERROR_422 = "redirect:/error/422";
+    public static final String REDIRECT_ERROR_500 = "redirect:/error/500";
 
     public static final String HOME_PAGE_URL = "/home";
     public static final String HOME_PAGE = "home";
@@ -58,6 +60,8 @@ public class WebURLConstants {
     public static final String PUBLIC_CUSTOMER_ARTICLES_SHOWING_URL = "/showing";
     public static final String PUBLIC_CUSTOMER_ARTICLES_SHOWING_MORE_URL = "/showing/more";
     public static final String PUBLIC_CUSTOMER_ARTICLES_UPDATE_FILTER_URL = "/update_filter";
+    public static final String PUBLIC_CUSTOMER_ADD_COMMENT_URL = "/add_comment";
+    public static final String PUBLIC_CUSTOMER_REDIRECT_ARTICLES_SHOWING_MORE_URL = "redirect:/public/customer/articles/showing/more?articlesId=%d";
     public static final String PUBLIC_CUSTOMER_ARTICLES_PAGE = "customer_articles";
     public static final String PUBLIC_CUSTOMER_ARTICLE_PAGE = "customer_article";
     public static final String PUBLIC_CUSTOMER_REDIRECT_ARTICLE_SHOWING_URL = "redirect:/public/customer/articles/showing";
@@ -89,11 +93,38 @@ public class WebURLConstants {
     public static final String PUBLIC_SALE_DELETE_ITEMS_URL = "/delete";
     public static final String PUBLIC_SALE_ITEM_SHOWING_MORE_URL = "/showing/more";
     public static final String PUBLIC_SALE_ITEM_COPY_FORM_URL = "/copy_form_item";
+    public static final String PUBLIC_SALE_ITEM_UPLOAD_URL = "/upload";
     public static final String PUBLIC_SALE_ITEM_COPY_URL = "/copy";
     public static final String PUBLIC_SALE_ITEMS_PAGE = "sale_items";
     public static final String PUBLIC_SALE_ITEM_PAGE = "sale_item";
     public static final String PUBLIC_SALE_ITEM_COPY_FORM_PAGE = "sale_copy_form_item";
     public static final String PUBLIC_SALE_REDIRECT_ITEMS_SHOWING_URL = "redirect:/public/sale/items/showing";
     public static final String PUBLIC_SALE_REDIRECT_ITEM_COPY_FORM_URL = "redirect:/public/sale/items/copy_form_item?itemId=%d";
+
+    public static final String PUBLIC_CUSTOMER_ITEMS_URL = "/public/customer/items";
+    public static final String PUBLIC_CUSTOMER_ITEMS_SHOWING_URL = "/showing";
+    public static final String PUBLIC_CUSTOMER_ITEMS_PAGE = "customer_items";
+    public static final String PUBLIC_CUSTOMER_ITEM_SHOWING_MORE_URL = "/showing/more";
+    public static final String PUBLIC_CUSTOMER_ITEM_PAGE = "customer_item";
+    public static final String PUBLIC_CUSTOMER_REDIRECT_ITEMS_SHOWING_URL = "redirect:/public/customer/items/showing";
+
+    public static final String PUBLIC_CUSTOMER_ORDERS_URL = "/public/customer/orders";
+    public static final String PUBLIC_CUSTOMER_ORDERS_SHOWING_USER_URL = "/showing_orders_user";
+    public static final String PUBLIC_CUSTOMER_ADD_ORDER = "/add";
+    public static final String PUBLIC_CUSTOMER_ORDERS_PAGE = "customer_orders";
+
+    public static final String PUBLIC_CUSTOMER_REVIEWS_URL = "/public/customer/reviews";
+    public static final String PUBLIC_CUSTOMER_ADD_REVIEWS_PAGE = "Customer_review";
+    public static final String PUBLIC_CUSTOMER_SHOW_FORM_SEND_REVIEWS_URL = "/show_form_send_reviews";
+    public static final String PUBLIC_CUSTOMER_ADD_REVIEWS_URL = "/add";
+    public static final String PUBLIC_CUSTOMER_REDIRECT_ADD_REVIEWS_URL = "redirect:/public/customer/reviews/show_form_send_reviews";
+
+    public static final String PUBLIC_SALE_ORDERS_URL = "/public/sale/orders";
+    public static final String PUBLIC_SALE_ORDERS_SHOWING_URL ="/showing";
+    public static final String PUBLIC_SALE_ORDERS_PAGE = "sale_orders";
+    public static final String PUBLIC_SALE_ORDERS_SHOWING_MORE_URL = "/showing/more";
+    public static final String PUBLIC_SALE_ORDER_PAGE = "sale_order";
+    public static final String PUBLIC_SALE_ORDERS_UPDATE_STATUS_URL = "/update_status";
+    public static final String PUBLIC_SALE_REDIRECT_ORDERS_SHOWING_MORE_URL = "redirect:/public/sale/orders/showing/more?orderId=%d";
 
 }

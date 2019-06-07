@@ -6,13 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kazimir.bortnik.online_market.repository.ReviewRepository;
+import ru.kazimir.bortnik.online_market.repository.UserRepository;
 import ru.kazimir.bortnik.online_market.repository.model.Review;
+import ru.kazimir.bortnik.online_market.repository.model.User;
 import ru.kazimir.bortnik.online_market.service.ReviewService;
 import ru.kazimir.bortnik.online_market.service.converter.Converter;
 import ru.kazimir.bortnik.online_market.service.exception.ReviewServiceException;
 import ru.kazimir.bortnik.online_market.service.model.PageDTO;
 import ru.kazimir.bortnik.online_market.service.model.ReviewDTO;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,11 +29,15 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final Converter<ReviewDTO, Review> reviewConverter;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository, Converter<ReviewDTO, Review> reviewConverter) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository,
+                             Converter<ReviewDTO, Review> reviewConverter,
+                             UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
         this.reviewConverter = reviewConverter;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -65,8 +72,8 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void updateHidden(List<ReviewDTO> reviewDTOS) {
         reviewDTOS.forEach(reviewDTO -> {
             Review review = reviewRepository.findById(reviewDTO.getId());
@@ -79,6 +86,17 @@ public class ReviewServiceImpl implements ReviewService {
                 throw new ReviewServiceException(REVIEW_ERROR_UPDATE_SHOWING);
             }
         });
+    }
+
+    @Override
+    @Transactional
+    public void add(ReviewDTO reviewDTO) {
+        Review review = new Review();
+        User user = userRepository.findById(reviewDTO.getUserDTO().getId());
+        review.setReview(reviewDTO.getReview());
+        review.setDataCreate(new Timestamp(System.currentTimeMillis()));
+        review.setUser(user);
+        reviewRepository.persist(review);
     }
 
 

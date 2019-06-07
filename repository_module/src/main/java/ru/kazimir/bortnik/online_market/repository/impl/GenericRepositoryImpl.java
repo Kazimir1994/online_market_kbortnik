@@ -3,6 +3,7 @@ package ru.kazimir.bortnik.online_market.repository.impl;
 import ru.kazimir.bortnik.online_market.repository.GenericRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.lang.reflect.ParameterizedType;
@@ -43,6 +44,19 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public T findByIdNotDeleted(I id) {
+        String queryString = "from " + entityClass.getName() + " where id =:id and deleted = 0 ";
+        Query query = entityManager.createQuery(queryString);
+        query.setParameter("id", id);
+        try {
+            return (T) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public List<T> findAll() {
         String query = "from " + entityClass.getName() + " c";
@@ -61,9 +75,18 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
     }
 
     @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public Long getCountOfEntities() {
         String query = "SELECT COUNT(*) FROM " + entityClass.getName() + " c";
         Query q = entityManager.createQuery(query);
+        return ((Number) q.getSingleResult()).longValue();
+    }
+
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public Long getCountOfNotDeletedEntities() {
+        String queryString = "SELECT COUNT(*) FROM " + entityClass.getName() + " where deleted = 0";
+        Query q = entityManager.createQuery(queryString);
         return ((Number) q.getSingleResult()).longValue();
     }
 }

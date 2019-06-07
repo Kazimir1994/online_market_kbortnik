@@ -770,4 +770,52 @@
             <column name="description" value="Text_Text_Text_Text_Text_Text_Text_"/>
         </insert>
     </changeSet>
+
+    <changeSet id="ORDERS_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <createTable tableName="Orders">
+
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="status" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="order_number" type="BIGINT UNSIGNED">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="quantity" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="data_create" type="Timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deleted" type="Boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="customer_user_id" type="BIGINT">
+                <constraints foreignKeyName="customer_user_id" references="User(id)" nullable="false"/>
+            </column>
+
+            <column name="item_id" type="BIGINT">
+                <constraints foreignKeyName="item_id" references="Item(id)" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="ITEM_ORDERS_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <insert tableName="Orders">
+            <column name="status" value="NEW"/>
+            <column name="order_number" value="2322"/>
+            <column name="quantity" value="2"/>
+            <column name="customer_user_id" value="2"/>
+            <column name="item_id" value="2"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

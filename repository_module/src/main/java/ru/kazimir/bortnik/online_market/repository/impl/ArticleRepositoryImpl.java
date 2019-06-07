@@ -49,7 +49,7 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> 
 
         List<Long> idTopArticle = queryManager.getResultList();
         if (!idTopArticle.isEmpty()) {
-            query = "from " + Article.class.getName() + " where id IN(:idTopArticle)";
+            query = "from " + Article.class.getName() + " where id IN(:idTopArticles)";
             Query q = entityManager.createQuery(query).setParameter("idTopArticles", idTopArticle);
             q.setMaxResults(sizeTop);
             return q.getResultList();

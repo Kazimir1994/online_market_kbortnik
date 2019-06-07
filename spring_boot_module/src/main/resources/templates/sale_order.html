@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+
+
+    <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
+    <div class="bs-docs-section">
+        <div class="page-header" style="padding-top: 20px; padding-bottom: 5px; color: #ebebeb">
+            <h1>Order</h1>
+        </div>
+        <div class="bs-component">
+            <th:block th:object="${Order}">
+                <div class="jumbotron">
+                    <h5>Order number</h5>
+                    <p class="lead" th:text="*{orderNumber}"></p>
+                    <hr class="my-4">
+                    <h5>Name item</h5>
+                    <p class="lead" th:text="*{item.name}"></p>
+                    <hr class="my-4">
+                    <h5>Quantity items</h5>
+                    <p class="lead" th:text="*{quantity}"></p>
+                    <hr class="my-4">
+                    <h5>Total price</h5>
+                    <p class="lead" th:text="*{totalPrice}"></p>
+                    <hr class="my-4">
+                    <h5>Customer</h5>
+                    <p class="lead" th:text="*{user.surname}"></p>
+                    <p class="lead" th:text="*{user.name}"></p>
+                    <p class="lead" th:text="*{user.email}"></p>
+                    <hr class="my-4">
+                    <h5>Telephone</h5>
+                    <p class="lead" th:text="*{user.profileDTO.telephone}"></p>
+                    <hr class="my-4">
+
+                    <h5>Order status</h5>
+                    <form style="padding-top:5px" action="#" th:action="@{/public/sale/orders/update_status}"
+                          th:object="${Order}" method="post">
+                        <select class="custom-select" name="role" th:field="*{status}">
+                            <option th:each="status : ${T(ru.kazimir.bortnik.online_market.repository.model.OrderStatusEnum).values()}"
+                                    th:if="${status.name()} == *{status.name()}" selected th:text="${status.name()}"
+                                    th:value="${status}">
+                            </option>
+                            <option th:each="status : ${T(ru.kazimir.bortnik.online_market.repository.model.OrderStatusEnum).values()}"
+                                    th:unless="${status.name()} == *{status.name()}" th:text="${status.name()}"
+                                    th:value="${status}">
+                            </option>
+                        </select>
+                        <label><input th:value="${Order.id}" name="id" hidden/></label>
+                        <div style="padding-top:10px ">
+                            <button type="submit" class="btn btn-outline-primary">Update</button>
+                        </div>
+                        <hr class="my-4">
+                    </form>
+                </div>
+
+            </th:block>
+        </div>
+    </div>
+
+
+    <div class="footer container-lg width-full px-3" role="contentinfo">
+        <div class="position-relative d-flex flex-justify-between pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+            <div style="text-align: center;">
+                <span>Online Marker__2018</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

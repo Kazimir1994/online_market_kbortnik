@@ -14,5 +14,6 @@ public class ErrorsMessage {
 
     public static final String ERROR_UNAUTHORIZED_USER = "Attempt to get unauthorized access to the resource.";
     public static final String ERROR_GET_UNAUTHORIZED_USER = "No user found in current session.";
-    public static final String ERROR_UPDATE_PROFILE = "Incorrect data for profile changes.";
+    public static final String ERROR_UPDATE_PROFILE = "Incorrect data for profile changes";
+    public static final String ERROR_ADD_REVIEW = "Incorrect data review";
 }

@@ -48,7 +48,8 @@ public class AddUserValidatorImpl implements Validator {
         if (userDTO.getProfileDTO() != null) {
             profileValidator.validate(userDTO.getProfileDTO(), errors);
         } else {
-            errors.rejectValue("ProfileDTO", "profile.error.null");
+            errors.rejectValue("ProfileDTO", "profile.error.null",
+                    "You entered an incorrect residential address.This residential address can not exist.");
         }
         if (!errors.hasFieldErrors()) {
             UserDTO user = userService.getByEmail(userDTO.getEmail());

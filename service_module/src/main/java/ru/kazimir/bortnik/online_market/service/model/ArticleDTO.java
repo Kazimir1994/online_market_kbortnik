@@ -12,7 +12,7 @@ public class ArticleDTO {
     private Long id;
 
     @NotNull
-    @Size(min = 10, max = 200,message = "{article.error.title}")
+    @Size(min = 10, max = 200, message = "{article.error.title}")
     private String title;
 
     @NotNull
@@ -31,6 +31,13 @@ public class ArticleDTO {
     private boolean deleted;
     private UserDTO author;
     private List<CommentDTO> commentDTOList;
+
+    public ArticleDTO() {
+    }
+
+    public ArticleDTO(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;

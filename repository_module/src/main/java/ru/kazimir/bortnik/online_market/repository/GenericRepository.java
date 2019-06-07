@@ -17,4 +17,8 @@ public interface GenericRepository<I, T> {
     List<T> findAll();
 
     Long getCountOfEntities();
+
+    Long getCountOfNotDeletedEntities();
+
+    T findByIdNotDeleted(I id);
 }

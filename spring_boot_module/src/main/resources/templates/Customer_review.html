@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <div class="bs-docs-section">
+        <div class="bs-component" style="padding-top: 40px">
+            <p th:if="${#strings.trim(message)}" class="text-success" th:text="${message}"></p>
+            <div class="jumbotron">
+                <form action="#" th:action="@{/public/customer/reviews/add}" th:object="${reviewDTO}"
+                      method="post">
+                    <fieldset>
+                        <h5>"Your feedback is very important to us"</h5>
+                        <hr class="my-4">
+
+                        <div class="form-group">
+                            <label>Only gods can comment here because only gods can comment on divine sites</label>
+                            <div class="form-group">
+                                <textarea name="review" class="form-control" rows="10" required></textarea>
+                            </div>
+                            <p th:if="${#fields.hasErrors('review')}" th:errors="*{review}" class="text-warning"
+                               style="padding-top: 10px">Name Error.</p>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-outline-primary"> Add review</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

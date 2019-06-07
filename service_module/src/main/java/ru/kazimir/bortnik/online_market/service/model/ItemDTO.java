@@ -26,6 +26,14 @@ public class ItemDTO {
 
     private boolean deleted;
 
+    public ItemDTO() {
+
+    }
+
+    public ItemDTO(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

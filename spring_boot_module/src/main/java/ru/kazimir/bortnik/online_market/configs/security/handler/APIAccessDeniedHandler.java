@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.ERROR_403_PAGE_URL;
+import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_403_URL;
 
 @Component
-public class MyAccessDeniedHandler implements AccessDeniedHandler {
-    private static final Logger logger = LoggerFactory.getLogger(MyAccessDeniedHandler.class);
+public class APIAccessDeniedHandler implements AccessDeniedHandler {
+    private static final Logger logger = LoggerFactory.getLogger(APIAccessDeniedHandler.class);
 
     @Override
     public void handle(HttpServletRequest httpServletRequest,
@@ -27,6 +27,6 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
         if (auth != null) {
             logger.info("User '" + auth.getName() + "' attempted to access the protected URL: " + httpServletRequest.getRequestURI());
         }
-        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + ERROR_403_PAGE_URL);
+        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + API_403_URL);
     }
 }

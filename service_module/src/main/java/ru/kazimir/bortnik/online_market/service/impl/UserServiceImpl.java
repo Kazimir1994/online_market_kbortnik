@@ -11,6 +11,7 @@ import ru.kazimir.bortnik.online_market.repository.UserRepository;
 import ru.kazimir.bortnik.online_market.repository.model.Role;
 import ru.kazimir.bortnik.online_market.repository.model.User;
 import ru.kazimir.bortnik.online_market.service.GenerationEncodePassword;
+import ru.kazimir.bortnik.online_market.service.MailService;
 import ru.kazimir.bortnik.online_market.service.UserService;
 import ru.kazimir.bortnik.online_market.service.converter.Converter;
 import ru.kazimir.bortnik.online_market.service.exception.UserServiceException;
@@ -41,20 +42,28 @@ public class UserServiceImpl implements UserService {
     private final Converter<UserDTO, User> userAddConverter;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final MailService mailService;
     private final GenerationEncodePassword generationEncodePassword;
+
+    private static final String SUBJECT_PASSWORD_CHANGE = "Password change";
+    private static final String MESSAGE_UPDATE_PASSWORD = "Dear user. Your password has been changed. New password := %s";
+
+    private static final String SUBJECT_ADD_USER = "Hello you are registered on our site";
+    private static final String MESSAGE_ADD_USER = "Your password := %s";
 
     @Autowired
     public UserServiceImpl(@Qualifier("userConverterImpl") Converter<UserDTO, User> userConverter,
                            @Qualifier("userProfileConverterImpl") Converter<UserDTO, User> userProfileConverter,
                            @Qualifier("checkUserForExistConverterImpl") Converter<UserDTO, User> checkUserForExistConverter,
                            @Qualifier("userSaveConverterImpl") Converter<UserDTO, User> userAddConverter, UserRepository userRepository,
-                           RoleRepository roleRepository, GenerationEncodePassword generationEncodePassword) {
+                           RoleRepository roleRepository, MailService mailService, GenerationEncodePassword generationEncodePassword) {
         this.userConverter = userConverter;
         this.userProfileConverter = userProfileConverter;
         this.checkUserForExistConverter = checkUserForExistConverter;
         this.userAddConverter = userAddConverter;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.mailService = mailService;
         this.generationEncodePassword = generationEncodePassword;
     }
 
@@ -62,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageDTO<UserDTO> getUsers(Long limitPositions, Long currentPage) {
         PageDTO<UserDTO> pageDTO = new PageDTO<>();
-        Long countOfUsers = userRepository.getCountOfEntities();
+        Long countOfUsers = userRepository.getCountOfNotDeletedEntities();
         Long countOfPages = calculationCountOfPages(countOfUsers, limitPositions);
         pageDTO.setCountOfPages(countOfPages);
 
@@ -83,7 +92,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUsersById(List<Long> listId) {
         listId.forEach(id -> {
-            User user = userRepository.findById(id);
+            User user = userRepository.findByIdNotDeleted(id);
             if (user != null) {
                 userRepository.remove(user);
             } else {
@@ -97,7 +106,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void updateRole(UserDTO userDTO) {
-        User user = userRepository.findById(userDTO.getId());
+        User user = userRepository.findByIdNotDeleted(userDTO.getId());
         if (user != null) {
             Role role = roleRepository.findById(userDTO.getRoleDTO().getId());
             user.setRole(role);
@@ -114,8 +123,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.getByEmail(email);
         if (user != null) {
             String password = generationEncodePassword.getPassword();
-            user.setPassword(password);
+            user.setPassword(generationEncodePassword.encryptPassword(password));
             userRepository.merge(user);
+            mailService.sendMessage(email, SUBJECT_PASSWORD_CHANGE, String.format(MESSAGE_UPDATE_PASSWORD, password));
         } else {
             throw new UserServiceException(String.format(USER_ERROR_UPDATE_PASSWORD, email));
         }
@@ -126,10 +136,11 @@ public class UserServiceImpl implements UserService {
     public void add(UserDTO userDTO) {
         try {
             String password = generationEncodePassword.getPassword();
-            userDTO.setPassword(password);
+            userDTO.setPassword(generationEncodePassword.encryptPassword(password));
             User user = userAddConverter.fromDTO(userDTO);
             user.getProfile().setUser(user);
             userRepository.persist(user);
+            mailService.sendMessage(userDTO.getEmail(), SUBJECT_ADD_USER, String.format(MESSAGE_ADD_USER, password));
         } catch (Exception e) {
             throw new UserServiceException(String.format(ADD_USER_ERROR_MESSAGE, userDTO));
         }
@@ -148,7 +159,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDTO getUserWithProfile(Long id) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findByIdNotDeleted(id);
         if (user != null) {
             logger.info(MESSAGES_GET_PROFILE, id, user);
             return userProfileConverter.toDTO(user);
@@ -161,7 +172,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDTO checkUserForExist(Long id) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findByIdNotDeleted(id);
         if (user != null) {
             return checkUserForExistConverter.toDTO(user);
         } else {
@@ -173,7 +184,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public String getPasswordById(Long id) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findByIdNotDeleted(id);
         if (user != null) {
             String password = user.getPassword();
             logger.info(MESSAGES_GET_PASSWORD, id, password);
@@ -188,7 +199,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateProfile(UserDTO userDTO) {
         logger.info(MESSAGES_UPDATE_PROFILE, userDTO);
-        User user = userRepository.findById(userDTO.getId());
+        User user = userRepository.findByIdNotDeleted(userDTO.getId());
         if (user != null) {
             user.setName(userDTO.getName());
             user.setSurname(userDTO.getSurname());

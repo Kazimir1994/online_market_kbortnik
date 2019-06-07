@@ -43,7 +43,6 @@ public class AdminUsersWebControllerIntegrationTest {
         userTestDTO.setRoleDTO(correctRole);
     }
 
-
     @WithMockUser(authorities = {ADMIN_ROLE_NAME})
     @Test
     public void aUserMustBeAddedAndRedirectedToTheAddUserPage() throws Exception {
@@ -84,7 +83,7 @@ public class AdminUsersWebControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id_delete_users", id.toString()))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/error/422"));
+                .andExpect(redirectedUrl("/error/404"));
     }
 
     @WithMockUser(authorities = {ADMIN_ROLE_NAME})

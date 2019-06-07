@@ -36,7 +36,7 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public WebSpringSecurityConfig(@Qualifier("appUserDetailsService") UserDetailsService userDetailsService,
-                                   AccessDeniedHandler accessDeniedHandler,
+                                   @Qualifier("WEBAccessDeniedHandler") AccessDeniedHandler accessDeniedHandler,
                                    PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
         this.accessDeniedHandler = accessDeniedHandler;

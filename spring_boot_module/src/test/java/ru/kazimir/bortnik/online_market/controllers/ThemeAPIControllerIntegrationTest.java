@@ -47,15 +47,6 @@ public class ThemeAPIControllerIntegrationTest {
     @Test
     public void testNotShouldAdd() {
         final String Url = "http://localhost:" + randomServerPort + "/api/v1/themes";
-        ThemeDTO themeDTO = new ThemeDTO();
-        themeDTO.setName("JAVA_CORE");
-
-        ResponseEntity responseEntity =
-                restTemplate.withBasicAuth(login, password).
-                        postForEntity(Url, themeDTO, ResponseEntity.class);
-        Assert.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-
-
         ThemeDTO theme = new ThemeDTO();
         theme.setName("JAVA_CORE");
 
@@ -73,5 +64,14 @@ public class ThemeAPIControllerIntegrationTest {
                 restTemplate.withBasicAuth(login, password).
                         postForEntity(Url, themeDTO, ResponseEntity.class);
         Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void shouldReturnTheSheetWithTheThemes() {
+        final String Url = "http://localhost:" + randomServerPort + "/api/v1/themes";
+        ThemeDTO[] articleDTO =
+                restTemplate.withBasicAuth(login, password).getForObject(Url, ThemeDTO[].class);
+        Assert.assertNotNull(articleDTO);
+
     }
 }

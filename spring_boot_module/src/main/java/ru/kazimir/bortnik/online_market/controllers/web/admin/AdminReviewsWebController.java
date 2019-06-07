@@ -57,7 +57,7 @@ public class AdminReviewsWebController {
     public String updateStatusShowing(@Valid WrappingSheetReviews WrappingSheetReviews,
                                       BindingResult bindingResult,
                                       RedirectAttributes redirectAttributes) {
-        logger.info("Order status change request {} ", WrappingSheetReviews.getReviewList());
+        logger.info("OrderDTO status change request {} ", WrappingSheetReviews.getReviewList());
         if (bindingResult.hasErrors()) {
             logger.info("Request denied. Error code := {}", ERROR_UPDATE_STATUS_SHOWING_REVIEWS);
             return REDIRECT_PRIVATE_REVIEWS_SHOWING;

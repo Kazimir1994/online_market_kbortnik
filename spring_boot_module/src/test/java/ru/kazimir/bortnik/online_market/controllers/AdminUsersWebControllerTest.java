@@ -100,38 +100,6 @@ public class AdminUsersWebControllerTest {
     }
 
     @Test
-    public void shouldGetAUserPageWithAFilledTable() throws Exception {
-        when(userService.getUsers(10L, 0L)).thenReturn((PageDTO<UserDTO>) userDTOS);
-        mockMvc.perform(get("/private/users/showing.html"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("users", equalTo(userDTOS)))
-                .andExpect(forwardedUrl("private_users"));
-    }
-
-    @Test
-    public void shouldGetAPageWithAListOfRoles() throws Exception {
-        when(roleService.getRoles()).thenReturn(roleDTOS);
-        mockMvc.perform(get("/private/users/showing.html"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("roles", equalTo(roleDTOS)))
-                .andExpect(forwardedUrl("private_users"));
-    }
-
-
-
-    @Test
-    public void shouldReturnTheAddUserPageWithTheRoleFieldsFilled() throws Exception {
-        when(roleService.getRoles()).thenReturn(roleDTOS);
-        mockMvc.perform(get("/private/users/form_add_users.html"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("roles", equalTo(roleDTOS)))
-                .andExpect(forwardedUrl("private_addUsers"));
-    }
-
-    @Test
     public void ifTheIncomingSheetIdIsNullThenTheMethodForDeletionShouldNotBeCaused() {
         List<Long> longList = new ArrayList<>();
         adminUsersWebController.deleteUsers(null, null);
@@ -159,16 +127,6 @@ public class AdminUsersWebControllerTest {
 
 
     @Test
-    public void ifTheUserComesWithAnEmptyRoleSendToRedirect() {
-        when(bindingResult.hasErrors()).thenReturn(true);
-        UserDTO userDTO = new UserDTO();
-        userDTO.setRoleDTO(new RoleDTO());
-        String result = adminUsersWebController.updateRole(userDTO, bindingResult, redirectAttributes);
-        assertEquals("redirect:/private/users/showing", result);
-    }
-
-
-    @Test
     public void ifTheUserComesWithAnEmptyRoleTheRoleChangeMethodShouldNotBeExecuted() {
         when(bindingResult.hasErrors()).thenReturn(true);
         UserDTO userDTO = new UserDTO();
@@ -188,31 +146,6 @@ public class AdminUsersWebControllerTest {
         verify(userService, Mockito.times(1)).updateRole(userDTO);
     }
 
-    @Test
-    public void ifTheUserComesWithAnEmptyEmailSendToRedirect() {
-        when(bindingResult.hasFieldErrors("email")).thenReturn(true);
-        UserDTO userDTO = new UserDTO();
-        String result = adminUsersWebController.updatePassword(userDTO, bindingResult, redirectAttributes);
-        assertEquals("redirect:/private/users/showing", result);
-    }
-
-    @Test
-    public void ifTheUserComesWithAnEmptyEmailThePasswordChangeMethodShouldNotBeExecuted() {
-        when(bindingResult.hasFieldErrors("email")).thenReturn(true);
-        UserDTO userDTO = new UserDTO();
-        userDTO.setEmail("test@mail.ru");
-        adminUsersWebController.updatePassword(userDTO, bindingResult, redirectAttributes);
-        verify(userService, never()).updatePasswordByEmail(userDTO.getEmail());
-    }
-
-    @Test
-    public void ifAUserComeSWithANonEmptyEmailThePasswordChangeMustBeExecuted() {
-        when(bindingResult.hasFieldErrors("email")).thenReturn(false);
-        UserDTO userDTO = new UserDTO();
-        userDTO.setEmail("test@mail.ru");
-        adminUsersWebController.updatePassword(userDTO, bindingResult, redirectAttributes);
-        verify(userService, Mockito.times(1)).updatePasswordByEmail(userDTO.getEmail());
-    }
 
     @Test
     public void ifAnEmptyUserHasArrivedSendToRedirect() {
@@ -240,23 +173,5 @@ public class AdminUsersWebControllerTest {
         userDTO.setRoleDTO(roleADMINISTRATOR);
         adminUsersWebController.addUsers(userDTO, bindingResult, redirectAttributes);
         verify(userService, Mockito.times(1)).add(userDTO);
-    }
-
-    @Test
-    public void shouldSisplayAProfileFormWithFieldsFilledIn() throws Exception {
-        UserDTO userDTO1 = new UserDTO();
-        userDTO1.setId(1L);
-        userDTO1.setEmail("Test@mail.ru");
-        userDTO1.setSurname("SurnameTest");
-        userDTO1.setName("NameTest");
-        RoleDTO roleDTO1 = new RoleDTO();
-        roleDTO1.setName("ADMINISTRATOR");
-        userDTO1.setRoleDTO(roleDTO1);
-
-        when(authentication.getPrincipal()).thenReturn(userDTO1);
-        mockMvc.perform(get("/private/users/show_Profile_User.html"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("private_profileUser"));
     }
 }

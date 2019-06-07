@@ -8,18 +8,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kazimir.bortnik.online_market.service.ThemeService;
+import ru.kazimir.bortnik.online_market.service.model.RoleDTO;
 import ru.kazimir.bortnik.online_market.service.model.ThemeDTO;
 
-import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_SALE_THEME_URL;
+import java.util.List;
+
+import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_ROLE_SHOWING_URL;
+import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_THEMES_SHOWING_URL;
+import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_THEME_URL;
 import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_THEMES_SAVE_URL;
 
 @RestController
-@RequestMapping(API_SALE_THEME_URL)
+@RequestMapping(API_THEME_URL)
 public class ThemeAPIController {
     private final static Logger logger = LoggerFactory.getLogger(ItemAPIController.class);
     private final Validator validator;
@@ -42,5 +48,13 @@ public class ThemeAPIController {
         }
         themeService.add(themeDTO);
         return new ResponseEntity(HttpStatus.CREATED);
+    }
+
+    @GetMapping(API_THEMES_SHOWING_URL)
+    public ResponseEntity<List<ThemeDTO>> getThemes() {
+        logger.info("Request for receiving roles");
+        List<ThemeDTO> themes = themeService.getThemes();
+        logger.info("Send a list of themes. := {}.", themes);
+        return new ResponseEntity<>(themes, HttpStatus.OK);
     }
 }

@@ -19,7 +19,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "User")
 @SQLDelete(sql = "UPDATE user SET deleted = 1  WHERE id = ? AND unchangeable = 0")
-@Where(clause = "deleted = '0'")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

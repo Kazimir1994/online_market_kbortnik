@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kazimir.bortnik.online_market.controllers.web.admin.AdminUsersWebController;
 import ru.kazimir.bortnik.online_market.service.ItemService;
+import ru.kazimir.bortnik.online_market.service.XmlService;
 import ru.kazimir.bortnik.online_market.service.exception.ItemServiceException;
+import ru.kazimir.bortnik.online_market.service.exception.StAXParserServiceException;
 import ru.kazimir.bortnik.online_market.service.model.ItemDTO;
 import ru.kazimir.bortnik.online_market.service.model.PageDTO;
 import ru.kazimir.bortnik.online_market.service.model.Pageable;
@@ -31,6 +34,7 @@ import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_S
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_ITEM_COPY_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_ITEM_PAGE;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_ITEM_SHOWING_MORE_URL;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_ITEM_UPLOAD_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_REDIRECT_ITEMS_SHOWING_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_SALE_REDIRECT_ITEM_COPY_FORM_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_ERROR_404;
@@ -38,15 +42,17 @@ import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT
 
 @Controller
 @RequestMapping(PUBLIC_SALE_ITEMS_URL)
-public class SaleItemController {
+public class SaleItemsController {
     private final static Logger logger = LoggerFactory.getLogger(AdminUsersWebController.class);
 
     private final ItemService itemService;
+    private final XmlService xmlService;
     private final Pageable pageable = new Pageable(10L);
 
     @Autowired
-    public SaleItemController(ItemService itemService) {
+    public SaleItemsController(ItemService itemService, XmlService xmlService) {
         this.itemService = itemService;
+        this.xmlService = xmlService;
     }
 
     @GetMapping(PUBLIC_SALE_ITEMS_SHOWING_URL)
@@ -134,5 +140,17 @@ public class SaleItemController {
         } else {
             return REDIRECT_ERROR_422;
         }
+    }
+
+    @PostMapping(PUBLIC_SALE_ITEM_UPLOAD_URL)
+    public String uploadFile(MultipartFile file, RedirectAttributes redirectAttributes) {
+        try {
+            List<ItemDTO> items = xmlService.parse(file);
+            redirectAttributes.addFlashAttribute("message", "Your products have been successfully added.");
+            itemService.add(items);
+        } catch (StAXParserServiceException e) {
+            redirectAttributes.addFlashAttribute("message", "An unknown crap occurred while loading the file.");
+        }
+        return PUBLIC_SALE_REDIRECT_ITEMS_SHOWING_URL;
     }
 }

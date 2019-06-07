@@ -3,6 +3,7 @@ package ru.kazimir.bortnik.online_market.controllers.web.customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,18 +16,22 @@ import ru.kazimir.bortnik.online_market.service.ArticleService;
 import ru.kazimir.bortnik.online_market.service.ThemeService;
 import ru.kazimir.bortnik.online_market.service.exception.ArticleServiceException;
 import ru.kazimir.bortnik.online_market.service.model.ArticleDTO;
+import ru.kazimir.bortnik.online_market.service.model.CommentDTO;
 import ru.kazimir.bortnik.online_market.service.model.PageDTO;
 import ru.kazimir.bortnik.online_market.service.model.ThemeDTO;
+import ru.kazimir.bortnik.online_market.service.model.UserDetail;
 import ru.kazimir.bortnik.online_market.service.model.filter.FilterNewsPage;
 
 import java.util.List;
 
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_ADD_COMMENT_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_ARTICLES_PAGE;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_ARTICLES_SHOWING_MORE_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_ARTICLES_SHOWING_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_ARTICLES_UPDATE_FILTER_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_ARTICLES_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_ARTICLE_PAGE;
+import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_REDIRECT_ARTICLES_SHOWING_MORE_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.PUBLIC_CUSTOMER_REDIRECT_ARTICLE_SHOWING_URL;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_ERROR_404;
 import static ru.kazimir.bortnik.online_market.constant.WebURLConstants.REDIRECT_ERROR_422;
@@ -82,5 +87,23 @@ public class CustomerArticlesWebController {
         } else {
             return REDIRECT_ERROR_422;
         }
+    }
+
+    @PostMapping(PUBLIC_CUSTOMER_ADD_COMMENT_URL)
+    public String addComment(@RequestParam(required = false) Long articlesId,
+                             @RequestParam(required = false) String comment,
+                             @AuthenticationPrincipal UserDetail UserDetail,
+                             RedirectAttributes redirectAttributes) {
+        logger.info("Comment creation request. Id Article:= {}, comment:= {}, User:=",
+                articlesId, comment, UserDetail.getUserDTO());
+
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setContent(comment);
+        commentDTO.setArticleDTO(new ArticleDTO(articlesId));
+        commentDTO.setUserDTO(UserDetail.getUserDTO());
+
+        articleService.addComment(commentDTO);
+        redirectAttributes.addFlashAttribute("message", "Your comment has been successfully added.");
+        return String.format(PUBLIC_CUSTOMER_REDIRECT_ARTICLES_SHOWING_MORE_URL, articlesId);
     }
 }

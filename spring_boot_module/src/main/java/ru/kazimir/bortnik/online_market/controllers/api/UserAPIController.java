@@ -23,19 +23,19 @@ import static ru.kazimir.bortnik.online_market.constant.ErrorsMessage.ERROR_ADD_
 @RequestMapping(API_USER_USER_URL)
 public class UserAPIController {
     private final static Logger logger = LoggerFactory.getLogger(UserAPIController.class);
-    private final Validator saveUserValidator;
+    private final Validator addUserValidator;
     private final UserService userService;
 
     @Autowired
     public UserAPIController(@Qualifier("addUserValidatorImpl") Validator saveUserValidator, UserService userService) {
-        this.saveUserValidator = saveUserValidator;
+        this.addUserValidator = saveUserValidator;
         this.userService = userService;
     }
 
     @PostMapping(API_USER_SAVE_URL)
     public ResponseEntity addUser(@RequestBody UserDTO userDTO, BindingResult bindingResult) {
         logger.info("Request API to add a user ( User := {}. )", userDTO);
-        saveUserValidator.validate(userDTO, bindingResult);
+        addUserValidator.validate(userDTO, bindingResult);
         if (bindingResult.hasErrors()) {
             logger.info("Request denied. Error code := {},{}.", ERROR_ADD_USER, bindingResult.getAllErrors());
             return new ResponseEntity(HttpStatus.BAD_REQUEST);

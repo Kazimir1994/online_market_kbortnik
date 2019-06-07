@@ -3,6 +3,7 @@ package ru.kazimir.bortnik.online_market.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kazimir.bortnik.online_market.repository.ItemRepository;
@@ -29,7 +30,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     public ItemServiceImpl(ItemRepository itemRepository,
-                           Converter<ItemDTO, Item> itemConverter) {
+                           @Qualifier("itemConverterImpl") Converter<ItemDTO, Item> itemConverter) {
         this.itemRepository = itemRepository;
         this.itemConverter = itemConverter;
     }
@@ -39,7 +40,7 @@ public class ItemServiceImpl implements ItemService {
     public PageDTO<ItemDTO> getItems(Long limitPositions, Long currentPage) {
         PageDTO<ItemDTO> pageDTO = new PageDTO<>();
         pageDTO.setCurrentPage(currentPage);
-        Long countOfUsers = itemRepository.getCountOfEntities();
+        Long countOfUsers = itemRepository.getCountOfNotDeletedEntities();
         Long countOfPages = calculationCountOfPages(countOfUsers, limitPositions);
         pageDTO.setCountOfPages(countOfPages);
 
@@ -67,7 +68,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public ItemDTO getById(Long id) {
-        Item item = itemRepository.findById(id);
+        Item item = itemRepository.findByIdNotDeleted(id);
         if (item != null) {
             return itemConverter.toDTO(item);
         } else {
@@ -78,7 +79,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public void deleteById(Long id) {
-        Item item = itemRepository.findById(id);
+        Item item = itemRepository.findByIdNotDeleted(id);
         if (item != null) {
             itemRepository.remove(item);
         } else {
@@ -92,6 +93,16 @@ public class ItemServiceImpl implements ItemService {
         itemDTO.setUniqueNumber(UUID.randomUUID().toString());
         Item item = itemConverter.fromDTO(itemDTO);
         itemRepository.persist(item);
+    }
+
+    @Transactional
+    @Override
+    public void add(List<ItemDTO> items) {
+        items.forEach(itemDTO -> {
+            itemDTO.setUniqueNumber(UUID.randomUUID().toString());
+            Item item = itemConverter.fromDTO(itemDTO);
+            itemRepository.persist(item);
+        });
     }
 
     private Long getPosition(Long limitPositions, Long positions) {

@@ -1,13 +1,14 @@
 package ru.kazimir.bortnik.online_market.service.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 public class ReviewDTO {
-    @NotNull
-    @Min(1)
     private Long id;
+    @Length(min = 10, max = 1000, message = "{review.error.review.size}")
     private String review;
     private Timestamp dataCreate;
     private UserDTO userDTO;

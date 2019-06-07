@@ -18,20 +18,34 @@ public class GenerationEncodePasswordIServiceImpl implements GenerationEncodePas
     }
 
     private final int DEFAULT_SIZE_OF_PASSWORD = DEFAULT_SIZE_OF_PASSWORDS;
-    private final int DEFAULT_START_POINT_ASCII = 66;
-    private final int DEFAULT_END_POINT_ASCII = 142;
+    private final int DEFAULT_START_POINT_ASCII = 67;
+    private final int DEFAULT_END_POINT_ASCII = 124;
 
     @Override
-    public String getPassword(int sizeOfPassword, int startPointASCII, int endPointASCII) {
+    public String getEncryptPassword(int sizeOfPassword, int startPointASCII, int endPointASCII) {
         return passwordEncoder.encode(new Random().ints(DEFAULT_SIZE_OF_PASSWORD, DEFAULT_START_POINT_ASCII, DEFAULT_END_POINT_ASCII).
                 mapToObj(i -> String.valueOf((char) i)).
                 collect(Collectors.joining()));
+    }
+
+
+    @Override
+    public String getPassword(int sizeOfPassword, int startPointASCII, int endPointASCII) {
+        return new Random().ints(DEFAULT_SIZE_OF_PASSWORD, DEFAULT_START_POINT_ASCII, DEFAULT_END_POINT_ASCII).
+                mapToObj(i -> String.valueOf((char) i)).
+                collect(Collectors.joining());
     }
 
     @Override
     public String getPassword() {
         return getPassword(DEFAULT_SIZE_OF_PASSWORD, DEFAULT_START_POINT_ASCII, DEFAULT_END_POINT_ASCII);
     }
+
+    @Override
+    public String getEncryptPassword() {
+        return getEncryptPassword(DEFAULT_SIZE_OF_PASSWORD, DEFAULT_START_POINT_ASCII, DEFAULT_END_POINT_ASCII);
+    }
+
 
     @Override
     public String encryptPassword(String password) {

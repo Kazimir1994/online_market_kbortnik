@@ -176,8 +176,6 @@
         </createTable>
     </changeSet>
 
-
-
     <changeSet id="THEME_TABLE_1" author="kazimir_bortnik@mail.ru">
         <createTable tableName="Theme">
 
@@ -196,6 +194,11 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="INSERT_THEME_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <insert tableName="Theme">
+            <column name="name" value="Common topic"/>
+        </insert>
+    </changeSet>
 
 
     <changeSet id="ARTICLE_TABLE_1" author="kazimir_bortnik@mail.ru">
@@ -236,7 +239,6 @@
         </createTable>
     </changeSet>
 
-
     <changeSet id="COMMENT_TABLE_1" author="kazimir_bortnik@mail.ru">
         <createTable tableName="Comment">
             <column autoIncrement="true" name="id" type="BIGINT">
@@ -265,7 +267,6 @@
         </createTable>
     </changeSet>
 
-
     <changeSet id="ITEM_TABLE_1" author="kazimir_bortnik@mail.ru">
         <createTable tableName="Item">
             <column autoIncrement="true" name="id" type="BIGINT">
@@ -292,6 +293,43 @@
                 <constraints nullable="false"/>
             </column>
 
+        </createTable>
+    </changeSet>
+
+    <changeSet id="ORDERS_TABLE_1" author="kazimir_bortnik@mail.ru">
+        <createTable tableName="Orders">
+
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="status" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="order_number" type="BIGINT UNSIGNED">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="quantity" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="data_create" type="Timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deleted" type="Boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="customer_user_id" type="BIGINT">
+                <constraints foreignKeyName="customer_user_id" references="User(id)" nullable="false"/>
+            </column>
+
+            <column name="item_id" type="BIGINT">
+                <constraints foreignKeyName="item_id" references="Item(id)" nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 

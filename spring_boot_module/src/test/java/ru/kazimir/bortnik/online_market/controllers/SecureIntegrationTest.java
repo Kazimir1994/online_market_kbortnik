@@ -67,7 +67,7 @@ public class SecureIntegrationTest {
     public void ifYouGoToThePagePrivateUsersShouldBeDeniedAccessAndRedirectedTo403() throws Exception {
         mockMvc.perform(get("/private/users/showing"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/403"));
+                .andExpect(redirectedUrl("/error/403"));
     }
 
     @WithMockUser(authorities = CUSTOMER_ROLE_NAME)
@@ -75,7 +75,7 @@ public class SecureIntegrationTest {
     public void ifYouGoToThePagePrivateUserAddUsersShouldBeDeniedAccessAndRedirectedTo403() throws Exception {
         mockMvc.perform(get("/private/users/form_add_users"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/403"));
+                .andExpect(redirectedUrl("/error/403"));
     }
 
     @WithMockUser(authorities = CUSTOMER_ROLE_NAME)
@@ -83,7 +83,7 @@ public class SecureIntegrationTest {
     public void ifYouMakeARequestToAddAUserShouldBeDeniedAccessAndRedirectedTo403() throws Exception {
         mockMvc.perform(get("/private/users/add_users"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/403"));
+                .andExpect(redirectedUrl("/error/403"));
     }
 
     @WithMockUser(authorities = CUSTOMER_ROLE_NAME)
@@ -91,7 +91,7 @@ public class SecureIntegrationTest {
     public void ifYouMakeARequestToUpdatePasswordShouldBeDeniedAccessAndRedirectedTo403() throws Exception {
         mockMvc.perform(get("/private/users/change_password"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/403"));
+                .andExpect(redirectedUrl("/error/403"));
     }
 
     @WithMockUser(authorities = CUSTOMER_ROLE_NAME)
@@ -99,7 +99,7 @@ public class SecureIntegrationTest {
     public void ifYouMakeARequestToUpdateRoleShouldBeDeniedAccessAndRedirectedTo403() throws Exception {
         mockMvc.perform(get("/private/users/update_role"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/403"));
+                .andExpect(redirectedUrl("/error/403"));
     }
 
     @WithMockUser(authorities = CUSTOMER_ROLE_NAME)
@@ -107,7 +107,7 @@ public class SecureIntegrationTest {
     public void ifYouMakeARequestToDeleteUsersShouldBeDeniedAccessAndRedirectedTo403() throws Exception {
         mockMvc.perform(get("/private/users/delete_users"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/403"));
+                .andExpect(redirectedUrl("/error/403"));
     }
 
     @WithMockUser(authorities = ADMIN_ROLE_NAME)
@@ -122,7 +122,7 @@ public class SecureIntegrationTest {
     public void ifYouGoToThePagePrivateReviewsShouldBeDeniedAccessAndRedirectedTo403() throws Exception {
         mockMvc.perform(get("/private/reviews/showing"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/403"));
+                .andExpect(redirectedUrl("/error/403"));
     }
 
     @WithMockUser(authorities = CUSTOMER_ROLE_NAME)
@@ -130,7 +130,7 @@ public class SecureIntegrationTest {
     public void ifYouMakeARequestToUpdateStatusShowingShouldBeDeniedAccessAndRedirectedTo403() throws Exception {
         mockMvc.perform(get("/private/users/update_showing"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/403"));
+                .andExpect(redirectedUrl("/error/403"));
     }
 
     @WithMockUser(authorities = CUSTOMER_ROLE_NAME)
@@ -138,6 +138,6 @@ public class SecureIntegrationTest {
     public void ifYouMakeARequestToDeleteReviewsShouldBeDeniedAccessAndRedirectedTo403() throws Exception {
         mockMvc.perform(get("/private/users/delete_reviews"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/403"));
+                .andExpect(redirectedUrl("/error/403"));
     }
 }

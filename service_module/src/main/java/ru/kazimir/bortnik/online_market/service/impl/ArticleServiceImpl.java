@@ -17,9 +17,11 @@ import ru.kazimir.bortnik.online_market.service.ArticleService;
 import ru.kazimir.bortnik.online_market.service.converter.Converter;
 import ru.kazimir.bortnik.online_market.service.exception.ArticleServiceException;
 import ru.kazimir.bortnik.online_market.service.model.ArticleDTO;
+import ru.kazimir.bortnik.online_market.service.model.CommentDTO;
 import ru.kazimir.bortnik.online_market.service.model.PageDTO;
 import ru.kazimir.bortnik.online_market.service.model.filter.FilterNewsPage;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -158,6 +160,27 @@ public class ArticleServiceImpl implements ArticleService {
         } else {
             logger.error(ERROR_DELETE_ARTICLE_BY_ID, articleDTO.getId());
             throw new ArticleServiceException(String.format(ERROR_DELETE_ARTICLE_BY_ID, articleDTO.getId()));
+        }
+    }
+
+    @Override
+    @Transactional
+    public void addComment(CommentDTO commentDTO) {
+        Comment comment = new Comment();
+        comment.setContent(commentDTO.getContent());
+        User author = userRepository.findByIdNotDeleted(commentDTO.getUserDTO().getId());
+        if (author != null) {
+            comment.setUser(author);
+            comment.setDataCreate(new Timestamp(System.currentTimeMillis()));
+            Article article = articleRepository.findById(commentDTO.getArticleDTO().getId());
+            if (article != null) {
+                comment.setArticle(article);
+                commentRepository.persist(comment);
+            } else {
+                throw new ArticleServiceException();
+            }
+        } else {
+            throw new ArticleServiceException();
         }
     }
 

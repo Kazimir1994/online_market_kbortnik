@@ -24,13 +24,6 @@ public class GeneralControllerTest {
     }
 
     @Test
-    public void shouldSucceedWith200ForHomePage() throws Exception {
-        this.mockMvc.perform(get("/home.html"))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("home"));
-    }
-
-    @Test
     public void shouldSucceedWith200ForLoginPage() throws Exception {
         this.mockMvc.perform(get("/login.html"))
                 .andExpect(status().isOk())

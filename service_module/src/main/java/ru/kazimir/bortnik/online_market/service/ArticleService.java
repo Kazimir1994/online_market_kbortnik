@@ -1,6 +1,7 @@
 package ru.kazimir.bortnik.online_market.service;
 
 import ru.kazimir.bortnik.online_market.service.model.ArticleDTO;
+import ru.kazimir.bortnik.online_market.service.model.CommentDTO;
 import ru.kazimir.bortnik.online_market.service.model.PageDTO;
 import ru.kazimir.bortnik.online_market.service.model.filter.FilterNewsPage;
 
@@ -23,4 +24,6 @@ public interface ArticleService {
     void deleteCommentByd(Long idComment);
 
     void update(ArticleDTO articleDTO);
+
+    void addComment(CommentDTO commentDTO);
 }

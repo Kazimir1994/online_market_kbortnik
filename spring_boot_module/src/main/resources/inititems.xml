@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.it-academy.by"
+       xsi:schemaLocation="https://www.it-academy.by itemschema.xsd">
+
+    <Item>
+        <name>Xiaomi Twenty Seventeen Light Fashion</name>
+        <description>quartz movement, case: stainless steel, 10 mm, sapphire crystal, 64 m, metal bracelet</description>
+        <price>33.2</price>
+    </Item>
+
+    <Item>
+        <name>Casio G-Shock GW-B5600BC-1B</name>
+        <description>quartz movement, case: stainless steel, 16 mm, sapphire crystal, 475 m, metal bracelet
+        </description>
+        <price>3.2</price>
+    </Item>
+
+    <Item>
+        <name>Casio EF-547D-1A1</name>
+        <description>quartz movement, case: stainless steel, 19 mm, sapphire crystal, 915 m, metal bracelet
+        </description>
+        <price>33.2</price>
+    </Item>
+
+    <Item>
+        <name>Casio Edifice Premium EFS-S510D-1A</name>
+        <description>quartz movement, case: stainless steel, 21 mm, sapphire crystal, 415 m, metal bracelet
+        </description>
+        <price>3.2</price>
+    </Item>
+
+    <Item>
+        <name>Casio MTD-1053D-1A</name>
+        <description>quartz movement, case: stainless steel, 28 mm, sapphire crystal, 115 m, metal bracelet
+        </description>
+        <price>3.2</price>
+    </Item>
+
+    <Item>
+        <name>Casio Edifice Premium EFS-S510D-1A</name>
+        <description>quartz movement, case: stainless steel, 50 mm, sapphire crystal, 152 m, metal bracelet
+        </description>
+        <price>3.2</price>
+    </Item>
+
+    <Item>
+        <name>Casio GA-110-1B</name>
+        <description>quartz movement, case: stainless steel, 280 mm, sapphire crystal, 153 m, metal bracelet
+        </description>
+        <price>3.2</price>
+    </Item>
+</Items>
+
+

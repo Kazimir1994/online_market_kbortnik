@@ -24,10 +24,10 @@ import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_ITEM
 import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_ITEM_ADD_URL;
 import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_ITEM_DELETE_ID_URL;
 import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_ITEM_SHOWING_ID_URL;
-import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_SALE_ITEM_URL;
+import static ru.kazimir.bortnik.online_market.constant.ApiURLConstants.API_ITEM_URL;
 
 @RestController
-@RequestMapping(API_SALE_ITEM_URL)
+@RequestMapping(API_ITEM_URL)
 public class ItemAPIController {
     private final static Logger logger = LoggerFactory.getLogger(ItemAPIController.class);
     private final ItemService itemService;

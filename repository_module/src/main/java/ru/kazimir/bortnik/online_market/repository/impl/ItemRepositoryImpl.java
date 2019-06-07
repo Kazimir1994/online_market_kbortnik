@@ -13,7 +13,7 @@ public class ItemRepositoryImpl extends GenericRepositoryImpl<Long, Item> implem
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public List<Item> findAll(Long offset, Long limit) {
-        String query = "from " + Item.class.getName() + " order by name ";
+        String query = "from " + Item.class.getName() + " where deleted = 0 order by name ";
         Query q = entityManager.createQuery(query)
                 .setMaxResults(Math.toIntExact(limit))
                 .setFirstResult(Math.toIntExact(offset));
