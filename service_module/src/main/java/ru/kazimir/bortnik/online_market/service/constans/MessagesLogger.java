@@ -21,7 +21,6 @@ public class MessagesLogger {
             " Amount of Reviews := {}, From the position := {}.";
     public static final String MESSAGES_GET_ITEMS = "List of items by the following parameters:" +
             " Amount of items := {}, From the position := {}.";
-
     public static final String MESSAGES_GET_ORDERS = "List of items by the following parameters:" +
             " Amount of Orders := {}, From the position := {}, ID user:= {}";
 }

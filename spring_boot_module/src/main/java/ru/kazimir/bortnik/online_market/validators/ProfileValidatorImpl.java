@@ -9,6 +9,7 @@ import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidati
 
 @Component
 public class ProfileValidatorImpl implements Validator {
+
     @Override
     public boolean supports(Class<?> clazz) {
         return ProfileDTO.class.equals(clazz);

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class RoleValidatorImpl implements Validator {
+
     private final RoleService roleService;
 
     @Autowired

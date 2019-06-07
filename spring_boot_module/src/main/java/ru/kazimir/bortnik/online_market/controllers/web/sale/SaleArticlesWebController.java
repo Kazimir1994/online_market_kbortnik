@@ -202,7 +202,6 @@ public class SaleArticlesWebController {
         }
     }
 
-
     @PostMapping(PUBLIC_SALE_UPDATE_ARTICLE_URL)
     public String updateArticle(@Valid ArticleDTO articleDTO,
                                 BindingResult results,

@@ -11,6 +11,7 @@ import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidati
 
 @Component
 public class UpdateByEmailPasswordValidatorImpl implements Validator {
+
     private final UserService userService;
 
     @Autowired

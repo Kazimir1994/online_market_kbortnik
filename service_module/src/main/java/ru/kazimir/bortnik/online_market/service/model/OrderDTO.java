@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 
 public class OrderDTO {
     private Long id;
-
     @NotNull
     @Min(1)
     private Integer quantity;

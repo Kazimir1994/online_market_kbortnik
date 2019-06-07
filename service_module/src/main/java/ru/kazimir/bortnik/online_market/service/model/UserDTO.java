@@ -9,17 +9,14 @@ import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidati
 
 public class UserDTO {
     private Long id;
-
     @NotNull
     @Pattern(regexp = REGEX_NAME, message = "{user.error.user.name}")
     @Size(min = 2, max = 20, message = "{user.error.name.size}")
     private String name;
-
     @NotNull
     @Size(min = 2, max = 40, message = "{user.error.surname.size}")
     @Pattern(regexp = REGEX_SURNAME, message = "{user.error.user.surname}")
     private String surname;
-
     private String email;
     private boolean isDeleted;
     private boolean unchangeable;

@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public class OrderRepositoryImpl extends GenericRepositoryImpl<Long, Order> implements OrderRepository {
+
     @Override
     public Long getCountOfOrdersById(Long id) {
         String query = "SELECT COUNT(*) FROM " + Order.class.getName() + " where user.id =:id";

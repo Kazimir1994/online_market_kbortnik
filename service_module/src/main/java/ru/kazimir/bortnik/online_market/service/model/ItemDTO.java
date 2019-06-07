@@ -9,25 +9,19 @@ import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidati
 
 public class ItemDTO {
     private Long id;
-
     @NotNull
     @Length(max = 100, min = 2, message = "{article.error.dataCreate}")
     private String name;
-
     @NotNull
     @Pattern(regexp = REGEX_NUMBER, message = "{item.error.price}")
     private String price;
-
     private String uniqueNumber;
-
     @NotNull
     @Length(max = 200, min = 2, message = "{item.error.description}")
     private String shortDescription;
-
     private boolean deleted;
 
     public ItemDTO() {
-
     }
 
     public ItemDTO(Long id) {

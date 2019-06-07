@@ -83,7 +83,6 @@ public class StAXParserImpl implements Parsing {
                         }
                         break;
                     }
-
                 }
             }
         } catch (XMLStreamException e) {

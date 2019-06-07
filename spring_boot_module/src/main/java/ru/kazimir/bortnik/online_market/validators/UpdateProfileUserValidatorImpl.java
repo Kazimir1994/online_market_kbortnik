@@ -12,6 +12,7 @@ import static ru.kazimir.bortnik.online_market.service.constans.ConstantValidati
 
 @Component
 public class UpdateProfileUserValidatorImpl implements Validator {
+
     private final UserService userService;
     private final Validator profileValidator;
     private final GenerationEncodePassword generationEncodePassword;

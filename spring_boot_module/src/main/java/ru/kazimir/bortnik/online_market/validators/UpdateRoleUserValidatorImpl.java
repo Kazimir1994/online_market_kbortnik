@@ -11,6 +11,7 @@ import ru.kazimir.bortnik.online_market.service.model.UserDTO;
 
 @Component
 public class UpdateRoleUserValidatorImpl implements Validator {
+
     private final UserService userService;
     private final Validator roleValidator;
 

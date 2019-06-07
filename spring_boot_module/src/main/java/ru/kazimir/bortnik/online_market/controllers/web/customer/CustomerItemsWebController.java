@@ -42,7 +42,6 @@ public class CustomerItemsWebController {
         return PUBLIC_CUSTOMER_ITEMS_PAGE;
     }
 
-
     @GetMapping(PUBLIC_CUSTOMER_ITEM_SHOWING_MORE_URL)
     public String showMoreItem(@RequestParam(required = false, defaultValue = "0") Long itemId, Model model) {
         if (itemId != null && itemId > 0) {
@@ -50,7 +49,6 @@ public class CustomerItemsWebController {
             model.addAttribute("Item", ItemDTO);
             logger.info("Item to display := {} ", ItemDTO);
             return PUBLIC_CUSTOMER_ITEM_PAGE;
-
         } else {
             return REDIRECT_ERROR_422;
         }

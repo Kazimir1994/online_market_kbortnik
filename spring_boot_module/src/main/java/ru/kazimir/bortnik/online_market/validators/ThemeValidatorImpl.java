@@ -9,6 +9,7 @@ import ru.kazimir.bortnik.online_market.service.model.ThemeDTO;
 
 @Component
 public class ThemeValidatorImpl implements Validator {
+
     private final ThemeService themeService;
 
     @Autowired

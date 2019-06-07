@@ -10,24 +10,18 @@ import java.util.List;
 
 public class ArticleDTO {
     private Long id;
-
     @NotNull
     @Size(min = 10, max = 200, message = "{article.error.title}")
     private String title;
-
     @NotNull
     @Size(min = 10, max = 1000, message = "{article.error.content}")
     private String content;
-
     private String summary;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date dataCreate;
-
     @NotNull
     @Valid
     private ThemeDTO themeDTO;
-
     private boolean deleted;
     private UserDTO author;
     private List<CommentDTO> commentDTOList;

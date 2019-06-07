@@ -28,7 +28,6 @@ public class GenerationEncodePasswordIServiceImpl implements GenerationEncodePas
                 collect(Collectors.joining()));
     }
 
-
     @Override
     public String getPassword(int sizeOfPassword, int startPointASCII, int endPointASCII) {
         return new Random().ints(DEFAULT_SIZE_OF_PASSWORD, DEFAULT_START_POINT_ASCII, DEFAULT_END_POINT_ASCII).
@@ -45,7 +44,6 @@ public class GenerationEncodePasswordIServiceImpl implements GenerationEncodePas
     public String getEncryptPassword() {
         return getEncryptPassword(DEFAULT_SIZE_OF_PASSWORD, DEFAULT_START_POINT_ASCII, DEFAULT_END_POINT_ASCII);
     }
-
 
     @Override
     public String encryptPassword(String password) {

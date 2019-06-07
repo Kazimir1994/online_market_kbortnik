@@ -62,7 +62,6 @@ public class AdminReviewsWebController {
             logger.info("Request denied. Error code := {}", ERROR_UPDATE_STATUS_SHOWING_REVIEWS);
             return REDIRECT_PRIVATE_REVIEWS_SHOWING;
         }
-
         try {
             reviewService.updateHidden(WrappingSheetReviews.getReviewList());
         } catch (ReviewServiceException e) {
